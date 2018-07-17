@@ -1,0 +1,1 @@
+include ':app', ':component_user', ':component_base', ':component_interceptors', ':component_protect_demo'

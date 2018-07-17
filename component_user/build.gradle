@@ -1,0 +1,34 @@
+
+apply from: rootProject.file('cc-settings.gradle')
+
+android {
+    compileSdkVersion rootProject.compileVersion
+    buildToolsVersion rootProject.buildVersion
+
+    defaultConfig {
+        minSdkVersion 9 // support v7 minSdkVersion is 9
+        targetSdkVersion rootProject.compileVersion
+        versionCode 1
+        versionName "1.0"
+    }
+
+    resourcePrefix "component_user_"
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+}
+
+dependencies {
+    implementation "com.android.support:appcompat-v7:${rootProject.supportVersion}"
+    implementation project(':component_base')
+}
