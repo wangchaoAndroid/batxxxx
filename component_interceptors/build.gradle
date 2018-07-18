@@ -5,8 +5,8 @@ android {
     buildToolsVersion rootProject.buildVersion
 
     defaultConfig {
-        minSdkVersion 8
-        targetSdkVersion rootProject.compileVersion
+        minSdkVersion rootProject.minVersion
+        targetSdkVersion rootProject.targetSdkVersion
         versionCode 1
         versionName "1.0"
     }

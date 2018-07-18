@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.fenghuang.component_screen.MainActivity">
+
+    <TextView
+        android:id="@+id/component_srceen"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/component_screen_dp_40"
+        android:text="Hello World!"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/component_control"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:id="@+id/component_control"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/component_screen_dp_40"
+        android:text="Hello World!"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/component_setting"
+        app:layout_constraintLeft_toRightOf="@+id/component_srceen"/>
+
+    <TextView
+        android:id="@+id/component_setting"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/component_screen_dp_40"
+        android:text="Hello World!"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/component_mall"
+        app:layout_constraintLeft_toRightOf="@+id/component_control"/>
+
+    <TextView
+        android:id="@+id/component_mall"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/component_screen_dp_40"
+        android:text="Hello World!"
+        android:gravity="center"
+        app:layout_constraintLeft_toRightOf="@+id/component_setting"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+</android.support.constraint.ConstraintLayout>

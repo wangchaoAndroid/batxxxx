@@ -11,3 +11,6 @@
 repo-local
 /gradle
 *.pyc
+.idea
+gradlew
+gradlew.bat

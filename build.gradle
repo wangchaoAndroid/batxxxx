@@ -25,9 +25,14 @@ allprojects {
 ext {
     compileVersion = 26
     buildVersion = '26.0.2'
-    minVersion = 8
-
+    minVersion = 14
+    retrofitVersion     ="2.3.0"
+    rxjava = "2.1.1"
+    rxjava_android = "2.0.1"
+    rxjava_adapter = "2.3.0"
+    gson_converter = "2.3.0"
     supportVersion = '25.3.1'
+    targetSdkVersion = 22
 }
 
 task clean(type: Delete) {

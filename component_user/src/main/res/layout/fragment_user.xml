@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:id="@+id/ll1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/component_user_dp_10"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/component_user_dp_50"
+            android:drawableRight="@drawable/file_delete_able"
+            android:gravity="center_vertical"
+            android:paddingBottom="@dimen/component_user_dp_10"
+            android:paddingTop="@dimen/component_user_dp_10"
+
+            android:text="aaaa"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divide_line"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/component_user_dp_50"
+            android:drawableRight="@drawable/file_copy_able"
+            android:gravity="center_vertical"
+            android:paddingBottom="@dimen/component_user_dp_10"
+            android:paddingTop="@dimen/component_user_dp_10"
+            android:text="bbbb"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divide_line"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/component_user_dp_50"
+            android:drawableRight="@drawable/file_cut_able"
+            android:gravity="center_vertical"
+            android:paddingBottom="@dimen/component_user_dp_10"
+            android:paddingTop="@dimen/component_user_dp_10"
+            android:text="cccc"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divide_line"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/component_user_dp_50"
+            android:drawableRight="@drawable/file_delete_able"
+            android:gravity="center_vertical"
+            android:paddingBottom="@dimen/component_user_dp_10"
+            android:paddingTop="@dimen/component_user_dp_10"
+            android:text="dddd"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divide_line"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="17dp"
+        android:paddingLeft="@dimen/component_user_dp_10"
+        android:text="最大字数限制"
+        app:layout_constraintBottom_toTopOf="@+id/ll1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.7"/>
+</android.support.constraint.ConstraintLayout>

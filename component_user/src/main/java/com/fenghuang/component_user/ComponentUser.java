@@ -14,7 +14,7 @@ public class ComponentUser implements IComponent {
     public String getName() {
         //组件的名称，调用此组件的方式：
         // CC.obtainBuilder("ComponentA")...build().callAsync()
-        return "demo.ComponentUser";
+        return "component_user";
     }
 
     /**
@@ -53,10 +53,9 @@ public class ComponentUser implements IComponent {
     }
 
     private void lifecycleFragmentDoubleText(CC cc) {
-        LifecycleFragment lifecycleFragment = cc.getParamItem("fragment");
+        UserFragment lifecycleFragment = cc.getParamItem("fragment");
         if (lifecycleFragment != null) {
             String text = cc.getParamItem("text", "");
-            lifecycleFragment.addText(text);
             CC.sendCCResult(cc.getCallId(), CCResult.success());
         } else {
             CC.sendCCResult(cc.getCallId(), CCResult.error("no fragment params"));
@@ -64,8 +63,8 @@ public class ComponentUser implements IComponent {
     }
 
     private void getLifecycleFragment(CC cc) {
-        CC.sendCCResult(cc.getCallId(), CCResult.success("fragment", new LifecycleFragment())
-            .addData("int", 1)
+        CC.sendCCResult(cc.getCallId(), CCResult.success("fragment", new UserFragment())
+            .addData("int", 2)
         );
     }
 
