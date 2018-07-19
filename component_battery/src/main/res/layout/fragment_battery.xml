@@ -5,13 +5,114 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:text="11111111111111111"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+
+    <RelativeLayout
+        android:paddingLeft="@dimen/basic_d10"
+        android:paddingRight="@dimen/basic_d10"
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize">
+
+        <ImageView
+            android:id="@+id/left1"
+            android:layout_centerVertical="true"
+            android:src="@drawable/left1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:id="@+id/left2"
+            android:layout_marginLeft="@dimen/basic_d10"
+            android:layout_toRightOf="@+id/left1"
+            android:layout_centerVertical="true"
+            android:src="@drawable/left2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/title_tv"
+            android:text="型号9527"
+            android:gravity="center"
+            android:textSize="@dimen/basic_s16"
+            android:layout_centerInParent="true"
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content"/>
+
+        <ImageView
+            android:id="@+id/right1"
+            android:layout_marginRight="@dimen/basic_d10"
+            android:layout_toLeftOf="@+id/right2"
+            android:layout_centerVertical="true"
+            android:src="@drawable/right1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <ImageView
+            android:id="@+id/right2"
+            android:src="@drawable/right2"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        android:id="@+id/battery_icon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="match_parent"
+            android:src="@drawable/battery"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="89%"
+            android:textStyle="bold"
+            android:textColor="#fff"
+            android:layout_centerInParent="true"
+            android:textSize="30sp"
+            android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:id="@+id/battery_tips"
+        android:paddingTop="@dimen/basic_d10"
+        android:paddingBottom="@dimen/basic_d10"
+        app:layout_constraintTop_toBottomOf="@+id/battery_icon"
+        app:layout_constraintBottom_toTopOf="@+id/recycler_view"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:text="电池还可以使用"
+            android:padding="@dimen/basic_d10"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="19小时30分"
+            android:layout_gravity="center_horizontal"
+            android:padding="@dimen/basic_d10"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:background="#f1f1f1"
+        android:clipToPadding="true"
+        app:layout_constraintTop_toBottomOf="@+id/battery_tips"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"/>
+
 
 </android.support.constraint.ConstraintLayout>

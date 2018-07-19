@@ -10,7 +10,6 @@ import com.fenghuang.component_user.R;
 public class CameraActivity extends BaseActivity {
     @Override
     protected void initView() {
-        setContentView(R.layout.activity_camera);
         FragmentUtils.addFragment(getSupportFragmentManager(),new ActivityScanerCode(),R.id.root_view);
     }
 
@@ -22,5 +21,10 @@ public class CameraActivity extends BaseActivity {
     @Override
     protected void setEvent() {
 
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_camera;
     }
 }

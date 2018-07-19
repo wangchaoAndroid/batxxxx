@@ -16,6 +16,7 @@ import com.billy.cc.core.component.IComponentCallback;
 import com.fenghuang.battery.helper.BottomNavigationViewHelper;
 import com.fenghuang.battery.helper.FragmentFactory;
 import com.fenghuang.component_base.adapter.CommonFragmentAdapter;
+import com.fenghuang.component_base.base.BaseActivity;
 import com.fenghuang.component_base.base.BaseFragment;
 import com.fenghuang.component_base.utils.ViewFinder;
 
@@ -23,21 +24,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener {
     private BottomNavigationView mBottomNavigationView;
-    public static final String COMPONENT_NAME_A = "demo.ComponentUser";
     private ViewPager mViewPager;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        initView();
-        initData();
-        initListener();
+    public void initData() {
+        List<BaseFragment> fragments = new ArrayList<>();
+        fragments.add(FragmentFactory.createFragment(0));
+        fragments.add(FragmentFactory.createFragment(1));
+        fragments.add(FragmentFactory.createFragment(2));
+        fragments.add(FragmentFactory.createFragment(3));
+        mViewPager.setAdapter(new CommonFragmentAdapter(getSupportFragmentManager(),fragments));
     }
 
-    private void initListener() {
+    @Override
+    protected void setEvent() {
         mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -61,16 +63,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
-    private void initData() {
-        List<BaseFragment> fragments = new ArrayList<>();
-        fragments.add(FragmentFactory.createFragment(0));
-        fragments.add(FragmentFactory.createFragment(1));
-        fragments.add(FragmentFactory.createFragment(2));
-        fragments.add(FragmentFactory.createFragment(3));
-        mViewPager.setAdapter(new CommonFragmentAdapter(getSupportFragmentManager(),fragments));
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_main;
     }
 
-    private void initView() {
+    @Override
+    public void initView() {
         ViewFinder viewFinder = new ViewFinder(this);
         mBottomNavigationView = viewFinder.find(R.id.bottom_navigation);
         BottomNavigationViewHelper.disableShiftMode(mBottomNavigationView);

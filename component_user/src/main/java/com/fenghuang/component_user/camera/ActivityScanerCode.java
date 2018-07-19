@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.annotation.IdRes;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -23,9 +24,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.fenghuang.component_base.base.BaseActivity;
 import com.fenghuang.component_base.base.BaseFragment;
+import com.fenghuang.component_base.utils.FragmentUtils;
 import com.fenghuang.component_base.utils.ViewFinder;
 import com.fenghuang.component_user.R;
 import com.fenghuang.component_user.module.scaner.CameraManager;
@@ -58,7 +61,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Create by wangchao on 2018/7/18 16:38
  */
-public class ActivityScanerCode extends BaseFragment {
+public class ActivityScanerCode extends BaseFragment implements View.OnClickListener {
     private static final String TAG = "ActivityScanerCode";
     /**
      * 扫描结果监听
@@ -121,8 +124,8 @@ public class ActivityScanerCode extends BaseFragment {
      * 扫描结果显示框
      */
     private RxDialogSure rxDialogSure;
-    private ViewFinder mViewFinder;
-
+    private TextView inputTv;
+    private ImageView mQrLineView;
     /**
      * 设置扫描信息回调
      */
@@ -173,14 +176,24 @@ public class ActivityScanerCode extends BaseFragment {
         return R.layout.activity_scaner_code;
     }
 
+    private void addOnClickListeners(@IdRes int... ids) {
+        if (ids != null) {
+            for (@IdRes int id : ids) {
+                rootView.findViewById(id).setOnClickListener(this);
+            }
+        }
+    }
+
     @Override
     protected void init(View view) {
-        mViewFinder = new ViewFinder(view);
-        mIvLight = mViewFinder.find(R.id.top_mask);
-        mContainer = mViewFinder.find(R.id.capture_containter);
-        mCropLayout =  mViewFinder.find(R.id.capture_crop_layout);
+        mIvLight = rootView.findViewById(R.id.top_mask);
+        mContainer = rootView.findViewById(R.id.capture_containter);
+        mCropLayout = rootView.findViewById(R.id.capture_crop_layout);
+        inputTv = rootView.findViewById(R.id.input_code);
+        mQrLineView = rootView.findViewById(R.id.capture_scan_line);
         hasSurface = false;
         inactivityTimer = new InactivityTimer(getActivity());
+        addOnClickListeners(R.id.top_mask,R.id.input_code,R.id.top_back);
     }
 
     @Override
@@ -197,11 +210,11 @@ public class ActivityScanerCode extends BaseFragment {
         CameraManager.init(getActivity());
     }
 
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings("deprecation")//AA:27:1B:95:91:65:E7:9A:D5:84:90:79:34:9A:45:45:B4:09:46:DE
     @Override
-    public void onResume() {
+    public void onResume() {//BC:D2:AC:D0:A7:B3:3A:8D:41:AA:EA:61:B3:81:68:40:07:D2:09:25
         super.onResume();
-        SurfaceView surfaceView = mViewFinder.find(R.id.capture_preview);
+        SurfaceView surfaceView = rootView.findViewById(R.id.capture_preview);
         SurfaceHolder surfaceHolder = surfaceView.getHolder();
         Log.e(TAG,"surfaceHolder" +hasSurface );
         if (hasSurface) {
@@ -260,7 +273,6 @@ public class ActivityScanerCode extends BaseFragment {
     }
 
     private void initScanerAnimation() {
-        ImageView mQrLineView =  mViewFinder.find(R.id.capture_scan_line);
         RxAnimationTool.ScaleUpDowm(mQrLineView);
     }
 
@@ -283,14 +295,7 @@ public class ActivityScanerCode extends BaseFragment {
         CameraManager.FRAME_HEIGHT = mCropHeight;
     }
 
-    public void btn(View view) {
-        int viewId = view.getId();
-        if (viewId == R.id.top_mask) {
-            light();
-        } else if (viewId == R.id.top_back) {
-            //finish();
-        }
-    }
+
 
     private void light() {
         if (mFlashing) {
@@ -381,6 +386,19 @@ public class ActivityScanerCode extends BaseFragment {
             initDialogResult(result);
         } else {
             mScanerListener.onSuccess("From to Camera", result);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        int viewId = v.getId();
+        if (viewId == R.id.top_mask) {
+            light();
+        } else if (viewId == R.id.top_back) {
+            //finish();
+            FragmentUtils.addFragment(getActivity().getSupportFragmentManager(),new WarnFragment(),R.id.root_view);
+        }else if(viewId == R.id.input_code){
+            FragmentUtils.addFragment(getActivity().getSupportFragmentManager(),new InputNunFragment(),R.id.root_view);
         }
     }
     //==============================================================================================解析结果 及 后续处理 end

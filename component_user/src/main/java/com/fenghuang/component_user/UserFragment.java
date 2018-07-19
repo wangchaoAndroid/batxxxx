@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.fenghuang.component_base.base.BaseFragment;
 import com.fenghuang.component_base.utils.ViewFinder;
 import com.fenghuang.component_user.camera.ActivityScanerCode;
+import com.fenghuang.component_user.camera.CameraActivity;
 
 
 /**
@@ -24,8 +25,7 @@ public class UserFragment extends BaseFragment {
 
     @Override
     protected void init(View view) {
-        ViewFinder viewFinder = new ViewFinder(this.getView());
-        mTextView = viewFinder.find(R.id.tv_name);
+        mTextView = view.findViewById(R.id.tv_name);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class UserFragment extends BaseFragment {
         mTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(),ActivityScanerCode.class));
+                startActivity(new Intent(getActivity(),CameraActivity.class));
             }
         });
     }

@@ -11,7 +11,7 @@ import android.view.ViewGroup;
  * Create by wangchao on 2018/7/18 10:19
  */
 public abstract class BaseFragment extends Fragment {
-
+    public View rootView;
     protected abstract int setView();
 
     protected abstract void init(View view);
@@ -28,19 +28,20 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(setView(), container, false);
+        rootView  =  inflater.inflate(setView(), container, false);
+        init(rootView);
+        initData(savedInstanceState);
+        return rootView;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        init(view);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        initData(savedInstanceState);
     }
 
     @Override

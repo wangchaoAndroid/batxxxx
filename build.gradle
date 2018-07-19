@@ -19,13 +19,14 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url "https://jitpack.io" }
     }
 }
 
 ext {
     compileVersion = 26
     buildVersion = '26.0.2'
-    minVersion = 14
+    minVersion = 17
     retrofitVersion     ="2.3.0"
     rxjava = "2.1.1"
     rxjava_android = "2.0.1"

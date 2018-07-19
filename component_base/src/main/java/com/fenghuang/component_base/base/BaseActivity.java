@@ -20,7 +20,7 @@ import javax.annotation.Nullable;
 /**
  * Create by wangchao on 2018/7/18 10:20
  */
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class  BaseActivity extends AppCompatActivity {
     private static final String TAG = "BaseActivity";
     /**
      * context
@@ -42,14 +42,20 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected abstract void setEvent();
 
+    protected abstract int getLayoutId();
+
     private ArrayList<BaseFragment> fragments;// back fragment list.
     private BaseFragment fragment;// current fragment.
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(getSupportActionBar() != null){
+            getSupportActionBar().hide();
+        }
         Log.i(TAG, "--->onCreate()");
         mContext = this;
+        setContentView(getLayoutId());
         initView();
         initData();
         setEvent();

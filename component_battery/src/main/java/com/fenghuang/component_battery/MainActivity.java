@@ -3,7 +3,29 @@ package com.fenghuang.component_battery;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+import com.fenghuang.component_base.base.BaseActivity;
+
+public class MainActivity extends BaseActivity {
+
+    @Override
+    protected void initView() {
+
+    }
+
+    @Override
+    protected void initData() {
+
+    }
+
+    @Override
+    protected void setEvent() {
+
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return 0;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -24,4 +24,8 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     implementation "com.android.support:appcompat-v7:${rootProject.supportVersion}"
     implementation project(':component_base')
+    implementation "com.android.support:recyclerview-v7:${rootProject.supportVersion}"
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.40'
+    compile 'com.github.bumptech.glide:glide:4.4.0'
+    compile "com.android.support:design:${rootProject.supportVersion}"
 }
