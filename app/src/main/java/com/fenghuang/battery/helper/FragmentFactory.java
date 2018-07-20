@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.billy.cc.core.component.CC;
 import com.billy.cc.core.component.CCResult;
-import com.fenghuang.component_base.base.BaseFragment;
+import com.fenghuang.component_base.base.LazyLoadFragment;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,10 +13,10 @@ import java.util.Map;
  * Create by wangchao on 2018/7/18 10:16
  */
 public class FragmentFactory {
-    private static Map<Integer,BaseFragment> fragMap = new HashMap<>();
+    private static Map<Integer,LazyLoadFragment> fragMap = new HashMap<>();
 
-    public static BaseFragment createFragment(int pos) {
-        BaseFragment fragment = fragMap.get(pos);
+    public static LazyLoadFragment createFragment(int pos) {
+        LazyLoadFragment fragment = fragMap.get(pos);
         if (fragment == null) {
             switch (pos) {
                 case 0:

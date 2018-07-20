@@ -21,8 +21,19 @@ android {
 
 }
 
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        def requested = details.requested
+        if (requested.group == 'com.android.support') {
+            if (!requested.name.startsWith("multidex")) {
+                details.useVersion rootProject.supportVersion
+            }
+        }
+    }
+}
+
 dependencies {
-    implementation 'com.google.code.gson:gson:2.8.4'
+    api 'com.google.code.gson:gson:2.8.4'
     implementation "com.squareup.retrofit2:adapter-rxjava2:2.3.0"
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
@@ -30,7 +41,9 @@ dependencies {
     implementation 'com.trello.rxlifecycle2:rxlifecycle-android:2.0.1'
     implementation 'com.trello.rxlifecycle2:rxlifecycle-components:2.0.1'
     implementation "com.squareup.retrofit2:retrofit:2.3.0"
-    implementation "com.android.support:recyclerview-v7:${rootProject.supportVersion}"
-    compile 'com.github.bumptech.glide:glide:4.4.0'
-
+//    api "com.android.support:recyclerview-v7:${rootProject.supportVersion}"
+    api "com.android.support:appcompat-v7:${rootProject.supportVersion}"
+    api "com.android.support:design:${rootProject.supportVersion}"
+    api 'com.github.bumptech.glide:glide:4.4.0'
+    api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.40'
 }

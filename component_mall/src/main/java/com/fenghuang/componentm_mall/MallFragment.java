@@ -3,24 +3,28 @@ package com.fenghuang.componentm_mall;
 import android.os.Bundle;
 import android.view.View;
 
-import com.fenghuang.component_base.base.BaseFragment;
+import com.fenghuang.component_base.base.LazyLoadFragment;
 
 /**
  * Create by wangchao on 2018/7/18 14:00
  */
-public class MallFragment extends BaseFragment{
+public class MallFragment extends LazyLoadFragment {
+
+
     @Override
-    protected int setView() {
+    protected void init(View view,Bundle savedInstanceState) {
+
+    }
+
+    @Override
+    protected int setContentView() {
         return R.layout.fragment_mall;
     }
 
     @Override
-    protected void init(View view) {
+    protected void lazyLoad() {
 
     }
 
-    @Override
-    protected void initData(Bundle savedInstanceState) {
 
-    }
 }

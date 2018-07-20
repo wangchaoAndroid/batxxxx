@@ -18,6 +18,8 @@ android {
         }
     }
 
+
+
     sourceSets {
         main {
             manifest.srcFile 'src/main/AndroidManifest.xml'
@@ -30,9 +32,8 @@ android {
 }
 
 dependencies {
-    implementation "com.android.support:appcompat-v7:${rootProject.supportVersion}"
+
     implementation 'com.google.android:flexbox:0.3.0'
-    compile "com.android.support:design:${rootProject.supportVersion}"
     implementation project(':component_protect_demo')
 //    implementation 'com.ashokvarma.android:bottom-navigation-bar:1.3.0'
     //Notice:组件之间不要互相依赖，只在主app module依赖其它组件

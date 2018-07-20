@@ -90,13 +90,13 @@ public class RxDialogSure extends RxDialog {
 
     private void initView() {
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_sure, null);
-        mTvSure = dialogView.findViewById(R.id.tv_sure);
-        mTvTitle = dialogView.findViewById(R.id.tv_title);
+        mTvSure = (TextView) dialogView.findViewById(R.id.tv_sure);
+        mTvTitle = (TextView) dialogView.findViewById(R.id.tv_title);
         mTvTitle.setTextIsSelectable(true);
-        mTvContent = dialogView.findViewById(R.id.tv_content);
+        mTvContent = (TextView) dialogView.findViewById(R.id.tv_content);
         mTvContent.setMovementMethod(ScrollingMovementMethod.getInstance());
         mTvContent.setTextIsSelectable(true);
-        mIvLogo = dialogView.findViewById(R.id.iv_logo);
+        mIvLogo = (ImageView) dialogView.findViewById(R.id.iv_logo);
         setContentView(dialogView);
     }
 

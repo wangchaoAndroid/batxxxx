@@ -5,7 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.fenghuang.component_base.base.BaseFragment;
+import com.fenghuang.component_base.base.LazyLoadFragment;
 import com.fenghuang.component_base.helper.SpacesItemDecoration;
 import com.fenghuang.component_base.utils.DateTimeUtil;
 import com.fenghuang.component_user.R;
@@ -18,17 +18,14 @@ import java.util.List;
 /**
  * Create by wangchao on 2018/7/18 19:45
  */
-public class WarnFragment extends BaseFragment{
+public class WarnFragment extends LazyLoadFragment{
 
     private RecyclerView mRecyclerView;
-    @Override
-    protected int setView() {
-        return R.layout.fragment_warn;
-    }
+
 
     @Override
-    protected void init(View view) {
-        mRecyclerView = view.findViewById(R.id.recycler_view);
+    protected void init(View view,Bundle savedInstanceState) {
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.addItemDecoration(new SpacesItemDecoration(10));
         List<WarnItem> warnItemList = new ArrayList<>();
@@ -43,7 +40,13 @@ public class WarnFragment extends BaseFragment{
     }
 
     @Override
-    protected void initData(Bundle savedInstanceState) {
+    protected int setContentView() {
+        return R.layout.fragment_warn;
+    }
+
+    @Override
+    protected void lazyLoad() {
 
     }
+
 }

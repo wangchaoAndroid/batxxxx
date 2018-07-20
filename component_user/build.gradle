@@ -29,12 +29,9 @@ android {
 
 dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
-    implementation "com.android.support:appcompat-v7:${rootProject.supportVersion}"
     implementation project(':component_base')
     //Zxing核心包
     implementation 'com.google.zxing:core:3.3.0'
-    implementation "com.android.support:recyclerview-v7:${rootProject.supportVersion}"
-    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.40'
-    compile "com.android.support:cardview-v7:${rootProject.supportVersion}"
+    implementation "com.android.support:cardview-v7:${rootProject.supportVersion}"
 
 }

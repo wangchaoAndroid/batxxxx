@@ -3,25 +3,28 @@ package com.fenghuang.component_user.camera;
 import android.os.Bundle;
 import android.view.View;
 
-import com.fenghuang.component_base.base.BaseFragment;
+import com.fenghuang.component_base.base.LazyLoadFragment;
 import com.fenghuang.component_user.R;
 
 /**
  * Create by wangchao on 2018/7/18 19:45
  */
-public class InputNunFragment extends BaseFragment{
+public class InputNunFragment extends LazyLoadFragment {
+
     @Override
-    protected int setView() {
+    protected void init(View view,Bundle savedInstanceState) {
+
+    }
+
+    @Override
+    protected int setContentView() {
         return R.layout.fragment_input_num;
     }
 
     @Override
-    protected void init(View view) {
+    protected void lazyLoad() {
 
     }
 
-    @Override
-    protected void initData(Bundle savedInstanceState) {
 
-    }
 }

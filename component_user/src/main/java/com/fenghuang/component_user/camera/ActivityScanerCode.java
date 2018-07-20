@@ -26,8 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.fenghuang.component_base.base.BaseActivity;
-import com.fenghuang.component_base.base.BaseFragment;
+import com.fenghuang.component_base.base.LazyLoadFragment;
 import com.fenghuang.component_base.utils.FragmentUtils;
 import com.fenghuang.component_base.utils.ViewFinder;
 import com.fenghuang.component_user.R;
@@ -61,7 +60,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Create by wangchao on 2018/7/18 16:38
  */
-public class ActivityScanerCode extends BaseFragment implements View.OnClickListener {
+public class ActivityScanerCode extends LazyLoadFragment implements View.OnClickListener {
     private static final String TAG = "ActivityScanerCode";
     /**
      * 扫描结果监听
@@ -171,11 +170,6 @@ public class ActivityScanerCode extends BaseFragment implements View.OnClickList
         multiFormatReader.setHints(hints);
     }
 
-    @Override
-    protected int setView() {
-        return R.layout.activity_scaner_code;
-    }
-
     private void addOnClickListeners(@IdRes int... ids) {
         if (ids != null) {
             for (@IdRes int id : ids) {
@@ -185,36 +179,24 @@ public class ActivityScanerCode extends BaseFragment implements View.OnClickList
     }
 
     @Override
-    protected void init(View view) {
-        mIvLight = rootView.findViewById(R.id.top_mask);
-        mContainer = rootView.findViewById(R.id.capture_containter);
-        mCropLayout = rootView.findViewById(R.id.capture_crop_layout);
-        inputTv = rootView.findViewById(R.id.input_code);
-        mQrLineView = rootView.findViewById(R.id.capture_scan_line);
+    protected void init(View view,Bundle savedInstanceState) {
+        mIvLight = (ImageView) rootView.findViewById(R.id.top_mask);
+        mContainer = (RelativeLayout) rootView.findViewById(R.id.capture_containter);
+        mCropLayout = (RelativeLayout) rootView.findViewById(R.id.capture_crop_layout);
+        inputTv = (TextView) rootView.findViewById(R.id.input_code);
+        mQrLineView = (ImageView) rootView.findViewById(R.id.capture_scan_line);
         hasSurface = false;
         inactivityTimer = new InactivityTimer(getActivity());
         addOnClickListeners(R.id.top_mask,R.id.input_code,R.id.top_back);
     }
 
-    @Override
-    protected void initData(Bundle savedInstanceState) {
-        //界面控件初始化
-        RxTool.init(getActivity());
-        initDecode();
 
-        //权限初始化
-        //initPermission();
-        //扫描动画初始化
-        initScanerAnimation();
-        //初始化 CameraManager
-        CameraManager.init(getActivity());
-    }
 
     @SuppressWarnings("deprecation")//AA:27:1B:95:91:65:E7:9A:D5:84:90:79:34:9A:45:45:B4:09:46:DE
     @Override
     public void onResume() {//BC:D2:AC:D0:A7:B3:3A:8D:41:AA:EA:61:B3:81:68:40:07:D2:09:25
         super.onResume();
-        SurfaceView surfaceView = rootView.findViewById(R.id.capture_preview);
+        SurfaceView surfaceView = (SurfaceView) rootView.findViewById(R.id.capture_preview);
         SurfaceHolder surfaceHolder = surfaceView.getHolder();
         Log.e(TAG,"surfaceHolder" +hasSurface );
         if (hasSurface) {
@@ -400,6 +382,25 @@ public class ActivityScanerCode extends BaseFragment implements View.OnClickList
         }else if(viewId == R.id.input_code){
             FragmentUtils.addFragment(getActivity().getSupportFragmentManager(),new InputNunFragment(),R.id.root_view);
         }
+    }
+
+    @Override
+    protected int setContentView() {
+        return R.layout.activity_scaner_code;
+    }
+
+    @Override
+    protected void lazyLoad() {
+        //界面控件初始化
+        RxTool.init(getActivity());
+        initDecode();
+
+        //权限初始化
+        //initPermission();
+        //扫描动画初始化
+        initScanerAnimation();
+        //初始化 CameraManager
+        CameraManager.init(getActivity());
     }
     //==============================================================================================解析结果 及 后续处理 end
 

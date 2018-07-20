@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -11,17 +13,22 @@ import android.util.Log;
 import android.view.KeyEvent;
 
 import com.fenghuang.component_base.R;
+import com.fenghuang.component_base.data.CacheDataSource;
 import com.fenghuang.component_base.utils.ActivityStackManager;
+import com.fenghuang.component_base.utils.HandlerUtils;
 
 import java.util.ArrayList;
 
 import javax.annotation.Nullable;
 
+
 /**
  * Create by wangchao on 2018/7/18 10:20
  */
-public abstract class  BaseActivity extends AppCompatActivity {
+public abstract class  BaseActivity extends AppCompatActivity implements HandlerUtils.OnReceiveMessageListener {
     private static final String TAG = "BaseActivity";
+
+    public Handler mHandler;
     /**
      * context
      **/
@@ -44,8 +51,8 @@ public abstract class  BaseActivity extends AppCompatActivity {
 
     protected abstract int getLayoutId();
 
-    private ArrayList<BaseFragment> fragments;// back fragment list.
-    private BaseFragment fragment;// current fragment.
+    private ArrayList<LazyLoadFragment> fragments;// back fragment list.
+    private LazyLoadFragment fragment;// current fragment.
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,6 +60,10 @@ public abstract class  BaseActivity extends AppCompatActivity {
         if(getSupportActionBar() != null){
             getSupportActionBar().hide();
         }
+        if (savedInstanceState != null) {
+            CacheDataSource.restoreData(savedInstanceState);
+        }
+        mHandler = new HandlerUtils.HandlerHolder(this);
         Log.i(TAG, "--->onCreate()");
         mContext = this;
         setContentView(getLayoutId());
@@ -63,7 +74,7 @@ public abstract class  BaseActivity extends AppCompatActivity {
         ActivityStackManager.getInstance().addActivity(this);
     }
 
-    public ArrayList<BaseFragment> getFragments() {
+    public ArrayList<LazyLoadFragment> getFragments() {
         return fragments;
     }
 
@@ -80,11 +91,27 @@ public abstract class  BaseActivity extends AppCompatActivity {
     }
 
     /**
+     * 开启activity
+     *
+     * @param cls                  要打开的activity
+     * @param closeCurrentActivity 是否需要关闭当前页面
+     */
+    protected void startActivity(Class<? extends Activity> cls, boolean closeCurrentActivity) {
+        Intent intent = new Intent(this, cls);
+        startActivity(intent);
+        if (closeCurrentActivity) {
+            finish();
+        }
+    }
+
+
+
+    /**
      * get the current fragment.
      *
      * @return current fragment
      */
-    public BaseFragment getFirstFragment() {
+    public LazyLoadFragment getFirstFragment() {
         return fragment;
     }
 
@@ -169,5 +196,10 @@ public abstract class  BaseActivity extends AppCompatActivity {
             }
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void handlerMessage(Message msg) {
+
     }
 }

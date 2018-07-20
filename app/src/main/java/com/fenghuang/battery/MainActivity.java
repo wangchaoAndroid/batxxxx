@@ -4,9 +4,7 @@ import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
+
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -17,7 +15,7 @@ import com.fenghuang.battery.helper.BottomNavigationViewHelper;
 import com.fenghuang.battery.helper.FragmentFactory;
 import com.fenghuang.component_base.adapter.CommonFragmentAdapter;
 import com.fenghuang.component_base.base.BaseActivity;
-import com.fenghuang.component_base.base.BaseFragment;
+import com.fenghuang.component_base.base.LazyLoadFragment;
 import com.fenghuang.component_base.utils.ViewFinder;
 
 import java.util.ArrayList;
@@ -30,7 +28,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     public void initData() {
-        List<BaseFragment> fragments = new ArrayList<>();
+        List<LazyLoadFragment> fragments = new ArrayList<>();
         fragments.add(FragmentFactory.createFragment(0));
         fragments.add(FragmentFactory.createFragment(1));
         fragments.add(FragmentFactory.createFragment(2));
@@ -71,7 +69,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     public void initView() {
         ViewFinder viewFinder = new ViewFinder(this);
-        mBottomNavigationView = viewFinder.find(R.id.bottom_navigation);
+        mBottomNavigationView = (BottomNavigationView)viewFinder.find(R.id.bottom_navigation);
         BottomNavigationViewHelper.disableShiftMode(mBottomNavigationView);
         mViewPager = viewFinder.find(R.id.vp_view);
     }

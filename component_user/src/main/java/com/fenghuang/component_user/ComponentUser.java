@@ -3,11 +3,15 @@ package com.fenghuang.component_user;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.billy.cc.core.component.CC;
 import com.billy.cc.core.component.CCResult;
 import com.billy.cc.core.component.IComponent;
+import com.fenghuang.component_base.data.CacheDataSource;
+import com.fenghuang.component_base.data.SPDataSource;
+import com.fenghuang.component_user.login.LoginActivity;
 
 public class ComponentUser implements IComponent {
     @Override
@@ -28,10 +32,39 @@ public class ComponentUser implements IComponent {
     @Override
     public boolean onCall(CC cc) {
         String actionName = cc.getActionName();
+        if ("forceGetLoginUser".equals(actionName)) {
+            String token = (String) SPDataSource.get(cc.getContext(), SPDataSource.USER_TOKEN, "");
+            if (!TextUtils.isEmpty((token) )) {
+                //已登录同步实现，直接调用CC.sendCCResult(...)并返回返回false
+                CCResult result = CCResult.success(SPDataSource.USER_TOKEN, token);
+                CC.sendCCResult(cc.getCallId(), result);
+                return false;
+            }
+            //未登录，打开登录界面，在登录完成后再回调结果，异步实现
+            Context context = cc.getContext();
+            Intent intent = new Intent(context, LoginActivity.class);
+            if (!(context instanceof Activity)) {
+                //调用方没有设置context或app间组件跳转，context为application
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            }
+            //将cc的callId传给Activity，登录完成后通过这个callId来回传结果
+            intent.putExtra("callId", cc.getCallId());
+            context.startActivity(intent);
+            if(context instanceof Activity){
+                ((Activity) context).finish();
+            }
+            //异步实现，不立即调用CC.sendCCResult,返回true
+            return true;
+        }
+
         switch (actionName) {
+            case "toLoginActivity":
+                login(cc);
+                break;
+            case "toLoginActivityClearTask":
+                loginClearTask(cc);
+                break;
             case "showActivityA":
-                Log.e("11111","2222222222222");
-                openActivity(cc);
                 break;
             case "getLifecycleFragment":
                 //demo for provide fragment object to other component
@@ -68,6 +101,30 @@ public class ComponentUser implements IComponent {
         );
     }
 
+    public void login(CC cc){
+        Context context = cc.getContext();
+        Intent intent = new Intent(context, LoginActivity.class);
+        intent.putExtra("callId", cc.getCallId());
+        if (!(context instanceof Activity)) {
+            //调用方没有设置context或app间组件跳转，context为application
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+        context.startActivity(intent);
+        if (context instanceof Activity) {
+            ((Activity) context).finish();
+        }
+        CC.sendCCResult(cc.getCallId(), CCResult.success());
+    }
+
+    public void loginClearTask(CC cc){
+        Context context = cc.getContext();
+        Intent intent = new Intent(context, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.putExtra("callId", cc.getCallId());
+        context.startActivity(intent);
+        CC.sendCCResult(cc.getCallId(), CCResult.success());
+    }
+
     private void getInfo(CC cc) {
         String userName = "billy";
         CC.sendCCResult(cc.getCallId(), CCResult.success("userName", userName));
@@ -75,7 +132,7 @@ public class ComponentUser implements IComponent {
 
     private void openActivity(CC cc) {
         Context context = cc.getContext();
-        Intent intent = new Intent(context, UserActivity.class);
+        Intent intent = new Intent(context, LoginActivity.class);
         if (!(context instanceof Activity)) {
             //调用方没有设置context或app间组件跳转，context为application
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

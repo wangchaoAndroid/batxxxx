@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="component_user_dp_10">10dp</dimen>
-    <dimen name="component_user_dp_30">20dp</dimen>
+    <dimen name="component_user_dp_20">20dp</dimen>
+    <dimen name="component_user_dp_40">40dp</dimen>
     <dimen name="component_user_dp_50">50dp</dimen>
     <dimen name="component_user_dp_60">60dp</dimen>
 </resources>

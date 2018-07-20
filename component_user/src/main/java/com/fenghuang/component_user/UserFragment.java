@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.fenghuang.component_base.base.BaseFragment;
+import com.fenghuang.component_base.base.LazyLoadFragment;
 import com.fenghuang.component_base.utils.ViewFinder;
 import com.fenghuang.component_user.camera.ActivityScanerCode;
 import com.fenghuang.component_user.camera.CameraActivity;
@@ -15,21 +15,22 @@ import com.fenghuang.component_user.camera.CameraActivity;
  * @author billy.qi
  * @since 17/12/8 15:30
  */
-public class UserFragment extends BaseFragment {
+public class UserFragment extends LazyLoadFragment {
     TextView mTextView;
 
+
     @Override
-    protected int setView() {
+    protected void init(View view,Bundle savedInstanceState) {
+        mTextView = (TextView) view.findViewById(R.id.tv_name);
+    }
+
+    @Override
+    protected int setContentView() {
         return R.layout.fragment_user;
     }
 
     @Override
-    protected void init(View view) {
-        mTextView = view.findViewById(R.id.tv_name);
-    }
-
-    @Override
-    protected void initData(Bundle savedInstanceState) {
+    protected void lazyLoad() {
         mTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -37,6 +38,8 @@ public class UserFragment extends BaseFragment {
             }
         });
     }
+
+
 
 
 

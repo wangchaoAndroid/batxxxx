@@ -10,6 +10,8 @@
         <!--</item>-->
     </style>
 
+
+
     <style name="BasicActivityAnimation" parent="@android:style/Animation.Activity">
         <item name="android:activityOpenEnterAnimation">@anim/basic_slide_right_in</item>
         <item name="android:activityOpenExitAnimation">@anim/basic_slide_left_out</item>
