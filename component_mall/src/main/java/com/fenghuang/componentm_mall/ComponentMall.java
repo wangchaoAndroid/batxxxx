@@ -63,7 +63,7 @@ public class ComponentMall implements IComponent {
     }
 
     private void getLifecycleFragment(CC cc) {
-        CC.sendCCResult(cc.getCallId(), CCResult.success("fragment", new MallFragment())
+        CC.sendCCResult(cc.getCallId(), CCResult.success("fragment", new BuyFragment())
             .addData("int", 2)
         );
     }

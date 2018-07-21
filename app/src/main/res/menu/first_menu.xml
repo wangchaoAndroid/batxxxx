@@ -5,23 +5,23 @@
         android:id="@+id/item_tab1"
         android:icon="@drawable/tab1"
         app:showAsAction="ifRoom"
-        android:title="c1" />
+        android:title="电池" />
     <item
         android:id="@+id/item_tab2"
         app:showAsAction="ifRoom"
         android:icon="@drawable/tab2"
-        android:title="c2"
+        android:title="围栏"
         />
     <item
         android:id="@+id/item_tab3"
         app:showAsAction="ifRoom"
         android:icon="@drawable/tab3"
-        android:title="c3" />
+        android:title="商城" />
 
     <item
         android:id="@+id/item_tab4"
         app:showAsAction="ifRoom"
         android:icon="@drawable/tab4"
-        android:title="c4" />
+        android:title="我" />
 
 </menu>

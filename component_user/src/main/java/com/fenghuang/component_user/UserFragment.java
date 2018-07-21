@@ -6,9 +6,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.fenghuang.component_base.base.LazyLoadFragment;
-import com.fenghuang.component_base.utils.ViewFinder;
-import com.fenghuang.component_user.camera.ActivityScanerCode;
-import com.fenghuang.component_user.camera.CameraActivity;
 
 
 /**
@@ -34,7 +31,6 @@ public class UserFragment extends LazyLoadFragment {
         mTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(),CameraActivity.class));
             }
         });
     }

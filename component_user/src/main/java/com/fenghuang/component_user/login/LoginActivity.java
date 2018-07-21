@@ -40,13 +40,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
 
-    private void addOnClickListeners(@IdRes int... ids) {
-        if (ids != null) {
-            for (@IdRes int id : ids) {
-                findViewById(id).setOnClickListener(this);
-            }
-        }
-    }
 
 
     /**

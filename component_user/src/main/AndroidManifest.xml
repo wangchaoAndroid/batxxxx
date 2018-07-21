@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application>
-        <activity android:name=".camera.CameraActivity"
+        <activity android:name="com.fenghuang.componentm_mall.camera.CameraActivity"
                   android:configChanges="orientation|keyboardHidden|screenSize"
                   android:screenOrientation="portrait"
             />

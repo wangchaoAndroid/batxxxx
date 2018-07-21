@@ -9,8 +9,12 @@
     <color name="basic_white5">#1AFFFFFF</color>
     <color name="basic_white6">#F4F4F6</color>
     <color name="basic_white7">#C6C7CA</color>
+    <color name="basic_white8">#CCCCCC</color>
+
+
 
     <!-- 灰色 -->
+    <color name="basic_gray0">#dddddd</color>
     <color name="basic_gray1">#999999</color>
     <color name="basic_gray2">#949494</color>
     <color name="basic_gray3">#7D7D85</color>
@@ -30,7 +34,7 @@
     <color name="basic_black5">#C0000000</color>
     <color name="basic_black6">#000000</color>
     <color name="basic_black7">#60000000</color>
-
+    <color name="basic_black8">#333333</color>
     <!-- 红色 -->
     <color name="basic_red1">#FF0000</color>
     <color name="basic_red2">#E24D46</color>
@@ -40,6 +44,7 @@
     <!-- 蓝色 -->
     <color name="basic_blue1">#46DBE2</color>
     <color name="basic_blue2">#CC46DBE2</color>
+    <color name="basic_blue3">#b2ebed</color>
     <color name="basic_blue4">#007AFE</color>
 
     <!-- 黄色 -->

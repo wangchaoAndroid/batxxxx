@@ -65,7 +65,7 @@ public class MapFragment extends LazyLoadFragment implements AMap.OnMyLocationCh
                     //可在其中解析amapLocation获取相应内容。
                     DPoint dPoint = new DPoint(amapLocation.getLatitude(),amapLocation.getLongitude());
                     circle(amapLocation.getLatitude(), amapLocation.getLongitude());
-                    addFence(dPoint,500f,"111111");
+                    addFence(dPoint,500f,"您已进入围栏范围");
                     stopLocation();
                     mLocationClient.unRegisterLocationListener(this);
                     destoryClient();
@@ -84,8 +84,8 @@ public class MapFragment extends LazyLoadFragment implements AMap.OnMyLocationCh
         LatLng latLng = new LatLng(v1, v2);
 
         mAMap.addCircle(new CircleOptions().center(latLng)
-                .radius(300).strokeColor(Color.BLUE)
-                .fillColor(Color.BLUE).strokeWidth(2));
+                .radius(800).strokeColor(R.color.basic_blue3)
+                .fillColor(R.color.basic_blue3).strokeWidth(2));
         Log.e("tag", "============圈圈300==================2");
     }
 
@@ -138,6 +138,7 @@ public class MapFragment extends LazyLoadFragment implements AMap.OnMyLocationCh
         mMapView = (MapView) view.findViewById(R.id.map);
         mAMap = mMapView.getMap();
         mMapView.onCreate(savedInstanceState);// 此方法必须重写
+        regeist();
     }
 
 
@@ -160,9 +161,6 @@ public class MapFragment extends LazyLoadFragment implements AMap.OnMyLocationCh
                 String fenceId = bundle.getString(GeoFence.BUNDLE_KEY_FENCEID);
                 //获取当前有触发的围栏对象：
                 GeoFence fence = bundle.getParcelable(GeoFence.BUNDLE_KEY_FENCE);
-
-                Log.e("1111","99999999999999999999");
-
             }
         }
     };
@@ -177,7 +175,9 @@ public class MapFragment extends LazyLoadFragment implements AMap.OnMyLocationCh
 
     //取消注册广播
     public void unRegeist(){
-        getActivity().unregisterReceiver(mGeoFenceReceiver);
+        if(mGeoFenceReceiver != null){
+            getActivity().unregisterReceiver(mGeoFenceReceiver);
+        }
     }
 
     //清除所有围栏
@@ -195,12 +195,12 @@ public class MapFragment extends LazyLoadFragment implements AMap.OnMyLocationCh
         public void onGeoFenceCreateFinished(List<GeoFence> geoFenceList, int errorCode, String s) {
             if(errorCode == GeoFence.ADDGEOFENCE_SUCCESS){//判断围栏是否创建成功
                 //tvReult.setText();
-                Log.e("1111","添加围栏成功!!" + errorCode);
+                Log.e(TAG,"添加围栏成功!!" + errorCode);
                 //geoFenceList就是已经添加的围栏列表，可据此查看创建的围栏
             } else {
                 //geoFenceList就是已经添加的围栏列表
                 //.setText("添加围栏失败!!");
-                Log.e("1111","添加围栏失败!!" +  errorCode );
+                Log.e(TAG,"添加围栏失败!!" +  errorCode );
             }
         }
     };
@@ -239,7 +239,7 @@ public class MapFragment extends LazyLoadFragment implements AMap.OnMyLocationCh
         mAMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
         mAMap.setOnMyLocationChangeListener(this);
         latLngs.clear();
-        regeist();
+
         init(getActivity());
         setAMapLocationListener();
         startLocation();

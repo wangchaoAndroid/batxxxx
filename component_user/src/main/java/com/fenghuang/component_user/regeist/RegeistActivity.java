@@ -29,13 +29,6 @@ public class RegeistActivity extends BaseActivity implements View.OnClickListene
     }
 
 
-    private void addOnClickListeners(@IdRes int... ids) {
-        if (ids != null) {
-            for (@IdRes int id : ids) {
-                findViewById(id).setOnClickListener(this);
-            }
-        }
-    }
 
 
     /**

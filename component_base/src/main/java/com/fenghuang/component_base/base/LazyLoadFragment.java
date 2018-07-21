@@ -1,6 +1,7 @@
 package com.fenghuang.component_base.base;
 
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
@@ -50,6 +51,15 @@ public abstract class LazyLoadFragment extends Fragment {
         super.setUserVisibleHint(isVisibleToUser);
         isCanLoadData();
     }
+
+    protected void addOnClickListeners(@IdRes int... ids) {
+        if (ids != null) {
+            for (@IdRes int id : ids) {
+                findViewById(id).setOnClickListener((View.OnClickListener) this);
+            }
+        }
+    }
+
 
     /**
      * 是否可以加载数据

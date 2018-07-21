@@ -6,11 +6,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.IdRes;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 
 import com.fenghuang.component_base.R;
 import com.fenghuang.component_base.data.CacheDataSource;
@@ -101,6 +103,14 @@ public abstract class  BaseActivity extends AppCompatActivity implements Handler
         startActivity(intent);
         if (closeCurrentActivity) {
             finish();
+        }
+    }
+
+    protected void addOnClickListeners(@IdRes int... ids) {
+        if (ids != null) {
+            for (@IdRes int id : ids) {
+                findViewById(id).setOnClickListener((View.OnClickListener) this);
+            }
         }
     }
 

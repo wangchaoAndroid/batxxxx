@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends BaseActivity implements View.OnClickListener {
+public class MainActivity extends BaseActivity  {
     private BottomNavigationView mBottomNavigationView;
     private ViewPager mViewPager;
 
@@ -72,119 +72,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mBottomNavigationView = (BottomNavigationView)viewFinder.find(R.id.bottom_navigation);
         BottomNavigationViewHelper.disableShiftMode(mBottomNavigationView);
         mViewPager = viewFinder.find(R.id.vp_view);
-    }
-
-    private void addOnClickListeners(@IdRes int... ids) {
-        if (ids != null) {
-            for (@IdRes int id : ids) {
-                findViewById(id).setOnClickListener(this);
-            }
-        }
+        mBottomNavigationView.setItemIconTintList(null);
     }
 
 
 
-    CC componentBCC;
-    @Override
-    public void onClick(View v) {
-        CCResult result = null;
-        CC cc = null;
-        switch (v.getId()) {
-//            case R.id.test_lifecycle:
-//                CC.obtainBuilder("demo.lifecycle")
-//                        .build()
-//                        .callAsyncCallbackOnMainThread(printResultCallback);
-//                break;
-//            case R.id.componentAOpenActivity:
-//                cc = CC.obtainBuilder(COMPONENT_NAME_A)
-//                        .setActionName("showActivityA")
-//                        .build();
-//                result = cc.call();
-//                break;
-//            case R.id.componentAAsyncOpenActivity:
-//                CC.obtainBuilder(COMPONENT_NAME_A)
-//                        .setActionName("showActivityA")
-//                        .build().callAsyncCallbackOnMainThread(printResultCallback);
-//                break;
-//            case R.id.componentAGetData:
-//                cc = CC.obtainBuilder(COMPONENT_NAME_A)
-//                        .setActionName("getInfo")
-//                        .build();
-//                result = cc.call();
-//                break;
-//            case R.id.componentAAsyncGetData:
-//                CC.obtainBuilder(COMPONENT_NAME_A)
-//                        .setActionName("getInfo")
-//                        .addInterceptor(new MissYouInterceptor())
-//                        .build().callAsyncCallbackOnMainThread(printResultCallback);
-//                break;
-//            case R.id.componentB:
-//                cc = CC.obtainBuilder("ComponentB")
-//                        .setActionName("showActivity")
-//                        .build();
-//                result = cc.call();
-//                break;
-//            case R.id.componentBAsync:
-//                if (componentBCC != null) {
-//                    componentBCC.cancel();
-//                    Toast.makeText(this, R.string.canceled, Toast.LENGTH_SHORT).show();
-//                } else {
-//                    componentBCC = CC.obtainBuilder("ComponentB")
-//                            .setActionName("getNetworkData")
-//                            .build();
-//                    componentBCC.callAsyncCallbackOnMainThread(new IComponentCallback() {
-//                        @Override
-//                        public void onResult(CC cc, CCResult ccResult) {
-//                            componentBCC = null;
-//                            showResult(cc, ccResult);
-//                        }
-//                    });
-//                    Toast.makeText(this, R.string.clickToCancel, Toast.LENGTH_SHORT).show();
-//                }
-//                break;
-//            case R.id.componentBGetData:
-//                cc = CC.obtainBuilder("ComponentB")
-//                        .setActionName("getData")
-//                        .build();
-//                result = cc.call();
-//                break;
-//            case R.id.componentBLogin:
-//                CC.obtainBuilder("ComponentB")
-//                        .setActionName("login")
-//                        .build()
-//                        .callAsyncCallbackOnMainThread(printResultCallback);
-//                break;
-//            case R.id.componentKt:
-//                CC.obtainBuilder("demo.ktComponent")
-//                        .setActionName("showActivity")
-//                        .build()
-//                        .callAsyncCallbackOnMainThread(printResultCallback);
-//                break;
-            default:
-                break;
-        }
-//        if (cc != null && result != null) {
-//            showResult(cc, result);
-//        }
-    }
-    IComponentCallback printResultCallback = new IComponentCallback() {
-        @Override
-        public void onResult(CC cc, CCResult result) {
-            showResult(cc, result);
-        }
-    };
-    private void showResult(CC cc, CCResult result) {
-        String text = "result:\n" + JsonFormat.format(result.toString());
-        text += "\n\n---------------------\n\n";
-        text += "cc:\n" + JsonFormat.format(cc.toString());
-
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (componentBCC != null) {
-            componentBCC.cancel();
-        }
-        super.onDestroy();
-    }
 }

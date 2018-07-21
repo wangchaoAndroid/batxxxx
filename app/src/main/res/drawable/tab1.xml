@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_checked="true" android:drawable="@mipmap/file_add"/>
-    <item android:state_checked="false" android:drawable="@mipmap/file_add_enable"/>
+    <item android:state_checked="true" android:drawable="@drawable/icon_battery"/>
+    <item android:state_checked="false" android:drawable="@drawable/icon_battery_unable"/>
 </selector>

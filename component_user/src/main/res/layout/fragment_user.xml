@@ -21,12 +21,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="@dimen/component_user_dp_50"
-            android:drawableRight="@drawable/file_delete_able"
+            android:drawableRight="@drawable/icon_user_1"
             android:gravity="center_vertical"
             android:paddingBottom="@dimen/component_user_dp_10"
             android:paddingTop="@dimen/component_user_dp_10"
-
-            android:text="aaaa"/>
+            android:text="我的保险"/>
 
         <View
             android:layout_width="match_parent"
@@ -36,11 +35,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="@dimen/component_user_dp_50"
-            android:drawableRight="@drawable/file_copy_able"
+            android:drawableRight="@drawable/icon_user_2"
             android:gravity="center_vertical"
             android:paddingBottom="@dimen/component_user_dp_10"
             android:paddingTop="@dimen/component_user_dp_10"
-            android:text="bbbb"/>
+            android:text="我的副主"/>
 
         <View
             android:layout_width="match_parent"
@@ -50,11 +49,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="@dimen/component_user_dp_50"
-            android:drawableRight="@drawable/file_cut_able"
+            android:drawableRight="@drawable/icon_user_3"
             android:gravity="center_vertical"
             android:paddingBottom="@dimen/component_user_dp_10"
             android:paddingTop="@dimen/component_user_dp_10"
-            android:text="cccc"/>
+            android:text="关于我们"/>
 
         <View
             android:layout_width="match_parent"
@@ -64,11 +63,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="@dimen/component_user_dp_50"
-            android:drawableRight="@drawable/file_delete_able"
+            android:drawableRight="@drawable/icon_user_4"
             android:gravity="center_vertical"
             android:paddingBottom="@dimen/component_user_dp_10"
             android:paddingTop="@dimen/component_user_dp_10"
-            android:text="dddd"/>
+            android:text="给我好评"/>
 
         <View
             android:layout_width="match_parent"
@@ -81,7 +80,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/component_user_dp_10"
-        android:text="最大字数限制"
+        android:text="用户名最大字数限制"
         android:textSize="@dimen/basic_s16"
         app:layout_constraintBottom_toTopOf="@+id/ll1"
         app:layout_constraintTop_toTopOf="parent"
