@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
  * blog ：http://blog.csdn.net/linglongxin24/article/details/53205878
  */
 
-public abstract class LazyLoadFragment extends Fragment {
+public abstract class LazyLoadFragment extends Fragment implements View.OnClickListener {
     /**
      * 视图是否已经初初始化
      */
@@ -55,7 +55,7 @@ public abstract class LazyLoadFragment extends Fragment {
     protected void addOnClickListeners(@IdRes int... ids) {
         if (ids != null) {
             for (@IdRes int id : ids) {
-                findViewById(id).setOnClickListener((View.OnClickListener) this);
+                findViewById(id).setOnClickListener(this);
             }
         }
     }
@@ -139,6 +139,10 @@ public abstract class LazyLoadFragment extends Fragment {
     protected void stopLoad() {
     }
 
+    @Override
+    public void onClick(View view) {
+
+    }
 }
 
 //        4.用法

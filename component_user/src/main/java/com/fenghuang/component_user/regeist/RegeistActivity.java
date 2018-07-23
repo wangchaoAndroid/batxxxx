@@ -1,5 +1,6 @@
 package com.fenghuang.component_user.regeist;
 
+import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.design.widget.TextInputEditText;
 import android.view.View;
@@ -28,16 +29,11 @@ public class RegeistActivity extends BaseActivity implements View.OnClickListene
         addOnClickListeners(R.id.btn_login);
     }
 
-
-
-
-    /**
-     * 获取所有保存过的用户信息
-     */
     @Override
-    public void initData() {
+    protected void initData(Bundle savedInstanceState) {
         callId = getIntent().getStringExtra("callId");
     }
+
 
     @Override
     protected void setEvent() {

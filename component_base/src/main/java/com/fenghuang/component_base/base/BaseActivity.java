@@ -44,7 +44,7 @@ public abstract class  BaseActivity extends AppCompatActivity implements Handler
     /**
      * 初始化数据
      */
-    protected abstract void initData();
+    protected abstract void initData(Bundle savedInstanceState);
 
     /**
      * 绑定事件
@@ -70,7 +70,7 @@ public abstract class  BaseActivity extends AppCompatActivity implements Handler
         mContext = this;
         setContentView(getLayoutId());
         initView();
-        initData();
+        initData(savedInstanceState);
         setEvent();
 
         ActivityStackManager.getInstance().addActivity(this);

@@ -30,7 +30,6 @@ public class ComponentMall implements IComponent {
         String actionName = cc.getActionName();
         switch (actionName) {
             case "showActivityA":
-                Log.e("11111","2222222222222");
                 openActivity(cc);
                 break;
             case "getLifecycleFragment":
@@ -63,7 +62,7 @@ public class ComponentMall implements IComponent {
     }
 
     private void getLifecycleFragment(CC cc) {
-        CC.sendCCResult(cc.getCallId(), CCResult.success("fragment", new BuyFragment())
+        CC.sendCCResult(cc.getCallId(), CCResult.success("fragment", new MallFragment())
             .addData("int", 2)
         );
     }

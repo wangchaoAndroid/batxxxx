@@ -1,5 +1,6 @@
 package com.fenghuang.battery.splash;
 
+import android.os.Bundle;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
@@ -40,9 +41,10 @@ public class SplashActivity extends BaseActivity {
     protected void initView() {}
 
     @Override
-    protected void initData() {
+    protected void initData(Bundle savedInstanceState) {
         mHandler.sendEmptyMessageDelayed(0, 1000);
     }
+
 
     @Override
     protected void setEvent() {}

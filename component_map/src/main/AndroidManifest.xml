@@ -25,6 +25,10 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"></uses-permission>
     <application>
         <service android:name="com.amap.api.location.APSService"></service>
+        <activity android:name=".RouterActivity"
+                  android:configChanges="orientation|keyboardHidden|screenSize"
+                  android:screenOrientation="portrait"/>
+
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="09426e52bc2630a15c9676bc686aa0e7"/>

@@ -43,6 +43,7 @@ public class MallFragment extends LazyLoadFragment implements BaseQuickAdapter.O
         mRecyclerView.setAdapter(mMallAdapter);
         mMallAdapter.setOnItemClickListener(this);
         mMallAdapter.setChecked(0);
+        FragmentUtils.replaceFragment(getChildFragmentManager(),R.id.container2,new ProductFragment(),false);
     }
 
 

@@ -1,5 +1,6 @@
 package com.fenghuang.component_user.login;
 
+import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -39,16 +40,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         addOnClickListeners(R.id.btn_login,R.id.tv_login_config);
     }
 
-
-
-
-    /**
-     * 获取所有保存过的用户信息
-     */
     @Override
-    public void initData() {
+    protected void initData(Bundle savedInstanceState) {
         callId = getIntent().getStringExtra("callId");
     }
+
+
 
     @Override
     protected void setEvent() {

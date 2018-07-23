@@ -39,7 +39,7 @@ import java.util.List;
 /**
  * Create by wangchao on 2018/7/18 13:56
  */
-public class MapFragment extends LazyLoadFragment implements AMap.OnMyLocationChangeListener {
+public class MapFragment extends LazyLoadFragment {
 
     private List<LatLng> latLngs = new ArrayList<LatLng>();
     private MapView mMapView;
@@ -206,16 +206,6 @@ public class MapFragment extends LazyLoadFragment implements AMap.OnMyLocationCh
     };
 
     @Override
-    public void onMyLocationChange(Location location) {
-        latLngs.add(new LatLng(location.getLatitude(),location.getLongitude()));
-        if(polyline != null){
-            polyline.remove();
-        }
-        polyline =mAMap.addPolyline(new PolylineOptions().
-                addAll(latLngs).width(10).color(Color.argb(255, 1, 1, 1)));
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
         //clearFence();
@@ -231,18 +221,59 @@ public class MapFragment extends LazyLoadFragment implements AMap.OnMyLocationCh
     protected void lazyLoad() {
         mAMap.moveCamera(CameraUpdateFactory.zoomTo(15));
         myLocationStyle = new MyLocationStyle();//初始化定位蓝点样式类myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);//连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
+        myLocationStyle.strokeColor(android.R.color.transparent);
+        //自定义精度范围的圆形边框宽度
+        myLocationStyle.strokeWidth(0);
+        // 设置圆形的填充颜色
+        myLocationStyle.radiusFillColor(android.R.color.transparent);
         myLocationStyle.showMyLocation(true);
         myLocationStyle.interval(2000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
         mAMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
         mUiSettings = mAMap.getUiSettings();//实例化UiSettings类对象
         mUiSettings.setMyLocationButtonEnabled(true);
         mAMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
-        mAMap.setOnMyLocationChangeListener(this);
         latLngs.clear();
 
         init(getActivity());
         setAMapLocationListener();
         startLocation();
+    }
+
+
+    /**
+     * 方法必须重写
+     */
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mMapView.onDestroy();
+    }
+
+    /**
+     * 方法必须重写
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        mMapView.onResume();
+    }
+
+    /**
+     * 方法必须重写
+     */
+    @Override
+    public void onPause() {
+        super.onPause();
+        mMapView.onPause();
+    }
+
+    /**
+     * 方法必须重写
+     */
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mMapView.onSaveInstanceState(outState);
     }
 
 }

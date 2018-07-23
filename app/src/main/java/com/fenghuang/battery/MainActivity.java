@@ -1,5 +1,6 @@
 package com.fenghuang.battery;
 
+import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -22,19 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends BaseActivity  {
+public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
     private BottomNavigationView mBottomNavigationView;
     private ViewPager mViewPager;
-
-    @Override
-    public void initData() {
-        List<LazyLoadFragment> fragments = new ArrayList<>();
-        fragments.add(FragmentFactory.createFragment(0));
-        fragments.add(FragmentFactory.createFragment(1));
-        fragments.add(FragmentFactory.createFragment(2));
-        fragments.add(FragmentFactory.createFragment(3));
-        mViewPager.setAdapter(new CommonFragmentAdapter(getSupportFragmentManager(),fragments));
-    }
 
     @Override
     protected void setEvent() {
@@ -73,8 +64,32 @@ public class MainActivity extends BaseActivity  {
         BottomNavigationViewHelper.disableShiftMode(mBottomNavigationView);
         mViewPager = viewFinder.find(R.id.vp_view);
         mBottomNavigationView.setItemIconTintList(null);
+        mViewPager.addOnPageChangeListener(this);
+    }
+
+    @Override
+    protected void initData(Bundle savedInstanceState) {
+        List<LazyLoadFragment> fragments = new ArrayList<>();
+        fragments.add(FragmentFactory.createFragment(0));
+        fragments.add(FragmentFactory.createFragment(1));
+        fragments.add(FragmentFactory.createFragment(2));
+        fragments.add(FragmentFactory.createFragment(3));
+        mViewPager.setAdapter(new CommonFragmentAdapter(getSupportFragmentManager(),fragments));
     }
 
 
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        mBottomNavigationView.setSelectedItemId(mBottomNavigationView.getMenu().getItem(position).getItemId());
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
 }

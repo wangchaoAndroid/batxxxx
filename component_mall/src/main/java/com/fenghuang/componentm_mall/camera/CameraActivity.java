@@ -1,5 +1,7 @@
 package com.fenghuang.componentm_mall.camera;
 
+import android.os.Bundle;
+
 import com.fenghuang.component_base.base.BaseActivity;
 import com.fenghuang.component_base.utils.FragmentUtils;
 import com.fenghuang.componentm_mall.R;
@@ -14,9 +16,10 @@ public class CameraActivity extends BaseActivity {
     }
 
     @Override
-    protected void initData() {
+    protected void initData(Bundle savedInstanceState) {
 
     }
+
 
     @Override
     protected void setEvent() {

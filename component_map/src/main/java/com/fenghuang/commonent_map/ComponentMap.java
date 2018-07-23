@@ -43,6 +43,9 @@ public class ComponentMap implements IComponent {
             case "getInfo":
                 getInfo(cc);
                 break;
+            case "enter_router_map":
+                enterRouterMap(cc);
+                break;
             default:
                 //这个逻辑分支上没有调用CC.sendCCResult(...),是一种错误的示例
                 //并且方法的返回值为false，代表不会异步调用CC.sendCCResult(...)
@@ -50,6 +53,18 @@ public class ComponentMap implements IComponent {
                 break;
         }
         return false;
+    }
+
+    private void enterRouterMap(CC cc) {
+        Context context = cc.getContext();
+        Intent intent = new Intent(context, RouterActivity.class);
+        if (!(context instanceof Activity)) {
+            //调用方没有设置context或app间组件跳转，context为application
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+        context.startActivity(intent);
+        CC.sendCCResult(cc.getCallId(), CCResult.success());
+
     }
 
     private void lifecycleFragmentDoubleText(CC cc) {
@@ -75,7 +90,7 @@ public class ComponentMap implements IComponent {
 
     private void openActivity(CC cc) {
         Context context = cc.getContext();
-        Intent intent = new Intent(context, MainActivity.class);
+        Intent intent = new Intent(context, RouterActivity.class);
         if (!(context instanceof Activity)) {
             //调用方没有设置context或app间组件跳转，context为application
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
