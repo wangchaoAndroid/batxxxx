@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
+    <!--<item name="colorPrimary">@color/basic_white2</item>-->
+    <!--<item name="colorPrimaryDark">@color/basic_white2</item>-->
     <style name="BasicAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/basic_white2</item>
-        <item name="colorPrimaryDark">@color/basic_white2</item>
         <item name="android:windowAnimationStyle">@style/BasicActivityAnimation</item>
         <item name="android:windowBackground">@color/basic_white1</item>
         <!--<item name="android:navigationBarColor" tools:ignore="NewApi">@android:color/transparent-->

@@ -3,6 +3,7 @@ package com.fenghuang.component_base.base;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,6 +19,7 @@ import com.fenghuang.component_base.R;
 import com.fenghuang.component_base.data.CacheDataSource;
 import com.fenghuang.component_base.utils.ActivityStackManager;
 import com.fenghuang.component_base.utils.HandlerUtils;
+import com.fenghuang.component_base.utils.StatusBarUtil;
 
 import java.util.ArrayList;
 
@@ -61,6 +63,10 @@ public abstract class  BaseActivity extends AppCompatActivity implements Handler
         super.onCreate(savedInstanceState);
         if(getSupportActionBar() != null){
             getSupportActionBar().hide();
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            StatusBarUtil.setStatusBarColor(this,R.color.basic_white1);
         }
         if (savedInstanceState != null) {
             CacheDataSource.restoreData(savedInstanceState);
