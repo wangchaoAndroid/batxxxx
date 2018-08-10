@@ -1,5 +1,6 @@
 package com.fenghuang.component_battery;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import com.fenghuang.component_base.base.BaseApp;
 import com.fenghuang.component_base.base.LazyLoadFragment;
 import com.fenghuang.component_base.helper.GlideRoundTransform;
 import com.fenghuang.component_base.tool.ImageLoader;
+import com.fenghuang.component_base.utils.FragmentUtils;
 import com.fenghuang.component_battery.adapter.BannerAdapter;
 import com.fenghuang.component_battery.adapter.BatteryAdapter;
 import com.fenghuang.component_base.helper.SpacesItemDecoration;
@@ -44,7 +46,7 @@ public class BatteryFragment  extends LazyLoadFragment{
         mImageView = view.findViewById(R.id.app_enter_map);
         mBannerView = view.findViewById(R.id.app_banner);
         count_down_time = view.findViewById(R.id.count_down_time);
-        addOnClickListeners(R.id.app_enter_map);
+        addOnClickListeners(R.id.app_enter_map,R.id.left2);
     }
 
     @Override
@@ -61,12 +63,12 @@ public class BatteryFragment  extends LazyLoadFragment{
         BannerAdapter bannerAdapter = new BannerAdapter(getActivity(),items);
         mBannerView.setAdapter(bannerAdapter);
         ImageLoader.load(R.drawable.default1,mImageView);
-        SpannableString spannableString = new SpannableString("19小时30分");
+        SpannableString spannableString = new SpannableString("最新告警内容");
         //设置字体大小（相对值,单位：像素） 参数表示为默认字体大小的多少倍   ,0.5表示一半
-        spannableString.setSpan(new RelativeSizeSpan(2f), 0, 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spannableString.setSpan(new ForegroundColorSpan(Color.GREEN),0,2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spannableString.setSpan(new RelativeSizeSpan(2f), 4, 6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spannableString.setSpan(new ForegroundColorSpan(Color.GREEN),4,6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        spannableString.setSpan(new RelativeSizeSpan(2f), 0, 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        spannableString.setSpan(new ForegroundColorSpan(Color.GREEN),0,2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        spannableString.setSpan(new RelativeSizeSpan(2f), 4, 6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        spannableString.setSpan(new ForegroundColorSpan(Color.GREEN),4,6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         count_down_time.setText(spannableString);
     }
 
@@ -79,6 +81,8 @@ public class BatteryFragment  extends LazyLoadFragment{
                     .setActionName("enter_router_map")
                     .build()
                     .call();
+        }else if(viewId == R.id.left2){
+            startActivity(new Intent(getActivity(),WarnFragment.class));
         }
     }
 }

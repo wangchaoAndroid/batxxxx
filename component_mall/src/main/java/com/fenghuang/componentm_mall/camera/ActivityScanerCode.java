@@ -363,8 +363,8 @@ public class ActivityScanerCode extends LazyLoadFragment implements View.OnClick
         if (viewId == R.id.top_mask) {
             light();
         } else if (viewId == R.id.top_back) {
-            //finish();
-            FragmentUtils.addFragment(getActivity().getSupportFragmentManager(),new WarnFragment(),R.id.root_view);
+            FragmentUtils.removeFragment(this);
+            getActivity().finish();
         }else if(viewId == R.id.input_code){
             FragmentUtils.addFragment(getActivity().getSupportFragmentManager(),new InputNunFragment(),R.id.root_view);
         }
@@ -518,8 +518,10 @@ public class ActivityScanerCode extends LazyLoadFragment implements View.OnClick
             //Log.d(TAG, "Sending decode succeeded message...");
             message.sendToTarget();
         } else {
-            Message message = Message.obtain(handler, R.id.decode_failed);
-            message.sendToTarget();
+            if(!getActivity().isFinishing()){
+                Message message = Message.obtain(handler, R.id.decode_failed);
+                message.sendToTarget();
+            }
         }
     }
 

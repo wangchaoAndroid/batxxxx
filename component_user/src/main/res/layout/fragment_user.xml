@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/setting_container"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -47,13 +48,56 @@
             android:background="@color/divide_line"/>
 
         <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/component_user_dp_50"
+        android:drawableRight="@drawable/icon_user_3"
+        android:gravity="center_vertical"
+        android:paddingBottom="@dimen/component_user_dp_10"
+        android:paddingTop="@dimen/component_user_dp_10"
+        android:text="关于我们"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divide_line"/>
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="@dimen/component_user_dp_50"
             android:drawableRight="@drawable/icon_user_3"
             android:gravity="center_vertical"
             android:paddingBottom="@dimen/component_user_dp_10"
             android:paddingTop="@dimen/component_user_dp_10"
-            android:text="关于我们"/>
+            android:text="在线保修"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divide_line"/>
+
+        <TextView
+            android:id="@+id/scan_tv"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/component_user_dp_50"
+            android:drawableRight="@drawable/icon_user_3"
+            android:gravity="center_vertical"
+            android:paddingBottom="@dimen/component_user_dp_10"
+            android:paddingTop="@dimen/component_user_dp_10"
+            android:text="电池扫码"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divide_line"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/component_user_dp_50"
+            android:drawableRight="@drawable/icon_user_3"
+            android:gravity="center_vertical"
+            android:paddingBottom="@dimen/component_user_dp_10"
+            android:paddingTop="@dimen/component_user_dp_10"
+            android:text="附近门店"/>
 
         <View
             android:layout_width="match_parent"
@@ -67,7 +111,7 @@
             android:gravity="center_vertical"
             android:paddingBottom="@dimen/component_user_dp_10"
             android:paddingTop="@dimen/component_user_dp_10"
-            android:text="给我好评"/>
+            android:text="附近充电桩"/>
 
         <View
             android:layout_width="match_parent"

@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.billy.cc.core.component.CC;
 import com.billy.cc.core.component.CCResult;
 import com.fenghuang.component_base.base.BaseActivity;
+import com.fenghuang.component_base.base.LazyLoadFragment;
 import com.fenghuang.component_base.data.SPDataSource;
 import com.fenghuang.component_base.utils.ViewFinder;
 import com.fenghuang.component_user.R;
@@ -58,8 +59,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         return R.layout.user_activity_login;
     }
 
-
-
+    CCResult call;
     @Override
     public void onClick(View view) {
         int id = view.getId();
@@ -70,12 +70,23 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             if("admin".equals(phone) && "admin".equals(pwd)){
                 SPDataSource.put(this,SPDataSource.USER_TOKEN,"1111111");
                 //为确保不管登录成功与否都会调用CC.sendCCResult，在onDestroy方法中调用
-                CC.obtainBuilder("component_app")
+                call = CC.obtainBuilder("component_app")
                         .setContext(this)
                         .setActionName("enterMain")
                         .build()
                         .call();
+                if(call.isSuccess()){
+                    finish();
+                }
+            }else if("guest".equals(phone) && "guest".equals(pwd)){
+                call = CC.obtainBuilder("component_mall")
+                        .setContext(this)
+                        .setActionName("getBuyActivity")
+                        .build()
+                        .call();
+
             }
+
         } else if (id == R.id.tv_login_config) {
             startActivity(RegeistActivity.class,false);
         }

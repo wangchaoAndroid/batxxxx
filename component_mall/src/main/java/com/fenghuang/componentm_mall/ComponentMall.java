@@ -8,6 +8,7 @@ import android.util.Log;
 import com.billy.cc.core.component.CC;
 import com.billy.cc.core.component.CCResult;
 import com.billy.cc.core.component.IComponent;
+import com.fenghuang.componentm_mall.camera.CameraActivity;
 
 public class ComponentMall implements IComponent {
     @Override
@@ -30,11 +31,15 @@ public class ComponentMall implements IComponent {
         String actionName = cc.getActionName();
         switch (actionName) {
             case "showActivityA":
-                openActivity(cc);
+                openActivity(cc,CameraActivity.class);
                 break;
             case "getLifecycleFragment":
                 //demo for provide fragment object to other component
                 getLifecycleFragment(cc);
+                break;
+            case "getBuyActivity":
+                //demo for provide fragment object to other component
+                getBuyFragment(cc);
                 break;
             case "lifecycleFragment.addText":
                 lifecycleFragmentDoubleText(cc);
@@ -67,14 +72,22 @@ public class ComponentMall implements IComponent {
         );
     }
 
+    private void getBuyFragment(CC cc) {
+//        CC.sendCCResult(cc.getCallId(), CCResult.success("fragment", new BuyActivity())
+//                .addData("int", 2)
+//        );
+
+        openActivity(cc,BuyActivity.class);
+    }
+
     private void getInfo(CC cc) {
         String userName = "billy";
         CC.sendCCResult(cc.getCallId(), CCResult.success("userName", userName));
     }
 
-    private void openActivity(CC cc) {
+    private void openActivity(CC cc,Class cls) {
         Context context = cc.getContext();
-        Intent intent = new Intent(context, MainActivity.class);
+        Intent intent = new Intent(context, cls);
         if (!(context instanceof Activity)) {
             //调用方没有设置context或app间组件跳转，context为application
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

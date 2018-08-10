@@ -5,7 +5,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.billy.cc.core.component.CC;
+import com.billy.cc.core.component.CCResult;
 import com.fenghuang.component_base.base.LazyLoadFragment;
+import com.fenghuang.component_base.utils.FragmentUtils;
 
 
 /**
@@ -14,11 +17,12 @@ import com.fenghuang.component_base.base.LazyLoadFragment;
  */
 public class UserFragment extends LazyLoadFragment {
     TextView mTextView;
-
+    private TextView scan_tv;
 
     @Override
     protected void init(View view,Bundle savedInstanceState) {
         mTextView = (TextView) view.findViewById(R.id.tv_name);
+        scan_tv = (TextView) view.findViewById(R.id.scan_tv);
     }
 
     @Override
@@ -33,14 +37,23 @@ public class UserFragment extends LazyLoadFragment {
             public void onClick(View v) {
             }
         });
+        addOnClickListeners(R.id.scan_tv);
     }
 
+    @Override
+    public void onClick(View view) {
+        super.onClick(view);
+        int id = view.getId();
+        if(id == R.id.scan_tv){
+            CC.obtainBuilder("component_mall")
+                    .setContext(getActivity())
+                    .setActionName("showActivityA")
+                    .build()
+                    .call();
+        }
+    }
 
-
-
-
-
-//    @SuppressLint("SetTextI18n")
+    //    @SuppressLint("SetTextI18n")
 //    @Override
 //    public View onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
 //        Context context = container.getContext();

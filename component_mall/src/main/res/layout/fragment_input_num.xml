@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:background="#fff"
     android:clickable="true"
+    android:fitsSystemWindows="true"
     android:paddingLeft="@dimen/basic_d10"
     android:paddingRight="@dimen/basic_d10"
     android:orientation="vertical"
@@ -14,6 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize">
         <ImageView
+            android:id="@+id/top_back"
             android:layout_width="18dp"
             android:src="@drawable/back"
             android:layout_centerVertical="true"

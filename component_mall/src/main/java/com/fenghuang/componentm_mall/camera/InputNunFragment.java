@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.fenghuang.component_base.base.LazyLoadFragment;
+import com.fenghuang.component_base.utils.FragmentUtils;
 import com.fenghuang.componentm_mall.R;
 
 /**
@@ -13,7 +14,7 @@ public class InputNunFragment extends LazyLoadFragment {
 
     @Override
     protected void init(View view,Bundle savedInstanceState) {
-
+        addOnClickListeners(R.id.top_back);
     }
 
     @Override
@@ -26,5 +27,13 @@ public class InputNunFragment extends LazyLoadFragment {
 
     }
 
-
+    @Override
+    public void onClick(View view) {
+        super.onClick(view);
+        int id = view.getId();
+        if(id == R.id.top_back){
+//            getActivity().finish();
+            FragmentUtils.removeFragment(this);
+        }
+    }
 }
