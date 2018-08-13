@@ -1,4 +1,6 @@
 package com.fenghuang.component_base.net;
+import android.util.Log;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Set;
@@ -15,7 +17,7 @@ import okio.Buffer;
  * 公共参数
  */
 public class CommonInterceptor implements Interceptor {
-
+    private static final String TAG = "CommonInterceptor";
     public static final String METHOD_GET = "GET";
     public static final String METHOD_POST = "POST";
 
@@ -29,15 +31,16 @@ public class CommonInterceptor implements Interceptor {
         String method=oldRequest.method();
         if(METHOD_GET.equals(method)){
 
-            return chain.proceed(newRequest);
+            //return chain.proceed(newRequest);
         }
         if(METHOD_POST.equals(method)){
-            if (oldRequest.body() instanceof FormBody) {
-                FormBody body = (FormBody) oldRequest.body();
-
-                return chain.proceed(newRequest);
-            }
+//            if (oldRequest.body() instanceof FormBody) {
+//                FormBody body = (FormBody) oldRequest.body();
+//
+//                return chain.proceed(newRequest);
+//            }
         }
+        ILog.d( TAG ,oldRequest.url() + "");
         return chain.proceed(oldRequest);
 
     }

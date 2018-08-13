@@ -1,13 +1,15 @@
 package com.fenghuang.component_base.net;
 
 
+import android.text.TextUtils;
+
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
 /**
  * Create by wangchao on 2018/1/4 17:09
  */
-public abstract class ResponseCallback<T>  implements Observer<T>{
+public abstract class ResponseCallback<T extends BaseEntery> implements Observer<T>{
 
     public abstract void onSuccess(T value);
 
@@ -17,7 +19,12 @@ public abstract class ResponseCallback<T>  implements Observer<T>{
 
     @Override
     public void onNext(T value) {
-        onSuccess(value);
+        if(value == null) return;
+        if(value.code == 1){
+            onSuccess(value);
+        }else {
+            if(!TextUtils.isEmpty(value.msg)) onFailture(value.msg);
+        }
     }
 
     @Override

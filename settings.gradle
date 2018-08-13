@@ -1,1 +1,1 @@
-include ':app', ':component_user', ':component_base', ':component_interceptors', ':component_protect_demo', ':component_screen', ':component_battery', ':component_map', ':component_mall'
+include ':app', ':component_user', ':component_base', ':component_interceptors', ':component_protect_demo', ':component_screen', ':component_battery', ':component_map', ':component_mall', ':component_setting'

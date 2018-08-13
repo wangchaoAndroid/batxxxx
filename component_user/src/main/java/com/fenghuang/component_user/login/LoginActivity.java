@@ -19,10 +19,25 @@ import com.billy.cc.core.component.CCResult;
 import com.fenghuang.component_base.base.BaseActivity;
 import com.fenghuang.component_base.base.LazyLoadFragment;
 import com.fenghuang.component_base.data.SPDataSource;
+import com.fenghuang.component_base.net.BaseEntery;
+import com.fenghuang.component_base.net.ResponseCallback;
+import com.fenghuang.component_base.net.RetrofitManager;
+import com.fenghuang.component_base.tool.RxToast;
 import com.fenghuang.component_base.utils.ViewFinder;
+import com.fenghuang.component_user.LoginModel;
+import com.fenghuang.component_user.NetServices;
 import com.fenghuang.component_user.R;
 import com.fenghuang.component_user.UserActivity;
+import com.fenghuang.component_user.UserManager;
 import com.fenghuang.component_user.regeist.RegeistActivity;
+
+import java.util.List;
+
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
 
 /**
  * Created by wyl on 2017/12/5
@@ -31,7 +46,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     private TextInputEditText tiet_phone;
     private TextInputEditText tiet_password;
-    private TextView btn_login;
     private String callId;
     @Override
     public void initView() {
@@ -46,12 +60,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         callId = getIntent().getStringExtra("callId");
     }
 
-
-
     @Override
     protected void setEvent() {
-//        etUsername.addTextChangedListener(mTextWatcher);
-//        addOnClickListeners(R.id.iv_arrow, R.id.iv_visibility, R.id.btn_login, R.id.tv_login_config);
+
     }
 
     @Override
@@ -67,26 +78,44 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             String phone = tiet_phone.getText().toString().trim();
             String pwd = tiet_password.getText().toString().trim();
             //测试账号，登录
-            if("admin".equals(phone) && "admin".equals(pwd)){
-                SPDataSource.put(this,SPDataSource.USER_TOKEN,"1111111");
-                //为确保不管登录成功与否都会调用CC.sendCCResult，在onDestroy方法中调用
-                call = CC.obtainBuilder("component_app")
-                        .setContext(this)
-                        .setActionName("enterMain")
-                        .build()
-                        .call();
-                if(call.isSuccess()){
-                    finish();
-                }
-            }else if("guest".equals(phone) && "guest".equals(pwd)){
-                call = CC.obtainBuilder("component_mall")
-                        .setContext(this)
-                        .setActionName("getBuyActivity")
-                        .build()
-                        .call();
+            NetServices netServices = RetrofitManager.getInstance().initRetrofit().create(NetServices.class);
+            netServices.login(phone,pwd,"")
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new ResponseCallback<BaseEntery<LoginModel>>() {
+                        @Override
+                        public void onSuccess(BaseEntery<LoginModel> value) {
+                            LoginModel loginModel = (LoginModel) value;
+                            //内存保存用户数据
+                            UserManager.saveUserInfo(loginModel);
+                            //本地保存用户token
+                            SPDataSource.put(LoginActivity.this,SPDataSource.USER_TOKEN,((LoginModel) value).token);
+                            //根据电池集合判读是否需要购买
+                            List<String> viceCardListNumber = loginModel.viceCardListNumber;
+                            if(viceCardListNumber != null && !viceCardListNumber.isEmpty()){
+                                call = CC.obtainBuilder("component_app")
+                                        .setContext(LoginActivity.this)
+                                        .setActionName("enterMain")
+                                        .build()
+                                        .call();
+                                if(call.isSuccess()){
+                                    finish();
+                                }
+                            }else {
+                                call = CC.obtainBuilder("component_mall")
+                                        .setContext(LoginActivity.this)
+                                        .setActionName("getBuyActivity")
+                                        .build()
+                                        .call();
+                            }
 
-            }
+                        }
 
+                        @Override
+                        public void onFailture(String e) {
+                            RxToast.error(e);
+                        }
+                    });
         } else if (id == R.id.tv_login_config) {
             startActivity(RegeistActivity.class,false);
         }

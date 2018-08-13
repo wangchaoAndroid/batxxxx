@@ -1,16 +1,31 @@
 package com.fenghuang.component_user.regeist;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.IdRes;
 import android.support.design.widget.TextInputEditText;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.billy.cc.core.component.CC;
 import com.fenghuang.component_base.base.BaseActivity;
 import com.fenghuang.component_base.data.SPDataSource;
+import com.fenghuang.component_base.net.BaseEntery;
+import com.fenghuang.component_base.net.ResponseCallback;
+import com.fenghuang.component_base.net.RetrofitManager;
+import com.fenghuang.component_base.tool.RxToast;
 import com.fenghuang.component_base.utils.ViewFinder;
+import com.fenghuang.component_user.LoginModel;
+import com.fenghuang.component_user.NetServices;
 import com.fenghuang.component_user.R;
+import com.fenghuang.component_user.login.LoginActivity;
+import com.fenghuang.component_user.view.TimeCount;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by wyl on 2017/12/5
@@ -18,20 +33,31 @@ import com.fenghuang.component_user.R;
 public class RegeistActivity extends BaseActivity implements View.OnClickListener {
 
     private TextInputEditText tiet_phone;
-    private TextInputEditText tiet_password;
+    private TextInputEditText tiet_password,tiet_nick,tiet_auth_code,tiet_re_password;
     private TextView btn_login;
     private String callId;
+    private TextView tvCode;
+    private TimeCount time;
+    private NetServices mNetServices;
+
     @Override
     public void initView() {
         ViewFinder viewFinder = new ViewFinder(this);
         tiet_phone = viewFinder.find(R.id.tiet_phone);
         tiet_password = viewFinder.find(R.id.tiet_password);
+        tiet_nick = viewFinder.find(R.id.tiet_nick);
+        tiet_auth_code = viewFinder.find(R.id.tiet_auth_code);
+        tiet_re_password = viewFinder.find(R.id.tiet_re_password);
         addOnClickListeners(R.id.btn_login);
+        tvCode = (TextView) findViewById(R.id.code);
+        tvCode.setOnClickListener(this);
+        time = new TimeCount(60000,1000,tvCode);
     }
 
     @Override
     protected void initData(Bundle savedInstanceState) {
         callId = getIntent().getStringExtra("callId");
+        mNetServices = RetrofitManager.getInstance().initRetrofit().create(NetServices.class);
     }
 
 
@@ -51,28 +77,77 @@ public class RegeistActivity extends BaseActivity implements View.OnClickListene
     @Override
     public void onClick(View view) {
         int id = view.getId();
+        String phone = tiet_phone.getText().toString().trim();
+        String pwd = tiet_password.getText().toString().trim();
+        String nickName = tiet_nick.getText().toString().trim();
+        String auth_code = tiet_auth_code.getText().toString().trim();
+        String re_password = tiet_re_password.getText().toString().trim();
+        if(TextUtils.isEmpty(phone)){
+            RxToast.error("请输入手机号");
+            return;
+        }
+
+        //注册
         if(id == R.id.btn_login) {
-            String phone = tiet_phone.getText().toString().trim();
-            String pwd = tiet_password.getText().toString().trim();
-            //测试账号，登录
-            if("admin".equals(phone) && "admin".equals(pwd)){
-                SPDataSource.put(this,SPDataSource.USER_TOKEN,"1111111");
-                //为确保不管登录成功与否都会调用CC.sendCCResult，在onDestroy方法中调用
-                CC.obtainBuilder("component_app")
-                        .setContext(this)
-                        .setActionName("enterMain")
-                        .build()
-                        .call();
+            if(TextUtils.isEmpty(auth_code)){
+                RxToast.error("请输入验证码");
+                return;
             }
+            if(TextUtils.isEmpty(nickName)){
+                RxToast.error("请输入昵称");
+                return;
+            }
+            if(TextUtils.isEmpty(pwd)){
+                RxToast.error("请输入密码");
+                return;
+            }
+            if(TextUtils.isEmpty(re_password)){
+                RxToast.error("请再次输入密码");
+                return;
+            }
+
+            if(!re_password.equals(pwd)){
+                RxToast.error("密码输入不一致，请重新输入");
+                return;
+            }
+            mNetServices.regeist(phone,pwd,nickName,auth_code)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new ResponseCallback<BaseEntery>() {
+                        @Override
+                        public void onSuccess(BaseEntery value) {
+                            startActivity(LoginActivity.class,true);
+                        }
+
+                        @Override
+                        public void onFailture(String e) {
+                            RxToast.error(e);
+                        }
+                    });
         } else if (id == R.id.tv_login_config) {
 
+        }else if(id == R.id.code ){
+            getCode(phone);
+            time.start();
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
 
+    public void getCode(String phone) {
+        mNetServices.sendCode(phone)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ResponseCallback<BaseEntery<String>>() {
+                    @Override
+                    public void onSuccess(BaseEntery<String> value) {
+                        RxToast.normal("已发送");
+                    }
+
+                    @Override
+                    public void onFailture(String e) {
+                        //RxToast.error(e);
+                    }
+                });
     }
 
 

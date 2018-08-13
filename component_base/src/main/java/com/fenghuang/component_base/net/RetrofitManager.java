@@ -13,7 +13,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class RetrofitManager {
     private static volatile RetrofitManager instance;
-    private static  volatile Retrofit retrofit;
     private static final int CONNECT_TIME_OUT = 10;
     private static final int READ_TIME_OUT = 10;
 
@@ -31,9 +30,6 @@ public class RetrofitManager {
     }
 
 
-    public Retrofit getRetrofit(){
-        return retrofit;
-    }
 
     private OkHttpClient.Builder setOkhttpClientBuilder(){
         OkHttpClient.Builder okhttpClientBuilder = new OkHttpClient.Builder()
