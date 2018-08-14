@@ -10,6 +10,15 @@ android {
         targetSdkVersion rootProject.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        ndk {
+            //根据需要 自行选择添加的对应cpu类型的.so库。
+            abiFilters 'armeabi'
+            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
+        }
+        manifestPlaceholders = [
+                XG_ACCESS_ID : "2100293197",
+                XG_ACCESS_KEY: "A66X68RHVA8B",
+        ]
     }
     buildTypes {
         release {

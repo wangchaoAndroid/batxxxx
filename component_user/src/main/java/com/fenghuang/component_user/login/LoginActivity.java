@@ -20,6 +20,7 @@ import com.fenghuang.component_base.base.BaseActivity;
 import com.fenghuang.component_base.base.LazyLoadFragment;
 import com.fenghuang.component_base.data.SPDataSource;
 import com.fenghuang.component_base.net.BaseEntery;
+import com.fenghuang.component_base.net.ILog;
 import com.fenghuang.component_base.net.ResponseCallback;
 import com.fenghuang.component_base.net.RetrofitManager;
 import com.fenghuang.component_base.tool.RxToast;
@@ -30,8 +31,11 @@ import com.fenghuang.component_user.R;
 import com.fenghuang.component_user.UserActivity;
 import com.fenghuang.component_user.UserManager;
 import com.fenghuang.component_user.regeist.RegeistActivity;
+import com.tencent.android.tpush.XGIOperateCallback;
+import com.tencent.android.tpush.XGPushManager;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -65,6 +69,66 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     }
 
+    public void regeistXG(String phone ,String pwd){
+        XGPushManager.registerPush(this,new XGIOperateCallback() {
+            @Override
+            public void onSuccess(Object data, int flag) {
+//token在设备卸载重装的时候有可能会变
+                ILog.e("TPush", "注册成功，设备token为：" + data);
+                String xgToken = (String) data;
+                login(phone,pwd,xgToken);
+            }
+            @Override
+            public void onFail(Object data, int errCode, String msg) {
+                ILog.e("TPush", "注册失败，错误码：" + errCode + ",错误信息：" + msg);
+
+            }
+        });
+
+    }
+
+    public void login(String phone ,String pwd,String xgToken){
+        //测试账号，登录
+        NetServices netServices = RetrofitManager.getInstance().initRetrofit().create(NetServices.class);
+        netServices.login(phone,pwd,xgToken)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ResponseCallback<BaseEntery<LoginModel>>() {
+                    @Override
+                    public void onSuccess(BaseEntery<LoginModel> value) {
+                        LoginModel loginModel = (LoginModel) value;
+                        //内存保存用户数据
+                        UserManager.saveUserInfo(loginModel);
+                        //本地保存用户token
+                        SPDataSource.put(LoginActivity.this,SPDataSource.USER_TOKEN,((LoginModel) value).token);
+                        //根据电池集合判读是否需要购买
+                        List<String> viceCardListNumber = loginModel.viceCardListNumber;
+                        if(viceCardListNumber != null && !viceCardListNumber.isEmpty()){
+                            call = CC.obtainBuilder("component_app")
+                                    .setContext(LoginActivity.this)
+                                    .setActionName("enterMain")
+                                    .build()
+                                    .call();
+                            if(call.isSuccess()){
+                                finish();
+                            }
+                        }else {
+                            call = CC.obtainBuilder("component_mall")
+                                    .setContext(LoginActivity.this)
+                                    .setActionName("getBuyActivity")
+                                    .build()
+                                    .call();
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailture(String e) {
+                        RxToast.error(e);
+                    }
+                });
+    }
+
     @Override
     protected int getLayoutId() {
         return R.layout.user_activity_login;
@@ -77,45 +141,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         if(id == R.id.btn_login) {
             String phone = tiet_phone.getText().toString().trim();
             String pwd = tiet_password.getText().toString().trim();
-            //测试账号，登录
-            NetServices netServices = RetrofitManager.getInstance().initRetrofit().create(NetServices.class);
-            netServices.login(phone,pwd,"")
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new ResponseCallback<BaseEntery<LoginModel>>() {
-                        @Override
-                        public void onSuccess(BaseEntery<LoginModel> value) {
-                            LoginModel loginModel = (LoginModel) value;
-                            //内存保存用户数据
-                            UserManager.saveUserInfo(loginModel);
-                            //本地保存用户token
-                            SPDataSource.put(LoginActivity.this,SPDataSource.USER_TOKEN,((LoginModel) value).token);
-                            //根据电池集合判读是否需要购买
-                            List<String> viceCardListNumber = loginModel.viceCardListNumber;
-                            if(viceCardListNumber != null && !viceCardListNumber.isEmpty()){
-                                call = CC.obtainBuilder("component_app")
-                                        .setContext(LoginActivity.this)
-                                        .setActionName("enterMain")
-                                        .build()
-                                        .call();
-                                if(call.isSuccess()){
-                                    finish();
-                                }
-                            }else {
-                                call = CC.obtainBuilder("component_mall")
-                                        .setContext(LoginActivity.this)
-                                        .setActionName("getBuyActivity")
-                                        .build()
-                                        .call();
-                            }
-
-                        }
-
-                        @Override
-                        public void onFailture(String e) {
-                            RxToast.error(e);
-                        }
-                    });
+            if(TextUtils.isEmpty(phone)){
+                RxToast.error("请输入手机号");
+                return;
+            }
+            if(TextUtils.isEmpty(pwd)){
+                RxToast.error("请输入密码");
+                return;
+            }
+            regeistXG(phone,pwd);
         } else if (id == R.id.tv_login_config) {
             startActivity(RegeistActivity.class,false);
         }
