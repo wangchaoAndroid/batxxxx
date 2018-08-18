@@ -52,19 +52,19 @@
             <intent-filter>
 
                 <!-- 【必须】 请修改为当前APP包名.PUSH_ACTION -->
-                <action android:name="com.jpp.mall.PUSH_ACTION" />
+                <action android:name="com.fenghuang.battery.PUSH_ACTION" />
             </intent-filter>
         </service>
 
         <!-- !&#45;&#45; 【必须】 【注意】authorities修改为 包名.AUTH_XGPUSH, 如demo的包名为：com.qq.xgdemo&ndash;&gt; -->
         <provider
             android:name="com.tencent.android.tpush.XGPushProvider"
-            android:authorities="com.jpp.mall.AUTH_XGPUSH"
+            android:authorities="com.fenghuang.battery.AUTH_XGPUSH"
             android:exported="true" />
         <!-- 【必须】 【注意】authorities修改为 包名.TPUSH_PROVIDER, 如demo的包名为：com.qq.xgdemo -->
         <provider
             android:name="com.tencent.android.tpush.SettingsContentProvider"
-            android:authorities="com.jpp.mall.TPUSH_PROVIDER"
+            android:authorities="com.fenghuang.battery.TPUSH_PROVIDER"
             android:exported="false" />
         <!-- 【必须】 【注意】authorities修改为 包名.TENCENT.MID.V3, 如demo的包名为：com.qq.xgdemo -->
         <provider

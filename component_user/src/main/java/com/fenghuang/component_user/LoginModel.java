@@ -14,4 +14,13 @@ public class LoginModel extends BaseEntery  {
     public String sex;
     public String token;
 
+    @Override
+    public String toString() {
+        return "LoginModel{" +
+                "viceCardListNumber=" + viceCardListNumber +
+                ", nickName='" + nickName + '\'' +
+                ", sex='" + sex + '\'' +
+                ", token='" + token + '\'' +
+                '}';
+    }
 }

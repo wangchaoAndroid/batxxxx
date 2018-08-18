@@ -43,12 +43,11 @@ public class RetrofitManager {
     }
 
     public Retrofit initRetrofit(){
-        OkHttpClient client = setOkhttpClientBuilder().build();
         return new Retrofit.Builder()
                 .baseUrl(Api.baseurl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .client(client)
+                .client(setOkhttpClientBuilder().build())
                 .build();
     }
 

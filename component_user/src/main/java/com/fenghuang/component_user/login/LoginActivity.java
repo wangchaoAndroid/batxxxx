@@ -24,6 +24,7 @@ import com.fenghuang.component_base.net.ILog;
 import com.fenghuang.component_base.net.ResponseCallback;
 import com.fenghuang.component_base.net.RetrofitManager;
 import com.fenghuang.component_base.tool.RxToast;
+import com.fenghuang.component_base.utils.MD5Util;
 import com.fenghuang.component_base.utils.ViewFinder;
 import com.fenghuang.component_user.LoginModel;
 import com.fenghuang.component_user.NetServices;
@@ -76,7 +77,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 //token在设备卸载重装的时候有可能会变
                 ILog.e("TPush", "注册成功，设备token为：" + data);
                 String xgToken = (String) data;
-                login(phone,pwd,xgToken);
+                login(phone, MD5Util.getStringMD5(pwd),xgToken);
             }
             @Override
             public void onFail(Object data, int errCode, String msg) {
@@ -96,11 +97,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 .subscribe(new ResponseCallback<BaseEntery<LoginModel>>() {
                     @Override
                     public void onSuccess(BaseEntery<LoginModel> value) {
-                        LoginModel loginModel = (LoginModel) value;
+                        ILog.e( "login" ,value + "");
+                        LoginModel loginModel = value.obj;
                         //内存保存用户数据
                         UserManager.saveUserInfo(loginModel);
                         //本地保存用户token
-                        SPDataSource.put(LoginActivity.this,SPDataSource.USER_TOKEN,((LoginModel) value).token);
+                        SPDataSource.put(LoginActivity.this,SPDataSource.USER_TOKEN,loginModel.token);
                         //根据电池集合判读是否需要购买
                         List<String> viceCardListNumber = loginModel.viceCardListNumber;
                         if(viceCardListNumber != null && !viceCardListNumber.isEmpty()){
@@ -124,6 +126,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                     @Override
                     public void onFailture(String e) {
+                        ILog.e( "login" ,e + "");
                         RxToast.error(e);
                     }
                 });

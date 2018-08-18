@@ -34,11 +34,13 @@ public class CommonInterceptor implements Interceptor {
             //return chain.proceed(newRequest);
         }
         if(METHOD_POST.equals(method)){
-//            if (oldRequest.body() instanceof FormBody) {
-//                FormBody body = (FormBody) oldRequest.body();
-//
-//                return chain.proceed(newRequest);
-//            }
+            if (oldRequest.body() instanceof FormBody) {
+                FormBody body = (FormBody) oldRequest.body();
+                for (int i = 0; i < body.size(); i++) {
+                    ILog.d(body.name(i) + "",body.value(i) + "");
+                }
+               // return chain.proceed(newRequest);
+            }
         }
         ILog.d( TAG ,oldRequest.url() + "");
         return chain.proceed(oldRequest);

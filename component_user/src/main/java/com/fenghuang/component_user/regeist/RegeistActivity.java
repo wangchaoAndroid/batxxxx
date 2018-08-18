@@ -17,6 +17,7 @@ import com.fenghuang.component_base.net.BaseEntery;
 import com.fenghuang.component_base.net.ResponseCallback;
 import com.fenghuang.component_base.net.RetrofitManager;
 import com.fenghuang.component_base.tool.RxToast;
+import com.fenghuang.component_base.utils.MD5Util;
 import com.fenghuang.component_base.utils.ViewFinder;
 import com.fenghuang.component_user.LoginModel;
 import com.fenghuang.component_user.NetServices;
@@ -110,7 +111,7 @@ public class RegeistActivity extends BaseActivity implements View.OnClickListene
                 RxToast.error("密码输入不一致，请重新输入");
                 return;
             }
-            mNetServices.regeist(phone,pwd,nickName,auth_code)
+            mNetServices.regeist(phone, MD5Util.getStringMD5(pwd),nickName,auth_code)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new ResponseCallback<BaseEntery>() {

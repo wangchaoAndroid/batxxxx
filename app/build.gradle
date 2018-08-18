@@ -16,8 +16,8 @@ android {
             // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
         }
         manifestPlaceholders = [
-                XG_ACCESS_ID : "2100293197",
-                XG_ACCESS_KEY: "A66X68RHVA8B",
+                XG_ACCESS_ID : "2100307158",
+                XG_ACCESS_KEY: "A625BUXW5X3T",
         ]
     }
     buildTypes {

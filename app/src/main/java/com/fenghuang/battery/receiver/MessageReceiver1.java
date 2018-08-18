@@ -2,9 +2,6 @@ package com.fenghuang.battery.receiver;
 
 import android.content.Context;
 import android.content.Intent;
-
-import com.jpp.mall.event.MsgEvent;
-import com.jpp.mall.utils.Logger;
 import com.tencent.android.tpush.XGLocalMessage;
 import com.tencent.android.tpush.XGPushBaseReceiver;
 import com.tencent.android.tpush.XGPushClickedResult;
@@ -13,9 +10,10 @@ import com.tencent.android.tpush.XGPushRegisterResult;
 import com.tencent.android.tpush.XGPushShowedResult;
 import com.tencent.android.tpush.XGPushTextMessage;
 
-import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.logging.Logger;
 
 
 public class MessageReceiver1 extends XGPushBaseReceiver {
@@ -23,7 +21,6 @@ public class MessageReceiver1 extends XGPushBaseReceiver {
 	public static final String LogTag = "TPushReceiver";
 
 	private void show() {
-		EventBus.getDefault().postSticky(new MsgEvent());
 //		Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
 	}
 
@@ -126,7 +123,6 @@ public class MessageReceiver1 extends XGPushBaseReceiver {
 				// key1为前台配置的key
 				if (!obj.isNull("key")) {
 					String value = obj.getString("key");
-					Logger.d(LogTag, "get custom value:" + value);
 				}
 				// ...
 			} catch (JSONException e) {

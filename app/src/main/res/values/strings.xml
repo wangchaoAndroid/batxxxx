@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CC</string>
+    <string name="app_name">电池</string>
     <string name="turn2a">To A</string>
     <string name="clickToCancel">click to cancel</string>
     <string name="canceled">canceled</string>
