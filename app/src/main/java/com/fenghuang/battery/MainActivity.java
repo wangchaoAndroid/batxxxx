@@ -17,6 +17,9 @@ import com.fenghuang.battery.helper.FragmentFactory;
 import com.fenghuang.component_base.adapter.CommonFragmentAdapter;
 import com.fenghuang.component_base.base.BaseActivity;
 import com.fenghuang.component_base.base.LazyLoadFragment;
+import com.fenghuang.component_base.data.SPDataSource;
+import com.fenghuang.component_base.net.ILog;
+import com.fenghuang.component_base.utils.ContextManager;
 import com.fenghuang.component_base.utils.ViewFinder;
 
 import java.util.ArrayList;
@@ -24,11 +27,13 @@ import java.util.List;
 
 
 public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
+    private static final String TAG = "MainActivity";
     private BottomNavigationView mBottomNavigationView;
     private ViewPager mViewPager;
 
     @Override
     protected void setEvent() {
+
         mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {

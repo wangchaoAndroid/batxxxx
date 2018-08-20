@@ -7,12 +7,15 @@ import android.widget.ImageView;
 
 import com.fenghuang.component_base.base.BaseActivity;
 import com.fenghuang.component_base.base.LazyLoadFragment;
+import com.fenghuang.component_base.data.SPDataSource;
+import com.fenghuang.component_base.net.ILog;
 import com.fenghuang.componentm_mall.camera.CameraActivity;
 
 /**
  * Create by wangchao on 2018/7/21 11:04
  */
 public class BuyActivity extends BaseActivity implements View.OnClickListener {
+    private static final String TAG = "BuyActivity";
     private ImageView mImageView;
 
     @Override
@@ -33,7 +36,6 @@ public class BuyActivity extends BaseActivity implements View.OnClickListener {
 
     @Override
     protected void initData(Bundle savedInstanceState) {
-
     }
 
     @Override

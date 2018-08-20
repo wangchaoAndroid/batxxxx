@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import com.fenghuang.component_base.base.BaseApp;
 import com.fenghuang.component_base.tool.ImageLoader;
 import com.fenghuang.component_battery.R;
+import com.fenghuang.component_battery.bean.Ad;
 
 import java.util.List;
 
@@ -18,16 +19,16 @@ import java.util.List;
  */
 public class BannerAdapter extends PagerAdapter {
     private Context mContext;
-    private List<String> paths;
+    private  List<Ad> ads;
 
-    public BannerAdapter(Context context, List<String> paths) {
+    public BannerAdapter(Context context, List<Ad> adList) {
         mContext = context;
-        this.paths = paths;
+        this.ads = adList;
     }
 
     @Override
     public int getCount() {
-        return paths.size();
+        return ads.size();
     }
 
     @Override
@@ -41,7 +42,8 @@ public class BannerAdapter extends PagerAdapter {
         ImageView view = new ImageView(mContext);
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         view.setLayoutParams(layoutParams);
-        ImageLoader.load(R.drawable.default1,view);
+
+        ImageLoader.load(ads.get(position).advertisingjpg,view);
         container.addView(view);
         return view;
     }

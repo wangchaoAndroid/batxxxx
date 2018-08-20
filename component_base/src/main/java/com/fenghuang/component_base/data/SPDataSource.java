@@ -18,7 +18,8 @@ public class SPDataSource {
     private static final String FILE_NAME = "share_data";
     public static final String USER_NAME = "user_name_data";
     public static final String USER_PASSWORD = "user_password_data";
-    public static final String USER_TOKEN = "user_token_data";
+    public static final String USER_INFO = "user_info";
+    public static final String USER_TOKEN= "user_token";
 
 
     /**

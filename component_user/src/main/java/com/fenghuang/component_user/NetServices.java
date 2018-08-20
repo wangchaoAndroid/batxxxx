@@ -1,6 +1,7 @@
 package com.fenghuang.component_user;
 
 import com.fenghuang.component_base.net.BaseEntery;
+import com.fenghuang.component_user.bean.Neiboor;
 
 import java.util.List;
 import java.util.Map;
@@ -64,5 +65,34 @@ public interface NetServices {
                                        @Part List<MultipartBody.Part> parts);
 
 
+    /**
+     * 退出登录
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("logoutInterface")
+    Observable<BaseEntery> logout(@Field("token") String token);
 
+
+    /**
+     * 找回密码
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("retrievePasswordInterface")
+    Observable<BaseEntery> retrievePassword(@Field("account") String account,@Field("code") String code,@Field("newPassWord") String newPassWord);
+
+
+
+
+    /**
+     * 获得附近店铺
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("getNearbyShopInterface")
+    Observable<BaseEntery<List<Neiboor>>> getNearbyShop(@Field("token") String token,
+                                                        @Field("range") String range,
+                                                        @Field("currentLongitude") double currentLongitude,
+                                                        @Field("currentLatitudes") double currentLatitudes);
 }

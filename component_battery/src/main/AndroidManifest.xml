@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.fenghuang.component_battery">
     <application android:theme="@style/BasicAppTheme">
-        <activity android:name=".WarnFragment"
+        <activity android:name=".WarnActivity"
                   android:configChanges="orientation|keyboardHidden|screenSize"
                   android:screenOrientation="portrait"
             />

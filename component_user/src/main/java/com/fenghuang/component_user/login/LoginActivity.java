@@ -26,6 +26,7 @@ import com.fenghuang.component_base.net.RetrofitManager;
 import com.fenghuang.component_base.tool.RxToast;
 import com.fenghuang.component_base.utils.MD5Util;
 import com.fenghuang.component_base.utils.ViewFinder;
+import com.fenghuang.component_user.Contast;
 import com.fenghuang.component_user.LoginModel;
 import com.fenghuang.component_user.NetServices;
 import com.fenghuang.component_user.R;
@@ -52,12 +53,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private TextInputEditText tiet_phone;
     private TextInputEditText tiet_password;
     private String callId;
+
     @Override
     public void initView() {
         ViewFinder viewFinder = new ViewFinder(this);
         tiet_phone = viewFinder.find(R.id.tiet_phone);
         tiet_password = viewFinder.find(R.id.tiet_password);
-        addOnClickListeners(R.id.btn_login,R.id.tv_login_config);
+        addOnClickListeners(R.id.btn_login,R.id.tv_login_config,R.id.tv_forget_config);
     }
 
     @Override
@@ -101,11 +103,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         LoginModel loginModel = value.obj;
                         //内存保存用户数据
                         UserManager.saveUserInfo(loginModel);
-                        //本地保存用户token
+                        //单独保存token
                         SPDataSource.put(LoginActivity.this,SPDataSource.USER_TOKEN,loginModel.token);
                         //根据电池集合判读是否需要购买
                         List<String> viceCardListNumber = loginModel.viceCardListNumber;
-                        if(viceCardListNumber != null && !viceCardListNumber.isEmpty()){
+                        if(ILog.DEBUG){
                             call = CC.obtainBuilder("component_app")
                                     .setContext(LoginActivity.this)
                                     .setActionName("enterMain")
@@ -115,12 +117,26 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                 finish();
                             }
                         }else {
-                            call = CC.obtainBuilder("component_mall")
-                                    .setContext(LoginActivity.this)
-                                    .setActionName("getBuyActivity")
-                                    .build()
-                                    .call();
+                            if(viceCardListNumber != null && !viceCardListNumber.isEmpty()){
+                                call = CC.obtainBuilder("component_app")
+                                        .setContext(LoginActivity.this)
+                                        .setActionName("enterMain")
+                                        .build()
+                                        .call();
+                                if(call.isSuccess()){
+                                    finish();
+                                }
+                            }else {
+                                call = CC.obtainBuilder("component_mall")
+                                        .setContext(LoginActivity.this)
+                                        .setActionName("getBuyActivity")
+                                        .build()
+                                        .call();
+                            }
                         }
+
+
+
 
                     }
 
@@ -155,6 +171,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             regeistXG(phone,pwd);
         } else if (id == R.id.tv_login_config) {
             startActivity(RegeistActivity.class,false);
+        }
+        else if (id == R.id.tv_forget_config) {
+            startActivity(ForgetPwdActivity.class,true);
         }
     }
 

@@ -20,7 +20,7 @@ public final class ImageLoader  {
     }
 
 
-    public static void load(String path, ImageView view,int radius){
+    public static void load(String path, ImageView view){
         if(mContext == null){
             throw new IllegalStateException("not init");
         }

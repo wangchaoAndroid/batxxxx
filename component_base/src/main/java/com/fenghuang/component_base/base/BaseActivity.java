@@ -20,6 +20,7 @@ import com.fenghuang.component_base.data.CacheDataSource;
 import com.fenghuang.component_base.utils.ActivityStackManager;
 import com.fenghuang.component_base.utils.HandlerUtils;
 import com.fenghuang.component_base.utils.StatusBarUtil;
+import com.fenghuang.component_base.view.ProgressAlertDialog;
 
 import java.util.ArrayList;
 
@@ -217,5 +218,30 @@ public abstract class  BaseActivity extends AppCompatActivity implements Handler
     @Override
     public void handlerMessage(Message msg) {
 
+    }
+    public  ProgressAlertDialog alertDialog;
+    public void showLoadingDialog() {
+        if(alertDialog == null){
+            alertDialog = new ProgressAlertDialog(this);
+        }
+        alertDialog.show();
+    }
+
+    public void dimissLoadingDialog(){
+        if(alertDialog != null && alertDialog.isShowing()){
+            alertDialog.dismiss();
+        }
+    }
+
+    public boolean isDialogShowing(){
+        if(alertDialog != null){
+            if(alertDialog.isShowing()){
+                return true;
+            }else {
+                return false;
+            }
+        }else {
+            return false;
+        }
     }
 }

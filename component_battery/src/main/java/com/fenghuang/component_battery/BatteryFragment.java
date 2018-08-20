@@ -1,45 +1,42 @@
 package com.fenghuang.component_battery;
 
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.billy.cc.core.component.CC;
-import com.billy.cc.core.component.CCResult;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.fenghuang.component_base.base.BaseApp;
 import com.fenghuang.component_base.base.LazyLoadFragment;
-import com.fenghuang.component_base.helper.GlideRoundTransform;
+import com.fenghuang.component_base.data.SPDataSource;
+import com.fenghuang.component_base.net.BaseEntery;
+import com.fenghuang.component_base.net.ILog;
+import com.fenghuang.component_base.net.ResponseCallback;
+import com.fenghuang.component_base.net.RetrofitManager;
 import com.fenghuang.component_base.tool.ImageLoader;
-import com.fenghuang.component_base.utils.FragmentUtils;
+import com.fenghuang.component_base.tool.RxToast;
 import com.fenghuang.component_battery.adapter.BannerAdapter;
-import com.fenghuang.component_battery.adapter.BatteryAdapter;
-import com.fenghuang.component_base.helper.SpacesItemDecoration;
+import com.fenghuang.component_battery.bean.Ad;
+import com.fenghuang.component_battery.bean.HomeModel;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Create by wangchao on 2018/7/18 10:26
  */
 public class BatteryFragment  extends LazyLoadFragment{
-
+    private static final String TAG = "BatteryFragment";
     private ImageView mImageView;
     private ViewPager mBannerView;
     private TextView count_down_time;
-
+    List<Ad> items = new ArrayList<>();
+    private BannerAdapter mBannerAdapter;
 
     @Override
     protected void init(View view,Bundle savedInstanceState) {
@@ -56,12 +53,10 @@ public class BatteryFragment  extends LazyLoadFragment{
 
     @Override
     protected void lazyLoad() {
-        List<String> items = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            items.add(i + "");
-        }
-        BannerAdapter bannerAdapter = new BannerAdapter(getActivity(),items);
-        mBannerView.setAdapter(bannerAdapter);
+
+
+        mBannerAdapter = new BannerAdapter(getActivity(),items);
+        mBannerView.setAdapter(mBannerAdapter);
         ImageLoader.load(R.drawable.default1,mImageView);
         SpannableString spannableString = new SpannableString("最新告警内容");
         //设置字体大小（相对值,单位：像素） 参数表示为默认字体大小的多少倍   ,0.5表示一半
@@ -70,6 +65,7 @@ public class BatteryFragment  extends LazyLoadFragment{
 //        spannableString.setSpan(new RelativeSizeSpan(2f), 4, 6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 //        spannableString.setSpan(new ForegroundColorSpan(Color.GREEN),4,6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         count_down_time.setText(spannableString);
+        getHomeInfo();
     }
 
     @Override
@@ -82,7 +78,36 @@ public class BatteryFragment  extends LazyLoadFragment{
                     .build()
                     .call();
         }else if(viewId == R.id.left2){
-            startActivity(new Intent(getActivity(),WarnFragment.class));
+            startActivity(new Intent(getActivity(),WarnActivity.class));
         }
+    }
+
+    public void getHomeInfo(){
+        String token = (String) SPDataSource.get(getActivity(),SPDataSource.USER_TOKEN,"");
+        ILog.e(TAG,token);
+        BatteryNetServices batteryNetServices = RetrofitManager.getInstance().initRetrofit().create(BatteryNetServices.class);
+        batteryNetServices.getHome(token).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ResponseCallback<BaseEntery<HomeModel>>() {
+                    @Override
+                    public void onSuccess(BaseEntery<HomeModel> value) {
+                        ILog.e(TAG,value + "");
+                        if(value != null){
+                            items.clear();
+                            HomeModel homeModel = value.obj;
+                            List<Ad> advertisingtabList = homeModel.advertisingtabList;
+                            items.clear();
+                            items.addAll(advertisingtabList);
+                            mBannerAdapter.notifyDataSetChanged();
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onFailture(String e) {
+                        RxToast.error(e);
+                    }
+                });
     }
 }

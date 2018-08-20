@@ -56,4 +56,6 @@ dependencies {
     api 'com.tencent.wup:wup:1.0.0.E-release'
 //mid包
     api 'com.tencent.mid:mid:4.0.6-release'
+
+    api 'com.contrarywind:Android-PickerView:4.1.3'
 }

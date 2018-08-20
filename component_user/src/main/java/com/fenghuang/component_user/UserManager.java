@@ -1,5 +1,8 @@
 package com.fenghuang.component_user;
 
+import com.fenghuang.component_base.data.SPDataSource;
+import com.fenghuang.component_base.utils.ContextManager;
+
 import java.util.List;
 
 /**
@@ -12,7 +15,18 @@ public final class UserManager {
         userInfo  = loginModel;
     }
 
+    public static void clearUserInfo(){
+        userInfo  = null;
+    }
+
     public static LoginModel getUserInfo(){
         return userInfo;
+    }
+
+    public static String getToken(){
+        if(userInfo == null){
+            return (String) SPDataSource.get(ContextManager.getAppContext(),SPDataSource.USER_TOKEN,"");
+        }
+        return userInfo.token;
     }
 }

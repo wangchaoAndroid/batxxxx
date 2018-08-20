@@ -91,6 +91,7 @@
             android:background="@color/divide_line"/>
 
         <TextView
+            android:id="@+id/tv_nearbyShop"
             android:layout_width="match_parent"
             android:layout_height="@dimen/component_user_dp_50"
             android:drawableRight="@drawable/icon_user_3"
@@ -118,6 +119,22 @@
             android:layout_height="1dp"
             android:background="@color/divide_line"/>
     </LinearLayout>
+
+
+
+    <TextView
+        android:id="@+id/btn_logout"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/component_user_dp_10"
+        android:layout_marginLeft="@dimen/component_user_dp_10"
+        android:layout_marginRight="@dimen/component_user_dp_10"
+        android:layout_width="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@android:color/background_dark"
+        android:textColor="@android:color/white"
+        android:layout_height="@dimen/basic_d40"
+        android:text="退出登录"
+        android:textSize="@dimen/basic_s18" />
 
     <TextView
         android:id="@+id/tv_name"
