@@ -92,7 +92,7 @@ public interface NetServices {
     @FormUrlEncoded
     @POST("getNearbyShopInterface")
     Observable<BaseEntery<List<Neiboor>>> getNearbyShop(@Field("token") String token,
-                                                        @Field("range") String range,
+                                                        @Field("range") int range,
                                                         @Field("currentLongitude") double currentLongitude,
                                                         @Field("currentLatitudes") double currentLatitudes);
 }

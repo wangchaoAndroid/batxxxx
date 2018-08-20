@@ -1,5 +1,6 @@
 package com.fenghuang.component_user;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,6 +9,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.fenghuang.component_base.base.BaseActivity;
 import com.fenghuang.component_base.data.SPDataSource;
@@ -37,6 +42,7 @@ public class NeiboorhoorActivity extends BaseActivity implements View.OnClickLis
     List<Neiboor> mNeiboors = new ArrayList<>();
     private NeiborAdapter mNeiborAdapter;
     NetServices batteryNetServices = RetrofitManager.getInstance().initRetrofit().create(NetServices.class);
+    private int mRange;
 
     @Override
     protected void initView() {
@@ -62,34 +68,35 @@ public class NeiboorhoorActivity extends BaseActivity implements View.OnClickLis
     /**
      * 获取告警信息
      */
-    public void getNeiborInfo(int neiborMeters){
-//        String token = (String) SPDataSource.get(this,SPDataSource.USER_TOKEN,"");
-//        ILog.e(TAG,token);
-//        batteryNetServices.getNearbyShop(token,neiborMeters,).subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new ResponseCallback<BaseEntery<List<Neiboor>>>() {
-//                    @Override
-//                    public void onSuccess(BaseEntery<List<Neiboor>> value) {
-//                        ILog.e(TAG,value + "");
-//                        if(value != null && !value.obj.isEmpty()){
-//                            mNeiboors.clear();
-//                            mNeiboors.addAll(value.obj);
-//                            mNeiborAdapter.notifyDataSetChanged();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailture(String e) {
-//                        RxToast.error(e);
-//                    }
-//                });
+    public void getNeiborInfo(int neiborMeters,AMapLocation amapLocation){
+
+        String token = (String) SPDataSource.get(this,SPDataSource.USER_TOKEN,"");
+        ILog.e(TAG,token);
+        batteryNetServices.getNearbyShop(token,neiborMeters,amapLocation.getLongitude(),amapLocation.getLatitude()).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ResponseCallback<BaseEntery<List<Neiboor>>>() {
+                    @Override
+                    public void onSuccess(BaseEntery<List<Neiboor>> value) {
+                        ILog.e(TAG,value + "");
+                        if(value != null && !value.obj.isEmpty()){
+                            mNeiboors.clear();
+                            mNeiboors.addAll(value.obj);
+                            mNeiborAdapter.notifyDataSetChanged();
+                        }
+                    }
+
+                    @Override
+                    public void onFailture(String e) {
+                        RxToast.error(e);
+                    }
+                });
     }
 
     @Override
     protected void initData(Bundle savedInstanceState) {
         Intent intent = getIntent();
-        int range = intent.getIntExtra("range", 0);
-        getNeiborInfo(range);
+        mRange = intent.getIntExtra("range", 0);
+        startLocation();
     }
 
 
@@ -112,4 +119,46 @@ public class NeiboorhoorActivity extends BaseActivity implements View.OnClickLis
             finish();
         }
     }
+
+    //声明AMapLocationClientOption对象
+    public AMapLocationClientOption mLocationOption;
+    //声明AMapLocationClient类对象
+    public AMapLocationClient mLocationClient ;
+    public void initLocation(Context context){
+        //初始化定位
+        mLocationClient = new AMapLocationClient(context);
+        mLocationOption = new AMapLocationClientOption();
+        //设置定位模式为AMapLocationMode.Hight_Accuracy，高精度模式。
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+        //设置定位场景，目前支持三种场景（签到、出行、运动，默认无场景）
+        //option.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.Transport);
+    }
+    //开始定位
+    public void startLocation(){
+        initLocation(this);
+        if(null != mLocationClient){
+            mLocationClient.setLocationOption(mLocationOption);
+            //设置场景模式后最好调用一次stop，再调用start以保证场景模式生效
+            mLocationClient.stopLocation();
+            mLocationClient.startLocation();
+            mLocationClient.setLocationListener(mAMapLocationListener);
+        }
+    }
+
+    //声明定位回调监听器
+    public AMapLocationListener mAMapLocationListener = new AMapLocationListener(){
+        @Override
+        public void onLocationChanged(AMapLocation amapLocation) {
+            if (amapLocation != null) {
+                if (amapLocation.getErrorCode() == 0) {
+                    getNeiborInfo(mRange, amapLocation);
+                }else {
+                    //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
+                    Log.e("AmapError","location Error, ErrCode:"
+                            + amapLocation.getErrorCode() + ", errInfo:"
+                            + amapLocation.getErrorInfo());
+                }
+            }
+        }
+    };
 }
