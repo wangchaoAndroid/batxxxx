@@ -91,10 +91,10 @@ public class SpFragment extends Fragment implements View.OnClickListener {
                         .setActionName("toLoginActivity")
                         .build()
                         .call();
-//                String data = ccResult.getDataItem(SPDataSource.USER_TOKEN);
-//                if(!TextUtils.isEmpty(data)){
-//                    startActivity(MainActivity.class, true);
-//                }
+                String data = ccResult.getDataItem(SPDataSource.USER_TOKEN);
+                if(!TextUtils.isEmpty(data)){
+                    startActivity(MainActivity.class, true);
+                }
             } else {
                 // 如果没有用户组件直接进入主界面
                 startActivity(MainActivity.class, true);

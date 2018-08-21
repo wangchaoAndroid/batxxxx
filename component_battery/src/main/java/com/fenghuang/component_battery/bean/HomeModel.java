@@ -6,8 +6,8 @@ import java.util.List;
  * Create by wangchao on 2018/8/20 14:55
  */
 public class HomeModel {
-    public String temperature;
-    public String electricquantity;
+    public int temperature;
+    public int electricquantity;
     public double longitude;
     public double latitude;
     public List<Ad> advertisingtabList;

@@ -16,7 +16,7 @@ public interface MapNetServices {
      */
     @FormUrlEncoded
     @POST("switchEnclosureInterface")
-    Observable<BaseEntery> switchEnclosure(@Field("token")String token,
+    Observable<BaseEntery<FenchModel>> switchEnclosure(@Field("token")String token,
                                    @Field("status")int status,
                                    @Field("type")int type);
 }

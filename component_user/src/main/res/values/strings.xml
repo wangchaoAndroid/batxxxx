@@ -7,4 +7,5 @@
     <string name="user_hint_nick">请输入昵称</string>
     <string name="title_btn_login">确定</string>
     <string name="title_btn_login_config">暂无账号，去注册</string>
+    <string name="title_activity_set_fench">SetFenchActivity</string>
 </resources>

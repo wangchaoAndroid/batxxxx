@@ -4,8 +4,7 @@ import android.support.annotation.Nullable;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.fenghuang.component_battery.R;
-import com.fenghuang.component_battery.bean.WarnModel;
+import com.fenghuang.component_user.R;
 import com.fenghuang.component_user.bean.Neiboor;
 
 import java.util.List;
@@ -21,16 +20,9 @@ public class NeiborAdapter extends BaseQuickAdapter<Neiboor,BaseViewHolder>{
 
     @Override
     protected void convert(BaseViewHolder helper, Neiboor item) {
-        helper.setText(R.id.warn_date,item.crateTime);
-        helper.setText(R.id.warn_info,item.alarmtitle);
-        if(item.status == 0){
-            helper.setChecked(R.id.warn_tips,true);
-        }else {
-            helper.setChecked(R.id.warn_tips,false);
-        }
+        helper.setText(R.id.warn_date,item.address);
+        helper.setText(R.id.warn_info,item.address);
     }
 
-    public void setReaded(){
 
-    }
 }

@@ -37,6 +37,10 @@ import io.reactivex.schedulers.Schedulers;
  * @since 17/12/8 15:30
  */
 public class UserFragment extends LazyLoadFragment {
+
+    private static final int FROM_SHOP = 0x01;
+    public static final int FROM_CHARGE = 0x02;
+
     TextView mTextView;
     private TextView scan_tv;
     private TextView logoutTv;
@@ -62,7 +66,7 @@ public class UserFragment extends LazyLoadFragment {
             }
         });
 
-        addOnClickListeners(R.id.scan_tv,R.id.btn_logout,R.id.tv_nearbyShop);
+        addOnClickListeners(R.id.scan_tv,R.id.btn_logout,R.id.tv_nearbyShop,R.id.tv_charge,R.id.set_fench);
     }
 
     @Override
@@ -79,7 +83,15 @@ public class UserFragment extends LazyLoadFragment {
             logout();
         } else if (id == R.id.tv_nearbyShop) {
             getNearbyShop();
+        }else if(id == R.id.tv_charge){
+            getNearbyCharged();
+        }else if(id == R.id.set_fench){
+            setFench();
         }
+    }
+
+    private void setFench() {
+        startActivity(new Intent(getActivity(),SetFenchActivity.class));
     }
 
     /**
@@ -116,15 +128,19 @@ public class UserFragment extends LazyLoadFragment {
                 });
     }
 
-
+    /**
+     * 附近门店
+     */
     public void getNearbyShop() {
-        showPickerView();
+        showPickerView(FROM_SHOP);
     }
+
+
     private List<RangeWrapper> ranges = new ArrayList<>();
     /**
      * 弹出选择器
      */
-    private void showPickerView() {
+    private void showPickerView(int from) {
         ranges.add(new RangeWrapper("500米内",500));
         ranges.add(new RangeWrapper("1000米内",1000));
         ranges.add(new RangeWrapper("2000米内",2000));
@@ -136,9 +152,17 @@ public class UserFragment extends LazyLoadFragment {
                     ILog.e(TAG,options1 + "---" + options2 + "---" + options3);
                     RangeWrapper rangeWrapper = ranges.get(options1);
                     int rangeMeter = rangeWrapper.rangeMeter;
-                    Intent intent = new Intent(getActivity(), NeiboorhoorActivity.class);
-                    intent.putExtra("range",rangeMeter);
-                    startActivity(intent);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("range",rangeMeter);
+                    switch (from){
+                        case FROM_CHARGE:
+                            ChargeActivity.startAction(getActivity(),bundle);
+                            break;
+                        case FROM_SHOP:
+                            NeiboorhoorActivity.startAction(getActivity(),bundle);
+                            break;
+                    }
+
                 }
             }
         })
@@ -152,5 +176,12 @@ public class UserFragment extends LazyLoadFragment {
         //pvOptions.setPicker(options1Items, options2Items);//二级选择器*/
         //pvOptions.setPicker(options1Items, options2Items, options3Items);//三级选择器
         pvOptions.show();
+    }
+
+    /**
+     * 获取附近充电桩
+     */
+    public void getNearbyCharged() {
+        showPickerView(FROM_CHARGE);
     }
 }

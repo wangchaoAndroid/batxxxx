@@ -37,6 +37,7 @@ import com.fenghuang.component_base.net.BaseEntery;
 import com.fenghuang.component_base.net.ILog;
 import com.fenghuang.component_base.net.ResponseCallback;
 import com.fenghuang.component_base.net.RetrofitManager;
+import com.fenghuang.component_base.tool.RxToast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,11 +85,11 @@ public class MapFragment extends LazyLoadFragment{
     };
 
     //绘制面
-    public void circle(double v1, double v2) {
+    public void circle(double v1, double v2,int radius) {
         LatLng latLng = new LatLng(v1, v2);
 
         mAMap.addCircle(new CircleOptions().center(latLng)
-                .radius(800).strokeColor(R.color.basic_blue3)
+                .radius(radius).strokeColor(R.color.basic_blue3)
                 .fillColor(R.color.basic_blue3).strokeWidth(2));
         Log.e("tag", "============圈圈300==================2");
     }
@@ -104,6 +105,12 @@ public class MapFragment extends LazyLoadFragment{
     }
 
     public void initMap(){
+        mAMap.setOnMapClickListener(new AMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                RxToast.info(latLng.longitude + "----" + latLng.latitude);
+            }
+        });
         mAMap.moveCamera(CameraUpdateFactory.zoomTo(15));
         myLocationStyle = new MyLocationStyle();//初始化定位蓝点样式类myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);//连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
         myLocationStyle.strokeColor(android.R.color.transparent);
@@ -122,9 +129,8 @@ public class MapFragment extends LazyLoadFragment{
 
     /**
      * 初始化围栏组件
-     * @param context
      */
-    public void init(Context context){
+    public void init( FenchModel fenchModel){
         //围栏初始化
         //注册监听事件
         mGeoFenceClient = new GeoFenceClient(getActivity());
@@ -134,13 +140,9 @@ public class MapFragment extends LazyLoadFragment{
         //创建并设置PendingIntent
         mGeoFenceClient.createPendingIntent(GEOFENCE_BROADCAST_ACTION);
         //可在其中解析amapLocation获取相应内容。
-//        DPoint dPoint = new DPoint(amapLocation.getLatitude(),amapLocation.getLongitude());
-//        circle(amapLocation.getLatitude(), amapLocation.getLongitude());
-//        addFence(dPoint,500f,"您已进入围栏范围");
-//        stopLocation();
-//        mLocationClient.unRegisterLocationListener(this);
-//        destoryClient();
-
+        DPoint dPoint = new DPoint(fenchModel.latitude,fenchModel.longitude);
+        circle(fenchModel.latitude,fenchModel.longitude,fenchModel.meter);
+        addFence(dPoint,fenchModel.meter,"您已进入围栏范围");
 
     }
 
@@ -176,8 +178,6 @@ public class MapFragment extends LazyLoadFragment{
         regeist();
     }
 
-
-
     public void addFence(DPoint point, float radius, String customId){
         mGeoFenceClient.addGeoFence(point,radius,customId);
     }
@@ -186,6 +186,7 @@ public class MapFragment extends LazyLoadFragment{
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(GEOFENCE_BROADCAST_ACTION)) {
+
                 //获取Bundle
                 Bundle bundle = intent.getExtras();
                 //获取围栏行为：
@@ -196,6 +197,7 @@ public class MapFragment extends LazyLoadFragment{
                 String fenceId = bundle.getString(GeoFence.BUNDLE_KEY_FENCEID);
                 //获取当前有触发的围栏对象：
                 GeoFence fence = bundle.getParcelable(GeoFence.BUNDLE_KEY_FENCE);
+                RxToast.warning(customId +"");
             }
         }
     };
@@ -272,7 +274,6 @@ public class MapFragment extends LazyLoadFragment{
             }else {
                 swtichFench(1,1);
             }
-
         }
     }
 
@@ -282,16 +283,21 @@ public class MapFragment extends LazyLoadFragment{
         mMapNetServices.switchEnclosure(token,status,type)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new ResponseCallback<BaseEntery>() {
+                .subscribe(new ResponseCallback<BaseEntery<FenchModel>>() {
                     @Override
-                    public void onSuccess(BaseEntery value) {
+                    public void onSuccess(BaseEntery<FenchModel> value) {
                         //后台返回围栏信息
-                        init(getActivity());
+                        if(value != null){
+                            FenchModel fenchModel = value.obj;
+                            ILog.e(TAG,"" + fenchModel.toString());
+                            init(fenchModel);
+                        }
+
                     }
 
                     @Override
                     public void onFailture(String e) {
-
+                        RxToast.error(e + "");
                     }
                 });
     }
@@ -330,6 +336,13 @@ public class MapFragment extends LazyLoadFragment{
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mMapView.onSaveInstanceState(outState);
+    }
+
+    /**
+     * 获取围栏信息
+     */
+    public void getFenchInfo(){
+
     }
 
 }

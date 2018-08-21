@@ -34,7 +34,11 @@ public abstract class ResponseCallback<T extends BaseEntery> implements Observer
 
     @Override
     public void onError(Throwable e) {
-        onFailture(e.getMessage());
+        String message = e.getMessage();
+        if(message == null){
+            message = "";
+        }
+        onFailture(message);
         mDisposable.dispose();
     }
 

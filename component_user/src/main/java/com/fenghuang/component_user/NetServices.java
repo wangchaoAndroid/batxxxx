@@ -85,7 +85,7 @@ public interface NetServices {
 
 
 
-    /**
+    /**getNearbyChargingInterface
      * 获得附近店铺
      * @return
      */
@@ -95,4 +95,26 @@ public interface NetServices {
                                                         @Field("range") int range,
                                                         @Field("currentLongitude") double currentLongitude,
                                                         @Field("currentLatitudes") double currentLatitudes);
+
+    /**
+     * 获得附近充电桩
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("getNearbyChargingInterface")
+    Observable<BaseEntery<List<Neiboor>>> getNearbyCharge(@Field("token") String token,
+                                                        @Field("range") int range,
+                                                        @Field("currentLongitude") double currentLongitude,
+                                                        @Field("currentLatitudes") double currentLatitudes);
+
+    /**
+     * 设置围栏
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("setEnclosureInterface")
+    Observable<BaseEntery> setEnclosure(@Field("token") String token,
+                                                          @Field("longitude") double longitude,
+                                                          @Field("latitude") double latitude,
+                                                          @Field("meter") int meter);
 }

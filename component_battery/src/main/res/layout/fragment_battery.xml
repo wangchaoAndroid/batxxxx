@@ -70,8 +70,8 @@
             android:layout_height="wrap_content"/>
 
         <TextView
+            android:id="@+id/last_precent"
             android:layout_width="wrap_content"
-            android:text="89%"
             android:textStyle="bold"
             android:textColor="#fff"
             android:layout_centerInParent="true"
@@ -114,7 +114,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/basic_d150"/>
 
-    <ImageView
+    <com.amap.api.maps.MapView
         android:id="@+id/app_enter_map"
         android:src="@drawable/default1"
         android:layout_margin="@dimen/basic_d10"

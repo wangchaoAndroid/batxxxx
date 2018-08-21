@@ -17,6 +17,7 @@ import android.view.View;
 
 import com.fenghuang.component_base.R;
 import com.fenghuang.component_base.data.CacheDataSource;
+import com.fenghuang.component_base.net.ILog;
 import com.fenghuang.component_base.utils.ActivityStackManager;
 import com.fenghuang.component_base.utils.HandlerUtils;
 import com.fenghuang.component_base.utils.StatusBarUtil;
@@ -244,4 +245,6 @@ public abstract class  BaseActivity extends AppCompatActivity implements Handler
             return false;
         }
     }
+
+
 }

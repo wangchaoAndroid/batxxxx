@@ -34,7 +34,7 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * Create by wangchao on 2018/8/20 17:19
  */
-public class NeiboorhoorActivity extends BaseActivity implements View.OnClickListener{
+public class ChargeActivity extends BaseActivity implements View.OnClickListener{
     private static final String TAG = "WarnActivity";
     private RecyclerView mRecyclerView;
 
@@ -44,7 +44,7 @@ public class NeiboorhoorActivity extends BaseActivity implements View.OnClickLis
     NetServices batteryNetServices = RetrofitManager.getInstance().initRetrofit().create(NetServices.class);
     private int mRange;
     public static void startAction(Context context ,Bundle bundle){
-        Intent intent = new Intent(context,NeiboorhoorActivity.class);
+        Intent intent = new Intent(context,ChargeActivity.class);
         intent.putExtras(bundle);
         context.startActivity(intent);
     }
@@ -71,13 +71,12 @@ public class NeiboorhoorActivity extends BaseActivity implements View.OnClickLis
     }
 
     /**
-     * 获取附近商家
+     * 获取附近充电桩
      */
     public void getNeiborInfo(int neiborMeters,AMapLocation amapLocation){
-
         String token = (String) SPDataSource.get(this,SPDataSource.USER_TOKEN,"");
         ILog.e(TAG,token);
-        batteryNetServices.getNearbyShop(token,neiborMeters,amapLocation.getLongitude(),amapLocation.getLatitude()).subscribeOn(Schedulers.io())
+        batteryNetServices.getNearbyCharge(token,neiborMeters,amapLocation.getLongitude(),amapLocation.getLatitude()).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new ResponseCallback<BaseEntery<List<Neiboor>>>() {
                     @Override
@@ -113,7 +112,7 @@ public class NeiboorhoorActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_neibor;
+        return R.layout.activity_charge;
     }
 
     @Override

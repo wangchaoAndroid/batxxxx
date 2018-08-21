@@ -24,7 +24,7 @@
             android:layout_height="18dp"/>
 
         <TextView
-            android:text="附近商家"
+            android:text="附近充电桩"
             android:textSize="@dimen/basic_s16"
             android:layout_width="wrap_content"
             android:layout_centerInParent="true"
@@ -36,4 +36,6 @@
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
+
 </LinearLayout>

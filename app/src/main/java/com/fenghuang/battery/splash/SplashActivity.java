@@ -62,6 +62,12 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     protected void initData(Bundle savedInstanceState) {
+        String token = (String) SPDataSource.get(this,SPDataSource.USER_TOKEN,"");
+        if(!TextUtils.isEmpty(token)){
+            // 已经登录过的，自动进入
+            startActivity(MainActivity.class, true);
+            return;
+        }
         res.add(R.mipmap.bg1);
         res.add(R.mipmap.sp2);
         res.add(R.mipmap.sp3);

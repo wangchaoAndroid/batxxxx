@@ -8,23 +8,42 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application>
-
-        <activity android:name=".login.LoginActivity"
-                  android:configChanges="orientation|keyboardHidden|screenSize"
-                  android:screenOrientation="portrait"
-                  android:theme="@style/CustomAppTheme_textinputLayout"
-                  android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
-        <activity android:name=".regeist.RegeistActivity"
-                  android:configChanges="orientation|keyboardHidden|screenSize"
-                  android:screenOrientation="portrait"
-                  android:theme="@style/CustomAppTheme_textinputLayout"
-                  android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
-
-        <activity android:name=".login.ForgetPwdActivity"
-                  android:configChanges="orientation|keyboardHidden|screenSize"
-                  android:screenOrientation="portrait"
-                  android:theme="@style/CustomAppTheme_textinputLayout"
-                  android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
+        <activity
+            android:name=".login.LoginActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/CustomAppTheme_textinputLayout"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
+        <activity
+            android:name=".regeist.RegeistActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/CustomAppTheme_textinputLayout"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
+        <activity
+            android:name=".login.ForgetPwdActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/CustomAppTheme_textinputLayout"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
+        <activity
+            android:name=".NeiboorhoorActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/CustomAppTheme_textinputLayout"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
+        <activity
+            android:name=".ChargeActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/CustomAppTheme_textinputLayout"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
+        <activity
+            android:name=".SetFenchActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/CustomAppTheme_textinputLayout"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
 
 
     </application>

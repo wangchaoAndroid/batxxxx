@@ -11,6 +11,7 @@ import com.billy.cc.core.component.CCResult;
 import com.billy.cc.core.component.IComponent;
 import com.fenghuang.component_base.data.CacheDataSource;
 import com.fenghuang.component_base.data.SPDataSource;
+import com.fenghuang.component_base.net.ILog;
 import com.fenghuang.component_user.login.LoginActivity;
 
 public class ComponentUser implements IComponent {
@@ -34,6 +35,7 @@ public class ComponentUser implements IComponent {
         String actionName = cc.getActionName();
         if ("forceGetLoginUser".equals(actionName)) {
             String token = (String) SPDataSource.get(cc.getContext(), SPDataSource.USER_TOKEN, "");
+            ILog.e("usr token",token);
             if (!TextUtils.isEmpty((token) )) {
                 //已登录同步实现，直接调用CC.sendCCResult(...)并返回返回false
                 CCResult result = CCResult.success(SPDataSource.USER_TOKEN, token);

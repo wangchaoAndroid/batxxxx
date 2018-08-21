@@ -1,6 +1,7 @@
 package com.fenghuang.battery;
 
 import android.app.Application;
+import android.support.multidex.MultiDex;
 
 import com.billy.cc.core.component.CC;
 import com.fenghuang.component_base.base.BaseApp;
@@ -20,5 +21,6 @@ public class MyApp extends BaseApp {
         CC.enableRemoteCC(true);
         RxTool.init(this);
         ContextManager.init(this);
+        MultiDex.install(this);
     }
 }
