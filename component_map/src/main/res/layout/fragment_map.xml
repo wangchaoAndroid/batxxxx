@@ -13,7 +13,6 @@
 
     <TextView
         android:id="@+id/start_fench"
-        android:text="开启围栏"
         android:layout_marginBottom="@dimen/basic_d20"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"

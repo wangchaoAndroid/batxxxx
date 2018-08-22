@@ -3,11 +3,14 @@ package com.fenghuang.component_battery;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.billy.cc.core.component.CC;
 import com.billy.cc.core.component.CCResult;
 import com.billy.cc.core.component.IComponent;
+
+import java.util.List;
 
 /**
  * Create by wangchao on 2018/7/18 10:33
@@ -44,7 +47,7 @@ public class ComponentBattery implements IComponent {
             case "lifecycleFragment.addText":
                 lifecycleFragmentDoubleText(cc);
                 break;
-            case "getInfo":
+            case "getWarnInfo":
                 getInfo(cc);
                 break;
             default:
@@ -67,14 +70,21 @@ public class ComponentBattery implements IComponent {
     }
 
     private void getLifecycleFragment(CC cc) {
-        CC.sendCCResult(cc.getCallId(), CCResult.success("fragment", new BatteryFragment())
+        BatteryFragment batteryFragment = new BatteryFragment();
+        CC.sendCCResult(cc.getCallId(), CCResult.success("fragment",batteryFragment)
                 .addData("int", 1)
         );
     }
 
     private void getInfo(CC cc) {
-        String userName = "billy";
-        CC.sendCCResult(cc.getCallId(), CCResult.success("userName", userName));
+        Context context = cc.getContext();
+        Intent intent = new Intent(context, WarnActivity.class);
+        if (!(context instanceof Activity)) {
+            //调用方没有设置context或app间组件跳转，context为application
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+        context.startActivity(intent);
+        CC.sendCCResult(cc.getCallId(), CCResult.success());
     }
 
     private void openActivity(CC cc) {

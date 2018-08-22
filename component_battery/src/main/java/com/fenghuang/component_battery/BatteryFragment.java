@@ -8,7 +8,10 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.amap.api.maps.AMap;
@@ -49,17 +52,28 @@ public class BatteryFragment  extends LazyLoadFragment{
     private static final String TAG = "BatteryFragment";
     private MapView mMapView;
     private ViewPager mBannerView;
-    private TextView count_down_time;
+    private TextView count_down_time,title_warn;
     List<Ad> items = new ArrayList<>();
     private BannerAdapter mBannerAdapter;
     private TextView lastPrecent;
-
+    private Spinner spinner;
+    private ArrayAdapter arr_adapter;
+    private ArrayList<String> mBind_ids = new ArrayList<>();
+    private ImageView left1,left2,right1,right2,iv_battery;
     @Override
     protected void init(View view,Bundle savedInstanceState) {
         mMapView = view.findViewById(R.id.app_enter_map);
         mBannerView = view.findViewById(R.id.app_banner);
         count_down_time = view.findViewById(R.id.count_down_time);
+        iv_battery = view.findViewById(R.id.iv_battery);
+        title_warn = view.findViewById(R.id.title_warn);
         lastPrecent = view.findViewById(R.id.last_precent);
+        left1 = view.findViewById(R.id.left1);
+        left2 = view.findViewById(R.id.left2);
+        right1 = view.findViewById(R.id.right1);
+        right2 = view.findViewById(R.id.right2);
+        spinner = (Spinner) findViewById(R.id.title_tv);
+
         mAMap = mMapView.getMap();
         mMapView.onCreate(savedInstanceState);// 此方法必须重写
         addOnClickListeners(R.id.app_enter_map,R.id.left2);
@@ -72,6 +86,10 @@ public class BatteryFragment  extends LazyLoadFragment{
 
     @Override
     protected void lazyLoad() {
+        Bundle arguments = getArguments();
+        if(arguments != null){
+            mBind_ids.addAll(arguments.getStringArrayList("key"));
+        }
 
         initMap();
         mBannerAdapter = new BannerAdapter(getActivity(),items);
@@ -83,8 +101,30 @@ public class BatteryFragment  extends LazyLoadFragment{
 //        spannableString.setSpan(new RelativeSizeSpan(2f), 4, 6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 //        spannableString.setSpan(new ForegroundColorSpan(Color.GREEN),4,6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         count_down_time.setText(spannableString);
+        //数据
+
+
+        //适配器
+        arr_adapter= new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, mBind_ids);
+        //设置样式
+        arr_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //加载适配器
+        spinner.setAdapter(arr_adapter);
         getHomeInfo();
 
+        spinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {//选择item的选择点击监听事件
+            public void onItemSelected(AdapterView<?> arg0, View arg1,
+                                       int arg2, long arg3) {
+                // TODO Auto-generated method stub
+                // 将所选mySpinner 的值带入myTextView 中
+
+            }
+
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+
+            }
+        });
     }
 
     @Override
@@ -111,8 +151,37 @@ public class BatteryFragment  extends LazyLoadFragment{
                         if(value != null){
                             items.clear();
                             HomeModel homeModel = value.obj;
-                            int temperature = homeModel.electricquantity;
-                            lastPrecent.setText(temperature + "%");
+                            if(homeModel.lockstatus == 1){
+//                                right1.setVisibility(View.VISIBLE);
+                            }else {
+//                                right1.setVisibility(View.G);
+                            }
+                            HomeModel.Alarmtab alarmtab = homeModel.alarmtab;
+                            count_down_time.setText(alarmtab.alarmcontent + "");
+                            title_warn.setText(alarmtab.alarmtitle + "");
+
+                            if(homeModel.railstatus == 1){
+                                left1.setVisibility(View.VISIBLE);
+                            }else {
+                                left1.setVisibility(View.GONE);
+                            }
+
+
+                            int electricquantity = homeModel.electricquantity;
+                            lastPrecent.setText(electricquantity + "%");
+                            if(electricquantity <= 10){
+                                iv_battery.setImageResource(R.mipmap.p_10);
+                            }else if(electricquantity <= 25){
+                                iv_battery.setImageResource(R.mipmap.p_25);
+                            }else if(electricquantity <= 45){
+                                iv_battery.setImageResource(R.mipmap.p_45);
+                            }else if(electricquantity <= 60){
+                                iv_battery.setImageResource(R.mipmap.p_60);
+                            }else if(electricquantity < 100){
+                                iv_battery.setImageResource(R.mipmap.p_80);
+                            }else {
+                                iv_battery.setImageResource(R.mipmap.p_100);
+                            }
                             List<Ad> advertisingtabList = homeModel.advertisingtabList;
                             items.clear();
                             items.addAll(advertisingtabList);
@@ -128,6 +197,7 @@ public class BatteryFragment  extends LazyLoadFragment{
                             markerOption.setFlat(true);//设置marker平贴地图效果
                             mAMap.moveCamera(CameraUpdateFactory.changeLatLng(latLng));
                             mAMap.addMarker(markerOption);
+
                         }
 
 

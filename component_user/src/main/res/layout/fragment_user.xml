@@ -8,11 +8,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
         <LinearLayout
-            android:id="@+id/ll1"
+            android:id="@+id/lll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -50,122 +47,54 @@
                 android:layout_height="1dp"
                 android:background="@color/divide_line"/>
 
+
             <TextView
-                android:id="@+id/set_fench"
+                android:id="@+id/warn_info"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/component_user_dp_50"
+                android:drawableRight="@drawable/icon_user_3"
+                android:gravity="center_vertical"
+                android:paddingBottom="@dimen/component_user_dp_10"
+                android:paddingTop="@dimen/component_user_dp_10"
+                android:text="告警信息"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/divide_line"/>
+
+
+
+
+            <TextView
+                android:id="@+id/setting_tv"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/component_user_dp_50"
                 android:drawableRight="@drawable/icon_user_4"
                 android:gravity="center_vertical"
                 android:paddingBottom="@dimen/component_user_dp_10"
                 android:paddingTop="@dimen/component_user_dp_10"
-                android:text="设置围栏"/>
+                android:text="设置"/>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/divide_line"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/component_user_dp_50"
-                android:drawableRight="@drawable/icon_user_3"
-                android:gravity="center_vertical"
-                android:paddingBottom="@dimen/component_user_dp_10"
-                android:paddingTop="@dimen/component_user_dp_10"
-                android:text="关于我们"/>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/divide_line"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/component_user_dp_50"
-                android:drawableRight="@drawable/icon_user_3"
-                android:gravity="center_vertical"
-                android:paddingBottom="@dimen/component_user_dp_10"
-                android:paddingTop="@dimen/component_user_dp_10"
-                android:text="在线保修"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/divide_line"/>
-
-            <TextView
-                android:id="@+id/scan_tv"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/component_user_dp_50"
-                android:drawableRight="@drawable/icon_user_3"
-                android:gravity="center_vertical"
-                android:paddingBottom="@dimen/component_user_dp_10"
-                android:paddingTop="@dimen/component_user_dp_10"
-                android:text="电池扫码"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/divide_line"/>
-
-            <TextView
-                android:id="@+id/tv_nearbyShop"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/component_user_dp_50"
-                android:drawableRight="@drawable/icon_user_3"
-                android:gravity="center_vertical"
-                android:paddingBottom="@dimen/component_user_dp_10"
-                android:paddingTop="@dimen/component_user_dp_10"
-                android:text="附近门店"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/divide_line"/>
-
-            <TextView
-                android:id="@+id/tv_charge"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/component_user_dp_50"
-                android:drawableRight="@drawable/icon_user_4"
-                android:gravity="center_vertical"
-                android:paddingBottom="@dimen/component_user_dp_10"
-                android:paddingTop="@dimen/component_user_dp_10"
-                android:text="附近充电桩"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/divide_line"/>
         </LinearLayout>
 
-    </ScrollView>
 
 
-
-
-    <TextView
-        android:id="@+id/btn_logout"
-        android:gravity="center"
-        android:layout_marginBottom="@dimen/component_user_dp_10"
-        android:layout_marginLeft="@dimen/component_user_dp_10"
-        android:layout_marginRight="@dimen/component_user_dp_10"
-        android:layout_width="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@android:color/background_dark"
-        android:textColor="@android:color/white"
-        android:layout_height="@dimen/basic_d40"
-        android:text="退出登录"
-        android:textSize="@dimen/basic_s18" />
 
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/component_user_dp_10"
-        android:text="用户名最大字数限制"
-        android:textSize="@dimen/basic_s16"
-        app:layout_constraintBottom_toTopOf="@+id/ll1"
+        android:textSize="@dimen/basic_s18"
+        app:layout_constraintBottom_toTopOf="@+id/lll"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.5"/>
 </android.support.constraint.ConstraintLayout>

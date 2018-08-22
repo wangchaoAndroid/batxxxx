@@ -38,19 +38,14 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class UserFragment extends LazyLoadFragment {
 
-    private static final int FROM_SHOP = 0x01;
-    public static final int FROM_CHARGE = 0x02;
+    private TextView tv_name,setting_tv;
 
-    TextView mTextView;
-    private TextView scan_tv;
-    private TextView logoutTv;
-    private Object mNearbyShop;
-    NetServices netServices = RetrofitManager.getInstance().initRetrofit().create(NetServices.class);
     @Override
     protected void init(View view,Bundle savedInstanceState) {
-        mTextView = (TextView) view.findViewById(R.id.tv_name);
-        scan_tv = (TextView) view.findViewById(R.id.scan_tv);
-        logoutTv = view.findViewById(R.id.btn_logout);
+
+        tv_name = view.findViewById(R.id.tv_name);
+        setting_tv = view.findViewById(R.id.setting_tv);
+
     }
 
     @Override
@@ -60,128 +55,29 @@ public class UserFragment extends LazyLoadFragment {
 
     @Override
     protected void lazyLoad() {
-        mTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
 
-        addOnClickListeners(R.id.scan_tv,R.id.btn_logout,R.id.tv_nearbyShop,R.id.tv_charge,R.id.set_fench);
+        LoginModel userInfo = UserManager.getUserInfo();
+        if(userInfo != null){
+            tv_name.setText(userInfo.nickName + "");
+        }
+
+        addOnClickListeners(R.id.setting_tv,R.id.warn_info);
     }
 
     @Override
     public void onClick(View view) {
         super.onClick(view);
         int id = view.getId();
-        if (id == R.id.scan_tv) {
-            CC.obtainBuilder("component_mall")
-                    .setContext(getActivity())
-                    .setActionName("showActivityA")
+        if(id == R.id.setting_tv){
+            startActivity(new Intent(getActivity(),SettingActivity.class));
+        }else if(id == R.id.warn_info){
+            CC.obtainBuilder("component_battery")
+                    .setActionName("getWarnInfo")
                     .build()
                     .call();
-        } else if (id == R.id.btn_logout) {
-            logout();
-        } else if (id == R.id.tv_nearbyShop) {
-            getNearbyShop();
-        }else if(id == R.id.tv_charge){
-            getNearbyCharged();
-        }else if(id == R.id.set_fench){
-            setFench();
         }
     }
 
-    private void setFench() {
-        startActivity(new Intent(getActivity(),SetFenchActivity.class));
-    }
-
-    /**
-     * 退出登录
-     */
-    public void logout(){
-        String token = UserManager.getToken();
-        if(TextUtils.isEmpty(token)){
-            return;
-        }
-        netServices.logout(token)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new ResponseCallback<BaseEntery>() {
-                    @Override
-                    public void onSuccess(BaseEntery value) {
-                        ILog.e( "logout" ,value + "");
-                        //清除内存保存用户数据
-                        UserManager.clearUserInfo();
-                        //清除sp token
-                        SPDataSource.put(getActivity(),SPDataSource.USER_TOKEN,"");
-                        //注销信鸽
-                        XGPushManager.unregisterPush(getActivity());
-                        //退到登录界面
-                        startActivity(new Intent(getActivity(),LoginActivity.class));
-                        ActivityStackManager.getInstance().finishAllActivity();
-                    }
-
-                    @Override
-                    public void onFailture(String e) {
-                        ILog.e( "logout" ,e + "");
-                        RxToast.error(e);
-                    }
-                });
-    }
-
-    /**
-     * 附近门店
-     */
-    public void getNearbyShop() {
-        showPickerView(FROM_SHOP);
-    }
 
 
-    private List<RangeWrapper> ranges = new ArrayList<>();
-    /**
-     * 弹出选择器
-     */
-    private void showPickerView(int from) {
-        ranges.add(new RangeWrapper("500米内",500));
-        ranges.add(new RangeWrapper("1000米内",1000));
-        ranges.add(new RangeWrapper("2000米内",2000));
-        OptionsPickerView pvOptions = new OptionsPickerBuilder(getActivity(), new OnOptionsSelectListener() {
-            @Override
-            public void onOptionsSelect(int options1, int options2, int options3, View v) {
-                //返回的分别是三个级别的选中位置
-                if(ranges != null && !ranges.isEmpty()){
-                    ILog.e(TAG,options1 + "---" + options2 + "---" + options3);
-                    RangeWrapper rangeWrapper = ranges.get(options1);
-                    int rangeMeter = rangeWrapper.rangeMeter;
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("range",rangeMeter);
-                    switch (from){
-                        case FROM_CHARGE:
-                            ChargeActivity.startAction(getActivity(),bundle);
-                            break;
-                        case FROM_SHOP:
-                            NeiboorhoorActivity.startAction(getActivity(),bundle);
-                            break;
-                    }
-
-                }
-            }
-        })
-                .setTitleText("范围")
-                .setDividerColor(Color.BLACK)
-                .setTextColorCenter(Color.BLACK) //设置选中项文字颜色
-                .setContentTextSize(14)
-                .build();
-
-        pvOptions.setPicker(ranges);//一级选择器
-        //pvOptions.setPicker(options1Items, options2Items);//二级选择器*/
-        //pvOptions.setPicker(options1Items, options2Items, options3Items);//三级选择器
-        pvOptions.show();
-    }
-
-    /**
-     * 获取附近充电桩
-     */
-    public void getNearbyCharged() {
-        showPickerView(FROM_CHARGE);
-    }
 }

@@ -32,14 +32,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-        <TextView
+        <Spinner
             android:id="@+id/title_tv"
-            android:text="型号9527"
             android:gravity="center"
             android:textSize="@dimen/basic_s16"
             android:layout_centerInParent="true"
+            android:drawableRight="@drawable/pull_select"
             android:layout_height="match_parent"
             android:layout_width="wrap_content"/>
+
+
 
         <ImageView
             android:id="@+id/right1"
@@ -65,8 +67,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
+            android:id="@+id/iv_battery"
             android:layout_width="match_parent"
-            android:src="@drawable/battery"
             android:layout_height="wrap_content"/>
 
         <TextView
@@ -91,18 +93,18 @@
         android:layout_height="wrap_content">
 
         <TextView
+            android:id="@+id/title_warn"
             android:layout_gravity="center_horizontal"
             android:layout_width="wrap_content"
-            android:text="最新告警"
             android:layout_height="wrap_content"/>
 
         <TextView
             android:id="@+id/count_down_time"
             android:layout_width="wrap_content"
 
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:padding="@dimen/basic_d10"
-            android:layout_height="wrap_content"/>
+            android:padding="@dimen/basic_d10"/>
     </LinearLayout>
 
     <android.support.v4.view.ViewPager

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/basic_white1"
+    android:orientation="vertical"
+    tools:context="com.fenghuang.component_user.SettingActivity">
+    <RelativeLayout
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:paddingLeft="@dimen/basic_d10"
+        android:paddingRight="@dimen/basic_d10"
+        android:layout_height="?android:attr/actionBarSize">
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="18dp"
+            android:src="@drawable/back"
+            android:layout_centerVertical="true"
+            android:layout_height="18dp"/>
+
+        <TextView
+            android:text="设置"
+            android:textSize="@dimen/basic_s16"
+            android:textColor="@color/basic_black3"
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:paddingLeft="@dimen/basic_d10"
+        android:paddingRight="@dimen/basic_d10"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="0dp">
+
+        <TextView
+            android:id="@+id/set_fench"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/component_user_dp_50"
+
+            android:gravity="center_vertical"
+            android:paddingBottom="@dimen/component_user_dp_10"
+            android:paddingTop="@dimen/component_user_dp_10"
+            android:text="设置围栏"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divide_line"/>
+
+
+
+        <TextView
+            android:id="@+id/scan_tv"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/component_user_dp_50"
+            android:gravity="center_vertical"
+            android:paddingBottom="@dimen/component_user_dp_10"
+            android:paddingTop="@dimen/component_user_dp_10"
+            android:text="电池扫码"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divide_line"/>
+
+        <TextView
+            android:id="@+id/tv_nearbyShop"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/component_user_dp_50"
+            android:gravity="center_vertical"
+            android:paddingBottom="@dimen/component_user_dp_10"
+            android:paddingTop="@dimen/component_user_dp_10"
+            android:text="附近门店"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divide_line"/>
+
+        <TextView
+            android:id="@+id/tv_charge"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/component_user_dp_50"
+            android:gravity="center_vertical"
+            android:paddingBottom="@dimen/component_user_dp_10"
+            android:paddingTop="@dimen/component_user_dp_10"
+            android:text="附近充电桩"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divide_line"/>
+
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/component_user_dp_50"
+            android:gravity="center_vertical"
+            android:paddingBottom="@dimen/component_user_dp_10"
+            android:paddingTop="@dimen/component_user_dp_10"
+            android:text="在线保修"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divide_line"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/component_user_dp_50"
+            android:gravity="center_vertical"
+            android:paddingBottom="@dimen/component_user_dp_10"
+            android:paddingTop="@dimen/component_user_dp_10"
+            android:text="关于我们"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divide_line"/>
+
+
+        <TextView
+            android:id="@+id/un_bind"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/component_user_dp_50"
+
+            android:gravity="center_vertical"
+            android:paddingBottom="@dimen/component_user_dp_10"
+            android:paddingTop="@dimen/component_user_dp_10"
+            android:text="解除绑定(管理员权限)"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divide_line"/>
+
+
+
+
+
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/btn_logout"
+        android:gravity="center"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="@dimen/component_user_dp_40"
+        android:layout_marginLeft="@dimen/component_user_dp_10"
+        android:layout_marginRight="@dimen/component_user_dp_10"
+        android:layout_width="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@android:color/background_dark"
+        android:textColor="@android:color/white"
+        android:layout_height="@dimen/basic_d40"
+        android:text="退出登录"
+        android:textSize="@dimen/basic_s18" />
+
+
+</LinearLayout>

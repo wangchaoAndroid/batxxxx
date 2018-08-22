@@ -120,7 +120,6 @@ public class NeiboorhoorActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View view) {
         int id = view.getId();
         if(id == R.id.back){
-            ILog.e("22222","22222222222222222222");
             finish();
         }
     }

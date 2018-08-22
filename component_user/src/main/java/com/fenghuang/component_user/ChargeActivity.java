@@ -119,7 +119,6 @@ public class ChargeActivity extends BaseActivity implements View.OnClickListener
     public void onClick(View view) {
         int id = view.getId();
         if(id == R.id.back){
-            ILog.e("22222","22222222222222222222");
             finish();
         }
     }

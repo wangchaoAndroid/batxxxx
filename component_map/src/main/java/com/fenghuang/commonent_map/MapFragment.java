@@ -11,6 +11,7 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.amap.api.fence.GeoFence;
 import com.amap.api.fence.GeoFenceClient;
@@ -26,6 +27,7 @@ import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.CameraPosition;
+import com.amap.api.maps.model.Circle;
 import com.amap.api.maps.model.CircleOptions;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.MyLocationStyle;
@@ -60,6 +62,7 @@ public class MapFragment extends LazyLoadFragment{
     public AMapLocationClient mLocationClient ;
     //声明AMapLocationClientOption对象
     public AMapLocationClientOption mLocationOption;
+    private TextView start_fench;
     //定义接收广播的action字符串
     public static final String GEOFENCE_BROADCAST_ACTION = "com.location.apis.geofencedemo.broadcast";
     MapNetServices mMapNetServices = RetrofitManager.getInstance().initRetrofit().create(MapNetServices.class);
@@ -83,12 +86,12 @@ public class MapFragment extends LazyLoadFragment{
             }
         }
     };
-
+    private Circle mCircle;
     //绘制面
     public void circle(double v1, double v2,int radius) {
         LatLng latLng = new LatLng(v1, v2);
 
-        mAMap.addCircle(new CircleOptions().center(latLng)
+        mCircle =  mAMap.addCircle(new CircleOptions().center(latLng)
                 .radius(radius).strokeColor(R.color.basic_blue3)
                 .fillColor(R.color.basic_blue3).strokeWidth(2));
         Log.e("tag", "============圈圈300==================2");
@@ -173,6 +176,7 @@ public class MapFragment extends LazyLoadFragment{
     @Override
     protected void init(View view,Bundle savedInstanceState) {
         mMapView = (MapView) view.findViewById(R.id.map);
+        start_fench = view.findViewById(R.id.start_fench);
         mAMap = mMapView.getMap();
         mMapView.onCreate(savedInstanceState);// 此方法必须重写
         regeist();
@@ -261,6 +265,7 @@ public class MapFragment extends LazyLoadFragment{
         setAMapLocationListener();
         startLocation();
         addOnClickListeners(R.id.start_fench);
+        start_fench.setText("开启围栏");
     }
 
 
@@ -278,28 +283,40 @@ public class MapFragment extends LazyLoadFragment{
     }
 
     private void swtichFench(int status,int type) {
-        String token = (String) SPDataSource.get(getActivity(),SPDataSource.USER_TOKEN,"");
-        ILog.e(TAG,token);
-        mMapNetServices.switchEnclosure(token,status,type)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new ResponseCallback<BaseEntery<FenchModel>>() {
-                    @Override
-                    public void onSuccess(BaseEntery<FenchModel> value) {
-                        //后台返回围栏信息
-                        if(value != null){
-                            FenchModel fenchModel = value.obj;
-                            ILog.e(TAG,"" + fenchModel.toString());
-                            init(fenchModel);
+        isOpen = !isOpen;
+        if(status == 0){
+            start_fench.setText("开启围栏");
+            if(mCircle != null){
+                mCircle.remove();
+            }
+            clearFence();
+        }else {
+            start_fench.setText("关闭围栏");
+            String token = (String) SPDataSource.get(getActivity(),SPDataSource.USER_TOKEN,"");
+            ILog.e(TAG,token);
+            mMapNetServices.switchEnclosure(token,status,type)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new ResponseCallback<BaseEntery<FenchModel>>() {
+                        @Override
+                        public void onSuccess(BaseEntery<FenchModel> value) {
+                            //后台返回围栏信息
+
+                            if(value != null){
+                                FenchModel fenchModel = value.obj;
+                                ILog.e(TAG,"" + fenchModel.toString());
+                                init(fenchModel);
+                            }
+
                         }
 
-                    }
+                        @Override
+                        public void onFailture(String e) {
+                            RxToast.error(e + "");
+                        }
+                    });
+        }
 
-                    @Override
-                    public void onFailture(String e) {
-                        RxToast.error(e + "");
-                    }
-                });
     }
 
     /**
@@ -309,6 +326,8 @@ public class MapFragment extends LazyLoadFragment{
     public void onDestroy() {
         super.onDestroy();
         mMapView.onDestroy();
+        mLocationClient.stopLocation();
+        mLocationClient.onDestroy();
     }
 
     /**

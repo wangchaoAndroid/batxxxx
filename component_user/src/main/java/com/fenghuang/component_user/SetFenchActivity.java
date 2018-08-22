@@ -77,7 +77,7 @@ public class SetFenchActivity extends BaseActivity implements View.OnClickListen
         initLocation(this);
         setAMapLocationListener();
         startLocation();
-        addOnClickListeners(R.id.set_fench);
+        addOnClickListeners(R.id.set_fench,R.id.back);
     }
 
 
@@ -230,6 +230,8 @@ public class SetFenchActivity extends BaseActivity implements View.OnClickListen
             }else {
                 RxToast.error("设置失败，请确认围栏信息");
             }
+        }else if(id == R.id.back){
+            finish();
         }
     }
 

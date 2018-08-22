@@ -83,7 +83,7 @@ public class MallFragment extends LazyLoadFragment implements BaseQuickAdapter.O
             @Override public void handlePaymentResult(Intent data) {
                 int code = data.getExtras().getInt("code");
                 String result = data.getExtras().getString("result");
-                RxToast.info(""+ result);
+//                RxToast.info(""+ result);
                 ILog.e(TAG,"code" + code + "----result" + result);
 //                if(code == 1){
 //                    details.remove(pos);

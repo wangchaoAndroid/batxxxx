@@ -44,8 +44,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/CustomAppTheme_textinputLayout"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
-
-
+        <activity
+            android:name=".SettingActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/CustomAppTheme_textinputLayout"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
     </application>
 
 </manifest>

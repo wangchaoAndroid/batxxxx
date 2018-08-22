@@ -1,5 +1,6 @@
 package com.fenghuang.battery;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
@@ -75,11 +76,12 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     @Override
     protected void initData(Bundle savedInstanceState) {
         List<LazyLoadFragment> fragments = new ArrayList<>();
-        fragments.add(FragmentFactory.createFragment(0));
-        fragments.add(FragmentFactory.createFragment(1));
-        fragments.add(FragmentFactory.createFragment(2));
-        fragments.add(FragmentFactory.createFragment(3));
+        fragments.add(FragmentFactory.createFragment(0,null));
+        fragments.add(FragmentFactory.createFragment(1,null));
+        fragments.add(FragmentFactory.createFragment(2,null));
+        fragments.add(FragmentFactory.createFragment(3,null));
         mViewPager.setAdapter(new CommonFragmentAdapter(getSupportFragmentManager(),fragments));
+
     }
 
 

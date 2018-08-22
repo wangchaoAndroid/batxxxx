@@ -1,6 +1,7 @@
 package com.fenghuang.component_user;
 
 import com.fenghuang.component_base.net.BaseEntery;
+import com.fenghuang.component_user.bean.BindModel;
 import com.fenghuang.component_user.bean.Neiboor;
 
 import java.util.List;
@@ -117,4 +118,21 @@ public interface NetServices {
                                                           @Field("longitude") double longitude,
                                                           @Field("latitude") double latitude,
                                                           @Field("meter") int meter);
+
+    /**
+     *  解除绑定
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("untieInterface")
+    Observable<BaseEntery> unBind(@Field("token") String token,
+                                        @Field("appAccount") String appAccount);
+
+    /**
+     * 获取绑定关系
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("getViceCardAllByAccountInterface")
+    Observable<BaseEntery<BindModel>> getViceCardAllByAccount(@Field("token") String token);
 }

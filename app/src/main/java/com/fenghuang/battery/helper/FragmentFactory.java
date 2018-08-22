@@ -1,5 +1,6 @@
 package com.fenghuang.battery.helper;
 
+import android.os.Bundle;
 import android.util.Log;
 
 import com.billy.cc.core.component.CC;
@@ -15,7 +16,7 @@ import java.util.Map;
 public class FragmentFactory {
     private static Map<Integer,LazyLoadFragment> fragMap = new HashMap<>();
 
-    public static LazyLoadFragment createFragment(int pos) {
+    public static LazyLoadFragment createFragment(int pos, Bundle bundle) {
         LazyLoadFragment fragment = fragMap.get(pos);
         if (fragment == null) {
             switch (pos) {

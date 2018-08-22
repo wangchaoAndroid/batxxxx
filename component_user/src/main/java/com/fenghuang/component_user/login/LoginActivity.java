@@ -36,6 +36,8 @@ import com.fenghuang.component_user.regeist.RegeistActivity;
 import com.tencent.android.tpush.XGIOperateCallback;
 import com.tencent.android.tpush.XGPushManager;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -106,7 +108,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         //单独保存token
                         SPDataSource.put(LoginActivity.this,SPDataSource.USER_TOKEN,loginModel.token);
                         //根据电池集合判读是否需要购买
-                        List<String> viceCardListNumber = loginModel.viceCardListNumber;
+                        ArrayList<String> viceCardListNumber = loginModel.viceCardListNumber;
                         if(ILog.DEBUG){
                             call = CC.obtainBuilder("component_app")
                                     .setContext(LoginActivity.this)
@@ -118,6 +120,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                             }
                         }else {
                             if(viceCardListNumber != null && !viceCardListNumber.isEmpty()){
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("key", viceCardListNumber);
                                 call = CC.obtainBuilder("component_app")
                                         .setContext(LoginActivity.this)
                                         .setActionName("enterMain")
