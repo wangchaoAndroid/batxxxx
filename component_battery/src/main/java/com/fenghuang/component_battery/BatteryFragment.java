@@ -135,7 +135,7 @@ public class BatteryFragment  extends LazyLoadFragment{
                 .subscribe(new ResponseCallback<BaseEntery>() {
                     @Override
                     public void onSuccess(BaseEntery value) {
-                        RxToast.info("切换成功");
+//                        RxToast.info("切换成功");
                     }
 
                     @Override

@@ -184,19 +184,25 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
     public void onClick(View view) {
         int id = view.getId();
         if(id == R.id.start_router){
-            TimePickerView pvTime = new TimePickerBuilder(RouterActivity.this, new OnTimeSelectListener() {
-                @Override
-                public void onTimeSelect(Date date, View v) {
-                    ILog.e(TAG,"");
-                    long time = DateTimeUtil.getTime(date.toLocaleString());
-                    ILog.e(TAG,"time " + time);
-                    // Toast.makeText(RouterActivity.this, pvTime.getTime(date), Toast.LENGTH_SHORT).show();
-                    getRouter("2018-07-03 00:00:00","2018-08-12 23:00:00");
-                }
-            })
-                    .setType(new boolean[]{true, true, true, true, true, true})
-                    .build();
-            pvTime.show();
+            if(!isOpen){
+                final TimePickerView pvTime = new TimePickerBuilder(RouterActivity.this, new OnTimeSelectListener() {
+                    @Override
+                    public void onTimeSelect(Date date, View v) {
+                        ILog.e(TAG,"");
+                        long time = DateTimeUtil.getTime(date.toLocaleString());
+                        ILog.e(TAG,"time " + time);
+                        // Toast.makeText(RouterActivity.this, pvTime.getTime(date), Toast.LENGTH_SHORT).show();
+                        getRouter("2018-07-03 00:00:00","2018-08-12 23:00:00");
+
+                    }
+                })
+                        .setType(new boolean[]{true, true, true, true, true, true})
+                        .build();
+                pvTime.show();
+            }else {
+                startRouter(null);
+            }
+
         }
     }
 
