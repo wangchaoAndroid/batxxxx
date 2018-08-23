@@ -38,7 +38,7 @@
             android:textSize="@dimen/basic_s16"
             android:layout_centerInParent="true"
             android:drawableRight="@drawable/pull_select"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_width="wrap_content"/>
 
 

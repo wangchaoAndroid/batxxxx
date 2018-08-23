@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -25,6 +26,10 @@ import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.trace.LBSTraceClient;
+import com.bigkoo.pickerview.builder.TimePickerBuilder;
+import com.bigkoo.pickerview.listener.OnTimeSelectListener;
+import com.bigkoo.pickerview.view.TimePickerView;
+import com.fenghuang.commonent_map.bean.RouterModel;
 import com.fenghuang.component_base.base.BaseActivity;
 import com.fenghuang.component_base.data.SPDataSource;
 import com.fenghuang.component_base.net.BaseEntery;
@@ -32,8 +37,10 @@ import com.fenghuang.component_base.net.ILog;
 import com.fenghuang.component_base.net.ResponseCallback;
 import com.fenghuang.component_base.net.RetrofitManager;
 import com.fenghuang.component_base.tool.RxToast;
+import com.fenghuang.component_base.utils.DateTimeUtil;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -63,6 +70,7 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     protected void initData(Bundle savedInstanceState) {
+
         mMapView.onCreate(savedInstanceState);// 此方法必须重写
         myLocationStyle = new MyLocationStyle();//初始化定位蓝点样式类myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);//连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
         myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE_NO_CENTER);
@@ -85,6 +93,7 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
         setAMapLocationListener();
         startLocation();
         mAMap.moveCamera(CameraUpdateFactory.zoomTo(15));
+
     }
     public void initLocation(Context context){
         //初始化定位
@@ -175,23 +184,39 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
     public void onClick(View view) {
         int id = view.getId();
         if(id == R.id.start_router){
-            startRouter();
+            TimePickerView pvTime = new TimePickerBuilder(RouterActivity.this, new OnTimeSelectListener() {
+                @Override
+                public void onTimeSelect(Date date, View v) {
+                    ILog.e(TAG,"");
+                    long time = DateTimeUtil.getTime(date.toLocaleString());
+                    ILog.e(TAG,"time " + time);
+                    // Toast.makeText(RouterActivity.this, pvTime.getTime(date), Toast.LENGTH_SHORT).show();
+                    getRouter("2018-07-03 00:00:00","2018-08-12 23:00:00");
+                }
+            })
+                    .setType(new boolean[]{true, true, true, true, true, true})
+                    .build();
+            pvTime.show();
         }
     }
+
+
 
     /**
      * 这里需要改用网络请求
      */
-    private void startRouter() {
+    private void startRouter(List<RouterModel> routerModels) {
         isOpen = !isOpen;
         if(isOpen){
             start_router.setText("关闭轨迹");
-            String token = (String) SPDataSource.get(this,SPDataSource.USER_TOKEN,"");
             latLngs.clear();
-            latLngs.add(new LatLng(22.529996f,113.95896f));
-            latLngs.add(new LatLng(22.533117f,113.95185f));
-            latLngs.add(new LatLng(22.534565f,113.95271f));
-            latLngs.add(new LatLng(22.536290f,113.95356f));
+            for(RouterModel routerModel : routerModels){
+                latLngs.add(new LatLng(routerModel.latitude,routerModel.longitude));
+            }
+//            latLngs.add(new LatLng(22.529996f,113.95896f));
+//            latLngs.add(new LatLng(22.533117f,113.95185f));
+//            latLngs.add(new LatLng(22.534565f,113.95271f));
+//            latLngs.add(new LatLng(22.536290f,113.95356f));
             if(polyline != null){
                 polyline.remove();
             }
@@ -203,7 +228,6 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
             }
             mAMap.animateCamera(CameraUpdateFactory.newLatLngBounds(newbounds.build(),
                     30));//第二个参数为四周留空宽度
-            ILog.e(TAG,token);
         }else {
             if(polyline != null){
                 polyline.remove();
@@ -214,5 +238,37 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
 
 
 
+    }
+
+
+    /**
+     * 获取轨迹
+     */
+    public void getRouter(String startTime ,String endTime) {
+        String token = (String) SPDataSource.get(this,SPDataSource.USER_TOKEN,"");
+        if(TextUtils.isEmpty(token)){
+            return;
+        }
+        mMapNetServices.getNavigation(token,startTime,endTime)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ResponseCallback<BaseEntery<List<RouterModel>>>() {
+                    @Override
+                    public void onSuccess(BaseEntery<List<RouterModel>> value) {
+                        ILog.e(TAG,value.toString());
+                        List<RouterModel> routerModels = value.obj;
+                        if(routerModels != null && !routerModels.isEmpty()){
+                            startRouter(routerModels);
+                        }else {
+                            RxToast.error("无轨迹数据");
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailture(String e) {
+                        RxToast.error(e + "");
+                    }
+                });
     }
 }

@@ -37,6 +37,7 @@ import com.fenghuang.component_base.tool.ImageLoader;
 import com.fenghuang.component_base.tool.RxToast;
 import com.fenghuang.component_battery.adapter.BannerAdapter;
 import com.fenghuang.component_battery.bean.Ad;
+import com.fenghuang.component_battery.bean.FenchModel;
 import com.fenghuang.component_battery.bean.HomeModel;
 
 import java.util.ArrayList;
@@ -60,6 +61,8 @@ public class BatteryFragment  extends LazyLoadFragment{
     private ArrayAdapter arr_adapter;
     private ArrayList<String> mBind_ids = new ArrayList<>();
     private ImageView left1,left2,right1,right2,iv_battery;
+    BatteryNetServices batteryNetServices = RetrofitManager.getInstance().initRetrofit().create(BatteryNetServices.class);
+    HomeModel homeModel;
     @Override
     protected void init(View view,Bundle savedInstanceState) {
         mMapView = view.findViewById(R.id.app_enter_map);
@@ -76,7 +79,7 @@ public class BatteryFragment  extends LazyLoadFragment{
 
         mAMap = mMapView.getMap();
         mMapView.onCreate(savedInstanceState);// 此方法必须重写
-        addOnClickListeners(R.id.app_enter_map,R.id.left2);
+        addOnClickListeners(R.id.right1,R.id.right2);
     }
 
     @Override
@@ -86,23 +89,9 @@ public class BatteryFragment  extends LazyLoadFragment{
 
     @Override
     protected void lazyLoad() {
-        Bundle arguments = getArguments();
-        if(arguments != null){
-            mBind_ids.addAll(arguments.getStringArrayList("key"));
-        }
-
         initMap();
         mBannerAdapter = new BannerAdapter(getActivity(),items);
         mBannerView.setAdapter(mBannerAdapter);
-        SpannableString spannableString = new SpannableString("最新告警内容");
-        //设置字体大小（相对值,单位：像素） 参数表示为默认字体大小的多少倍   ,0.5表示一半
-//        spannableString.setSpan(new RelativeSizeSpan(2f), 0, 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//        spannableString.setSpan(new ForegroundColorSpan(Color.GREEN),0,2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//        spannableString.setSpan(new RelativeSizeSpan(2f), 4, 6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//        spannableString.setSpan(new ForegroundColorSpan(Color.GREEN),4,6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        count_down_time.setText(spannableString);
-        //数据
-
 
         //适配器
         arr_adapter= new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, mBind_ids);
@@ -110,14 +99,19 @@ public class BatteryFragment  extends LazyLoadFragment{
         arr_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //加载适配器
         spinner.setAdapter(arr_adapter);
+        spinner.setSelection(0);
+
         getHomeInfo();
 
         spinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {//选择item的选择点击监听事件
-            public void onItemSelected(AdapterView<?> arg0, View arg1,
-                                       int arg2, long arg3) {
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
                 // TODO Auto-generated method stub
                 // 将所选mySpinner 的值带入myTextView 中
-
+              String productNumber = parent.getItemAtPosition(position).toString();
+              //切换终端
+                ILog.e(TAG,productNumber + "");
+              changeDevice(productNumber);
             }
 
             public void onNothingSelected(AdapterView<?> arg0) {
@@ -127,21 +121,118 @@ public class BatteryFragment  extends LazyLoadFragment{
         });
     }
 
+    /**
+     * 切换电池终端
+     */
+    private void changeDevice(String productNumber) {
+        String token = (String) SPDataSource.get(getActivity(),SPDataSource.USER_TOKEN,"");
+        if(TextUtils.isEmpty(token)){
+            return;
+        }
+        batteryNetServices.bindingDefault(token,productNumber)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ResponseCallback<BaseEntery>() {
+                    @Override
+                    public void onSuccess(BaseEntery value) {
+                        RxToast.info("切换成功");
+                    }
+
+                    @Override
+                    public void onFailture(String e) {
+                        RxToast.error(e + "");
+                    }
+                });
+    }
+
     @Override
     public void onClick(View view) {
         super.onClick(view);
         int  viewId = view.getId();
-        if(viewId == R.id.app_enter_map){
+        if(viewId == R.id.right1){
+            if(homeModel != null){
+                int lockstatus = homeModel.lockstatus;
+                if(lockstatus == 0){
+                    switchLock(1);
+                }else {
+                    switchLock(0);
+                }
+            }
 
-        }else if(viewId == R.id.left2){
-            startActivity(new Intent(getActivity(),WarnActivity.class));
+        }else if(viewId == R.id.right2){
+            //开关  0关 1开 2充电中 3欠费关机
+            int batteryStatus = homeModel.batteryStatus;
+            if(batteryStatus == 0){
+                switchBattery(1);
+            }else {
+                switchBattery(0);
+            }
+
         }
+    }
+    //调用位置死锁
+    private void switchLock(final int staus) {
+        String token = (String) SPDataSource.get(getActivity(),SPDataSource.USER_TOKEN,"");
+        if(TextUtils.isEmpty(token)){
+            return;
+        }
+        batteryNetServices.switchEnclosure(token,staus,2)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ResponseCallback<BaseEntery<FenchModel>>() {
+                    @Override
+                    public void onSuccess(BaseEntery<FenchModel> value) {
+                        if(staus == 1){
+                            RxToast.info("位置已锁定");
+                            right1.setImageResource(R.mipmap.lock);
+                        }else {
+                            RxToast.info("位置解除锁定");
+                            right1.setImageResource(R.mipmap.un_lock);
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailture(String e) {
+                        RxToast.info(e + "");
+                    }
+                });
+    }
+    //开关电池
+    private void switchBattery(final int status) {
+        String token = (String) SPDataSource.get(getActivity(),SPDataSource.USER_TOKEN,"");
+        if(TextUtils.isEmpty(token)){
+            return;
+        }
+        batteryNetServices.switchBattery(token,status)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ResponseCallback<BaseEntery>() {
+                    @Override
+                    public void onSuccess(BaseEntery value) {
+
+                       // 2 充电中 3分期付款需要缴费 4电池处于离线状态 5成功发出指令
+                        ILog.e(TAG,value.toString());
+                        int code =  Integer.valueOf((String) value.obj);
+                        if(code == 5){
+                            RxToast.info(value.msg);
+                        }else {
+                            RxToast.error(value.msg);
+                        }
+                    }
+
+                    @Override
+                    public void onFailture(String e) {
+                        RxToast.info(e + "");
+                    }
+                });
     }
 
     public void getHomeInfo(){
         String token = (String) SPDataSource.get(getActivity(),SPDataSource.USER_TOKEN,"");
-        ILog.e(TAG,token);
-        BatteryNetServices batteryNetServices = RetrofitManager.getInstance().initRetrofit().create(BatteryNetServices.class);
+        if(TextUtils.isEmpty(token)){
+            return;
+        }
         batteryNetServices.getHome(token).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new ResponseCallback<BaseEntery<HomeModel>>() {
@@ -150,38 +241,66 @@ public class BatteryFragment  extends LazyLoadFragment{
                         ILog.e(TAG,value + "");
                         if(value != null){
                             items.clear();
-                            HomeModel homeModel = value.obj;
-                            if(homeModel.lockstatus == 1){
-//                                right1.setVisibility(View.VISIBLE);
-                            }else {
-//                                right1.setVisibility(View.G);
+                            homeModel = value.obj;
+                            List<HomeModel.ViceCard> viceCardList = homeModel.viceCardList;
+                            if(viceCardList != null && !viceCardList.isEmpty()){
+                                for(HomeModel.ViceCard viceCard : viceCardList){
+                                    mBind_ids.add(viceCard.productNumber);
+                                }
+                                arr_adapter.notifyDataSetChanged();
                             }
-                            HomeModel.Alarmtab alarmtab = homeModel.alarmtab;
-                            count_down_time.setText(alarmtab.alarmcontent + "");
-                            title_warn.setText(alarmtab.alarmtitle + "");
 
+
+                            HomeModel.Alarmtab alarmtab = homeModel.alarmtab;
+                            if(alarmtab != null){
+                                count_down_time.setText(alarmtab.alarmcontent + "");
+                                title_warn.setText(alarmtab.alarmtitle + "");
+                            }
+                            // 围栏
                             if(homeModel.railstatus == 1){
                                 left1.setVisibility(View.VISIBLE);
                             }else {
                                 left1.setVisibility(View.GONE);
                             }
-
-
-                            int electricquantity = homeModel.electricquantity;
-                            lastPrecent.setText(electricquantity + "%");
-                            if(electricquantity <= 10){
-                                iv_battery.setImageResource(R.mipmap.p_10);
-                            }else if(electricquantity <= 25){
-                                iv_battery.setImageResource(R.mipmap.p_25);
-                            }else if(electricquantity <= 45){
-                                iv_battery.setImageResource(R.mipmap.p_45);
-                            }else if(electricquantity <= 60){
-                                iv_battery.setImageResource(R.mipmap.p_60);
-                            }else if(electricquantity < 100){
-                                iv_battery.setImageResource(R.mipmap.p_80);
+                            //告警
+                            if(homeModel.alarmtabStatus  == 1){
+                                left2.setVisibility(View.VISIBLE);
                             }else {
-                                iv_battery.setImageResource(R.mipmap.p_100);
+                                left2.setVisibility(View.GONE);
                             }
+                            //位置死锁
+                            if(homeModel.lockstatus == 1){
+                                right1.setImageResource(R.mipmap.lock);
+                            }else {
+                                right1.setImageResource(R.mipmap.un_lock);
+                            }
+                            //开关  0关 1开 2充电中 3欠费关机
+                            if(homeModel.batteryStatus  == 0){
+                                right2.setImageResource(R.mipmap.un_open);
+                            }else if(homeModel.batteryStatus ==1){
+                                right2.setImageResource(R.mipmap.open);
+                                int electricquantity = homeModel.electricquantity;
+                                lastPrecent.setText(electricquantity + "%");
+                                if(electricquantity <= 10){
+                                    iv_battery.setImageResource(R.mipmap.p_10);
+                                }else if(electricquantity <= 25){
+                                    iv_battery.setImageResource(R.mipmap.p_25);
+                                }else if(electricquantity <= 45){
+                                    iv_battery.setImageResource(R.mipmap.p_45);
+                                }else if(electricquantity <= 60){
+                                    iv_battery.setImageResource(R.mipmap.p_60);
+                                }else if(electricquantity < 100){
+                                    iv_battery.setImageResource(R.mipmap.p_80);
+                                }else {
+                                    iv_battery.setImageResource(R.mipmap.p_100);
+                                }
+                            }else if(homeModel.batteryStatus ==2){
+                                right2.setImageResource(R.mipmap.open);
+                                iv_battery.setImageResource(R.mipmap.charging);
+                            }else if(homeModel.batteryStatus ==3){
+                                right2.setImageResource(R.mipmap.lock);
+                            }
+
                             List<Ad> advertisingtabList = homeModel.advertisingtabList;
                             items.clear();
                             items.addAll(advertisingtabList);

@@ -1,6 +1,9 @@
 package com.fenghuang.commonent_map;
 
+import com.fenghuang.commonent_map.bean.RouterModel;
 import com.fenghuang.component_base.net.BaseEntery;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.http.Field;
@@ -19,4 +22,14 @@ public interface MapNetServices {
     Observable<BaseEntery<FenchModel>> switchEnclosure(@Field("token")String token,
                                    @Field("status")int status,
                                    @Field("type")int type);
+
+
+    /**
+     *获取轨迹
+     */
+    @FormUrlEncoded
+    @POST("getNavigationByMaxMinTimeInterface")
+    Observable<BaseEntery<List<RouterModel>>> getNavigation(@Field("token")String token,
+                                                            @Field("startTime")String startTime,
+                                                            @Field("endTime")String endTime);
 }

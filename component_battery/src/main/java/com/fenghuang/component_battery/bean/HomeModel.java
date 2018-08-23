@@ -15,7 +15,29 @@ public class HomeModel {
     public int railstatus; //是否开启围栏
     public int lockstatus;
     public Alarmtab alarmtab;
+    public int batteryStatus;
+    public int alarmtabStatus;
+    public String batteryModel;
+    public List<ViceCard> viceCardList;
 
+    public class ViceCard implements Serializable{
+        public int id;
+        public int isAdmin;
+        public String createTime;
+        public String productNumber;
+        public String account;
+
+        @Override
+        public String toString() {
+            return "ViceCard{" +
+                    "id=" + id +
+                    ", isAdmin=" + isAdmin +
+                    ", createTime='" + createTime + '\'' +
+                    ", productNumber='" + productNumber + '\'' +
+                    ", account='" + account + '\'' +
+                    '}';
+        }
+    }
     public class Alarmtab implements Serializable{
         public int id;
         public String alarmtitle;
@@ -50,6 +72,10 @@ public class HomeModel {
                 ", railstatus=" + railstatus +
                 ", lockstatus=" + lockstatus +
                 ", alarmtab=" + alarmtab +
+                ", batteryStatus=" + batteryStatus +
+                ", alarmtabStatus=" + alarmtabStatus +
+                ", batteryModel='" + batteryModel + '\'' +
+                ", viceCardList=" + viceCardList +
                 '}';
     }
 }

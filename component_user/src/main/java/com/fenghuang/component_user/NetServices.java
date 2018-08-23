@@ -84,7 +84,13 @@ public interface NetServices {
     Observable<BaseEntery> retrievePassword(@Field("account") String account,@Field("code") String code,@Field("newPassWord") String newPassWord);
 
 
-
+    /**
+     * 修改密码
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("updatePasswordInterface")
+    Observable<BaseEntery> updatePassword(@Field("token") String token,@Field("newPassWord") String newPassWord,@Field("oldPassWord") String oldPassWord);
 
     /**getNearbyChargingInterface
      * 获得附近店铺
@@ -134,5 +140,13 @@ public interface NetServices {
      */
     @FormUrlEncoded
     @POST("getViceCardAllByAccountInterface")
-    Observable<BaseEntery<BindModel>> getViceCardAllByAccount(@Field("token") String token);
+    Observable<BaseEntery<List<BindModel>>> getViceCardAllByAccount(@Field("token") String token);
+
+    /**
+     * 获取用户信息
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("getUserInfoInterface")
+    Observable<BaseEntery<List<BindModel>>> getUserInfo(@Field("token") String token);
 }

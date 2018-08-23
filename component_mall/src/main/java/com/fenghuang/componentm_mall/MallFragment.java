@@ -5,14 +5,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.fenghuang.component_base.base.LazyLoadFragment;
+import com.fenghuang.component_base.data.SPDataSource;
+import com.fenghuang.component_base.net.BaseEntery;
 import com.fenghuang.component_base.net.ILog;
+import com.fenghuang.component_base.net.ResponseCallback;
+import com.fenghuang.component_base.net.RetrofitManager;
 import com.fenghuang.component_base.tool.RxToast;
 import com.fenghuang.component_base.utils.FragmentUtils;
 import com.fenghuang.componentm_mall.adapter.MallAdapter;
+import com.fenghuang.componentm_mall.bean.Product;
 import com.pingplusplus.ui.PaymentHandler;
 import com.pingplusplus.ui.PingppUI;
 
@@ -24,6 +30,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+
 /**
  * Create by wangchao on 2018/7/18 14:00
  */
@@ -32,7 +41,7 @@ public class MallFragment extends LazyLoadFragment implements BaseQuickAdapter.O
     RecyclerView mRecyclerView;
     List<String> categorys = new ArrayList<>();
     private MallAdapter mMallAdapter;
-
+    MallNetServices mMallNetServices = RetrofitManager.getInstance().initRetrofit().create(MallNetServices.class);
     @Override
     protected void init(View view,Bundle savedInstanceState) {
         mRecyclerView = view.findViewById(R.id.recycler_view);
@@ -47,13 +56,11 @@ public class MallFragment extends LazyLoadFragment implements BaseQuickAdapter.O
 
     @Override
     protected void lazyLoad() {
-        for (int i = 0; i < 8; i++) {
-            categorys.add("categoty--" + i );
-        }
         mMallAdapter = new MallAdapter(R.layout.item_category, categorys);
         mRecyclerView.setAdapter(mMallAdapter);
         mMallAdapter.setOnItemClickListener(this);
         mMallAdapter.setChecked(0);
+        getGoodsData();
         FragmentUtils.replaceFragment(getChildFragmentManager(),R.id.container2,new ProductFragment(),false);
         new Thread(new Runnable() {
             @Override
@@ -121,5 +128,30 @@ public class MallFragment extends LazyLoadFragment implements BaseQuickAdapter.O
 
 
         }
+    }
+
+    public void getGoodsData() {
+        String token = (String) SPDataSource.get(getActivity(),SPDataSource.USER_TOKEN,"");
+        if(TextUtils.isEmpty(token))return;
+        mMallNetServices.getBatteryGoods(token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ResponseCallback<BaseEntery<List<Product>>>() {
+                    @Override
+                    public void onSuccess(BaseEntery<List<Product>> value) {
+                        List<Product> products = value.obj;
+                        if(products != null && !products.isEmpty()){
+                            for(Product p : products){
+                                categorys.add(p.batteryModel);
+                            }
+                            mMallAdapter.notifyDataSetChanged();
+                        }
+                    }
+
+                    @Override
+                    public void onFailture(String e) {
+
+                    }
+                });
     }
 }

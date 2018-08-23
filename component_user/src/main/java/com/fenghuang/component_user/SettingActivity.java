@@ -1,7 +1,9 @@
 package com.fenghuang.component_user;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -12,6 +14,7 @@ import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.billy.cc.core.component.CC;
+import com.contrarywind.interfaces.IPickerViewData;
 import com.fenghuang.component_base.base.BaseActivity;
 import com.fenghuang.component_base.data.SPDataSource;
 import com.fenghuang.component_base.net.BaseEntery;
@@ -20,6 +23,8 @@ import com.fenghuang.component_base.net.ResponseCallback;
 import com.fenghuang.component_base.net.RetrofitManager;
 import com.fenghuang.component_base.tool.RxToast;
 import com.fenghuang.component_base.utils.ActivityStackManager;
+import com.fenghuang.component_base.view.RxDialog;
+import com.fenghuang.component_base.view.RxDialogSure;
 import com.fenghuang.component_user.bean.BindModel;
 import com.fenghuang.component_user.login.LoginActivity;
 import com.tencent.android.tpush.XGPushManager;
@@ -34,6 +39,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     private static final String TAG = "SettingActivity";
     private static final int FROM_SHOP = 0x01;
     public static final int FROM_CHARGE = 0x02;
+    public static final int FROM_UNBIND = 0x02;
     private TextView scan_tv;
     private TextView logoutTv;
     NetServices netServices = RetrofitManager.getInstance().initRetrofit().create(NetServices.class);
@@ -45,12 +51,14 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     protected void initData(Bundle savedInstanceState) {
-
+        ranges.add(new RangeWrapper("500米内",500));
+        ranges.add(new RangeWrapper("1000米内",1000));
+        ranges.add(new RangeWrapper("2000米内",2000));
     }
 
     @Override
     protected void setEvent() {
-        addOnClickListeners(R.id.scan_tv,R.id.btn_logout,R.id.tv_nearbyShop,R.id.tv_charge,R.id.set_fench,R.id.un_bind,R.id.back);
+        addOnClickListeners(R.id.scan_tv,R.id.btn_logout,R.id.tv_nearbyShop,R.id.tv_charge,R.id.set_fench,R.id.back,R.id.acount_and_safe);
     }
 
     @Override
@@ -75,10 +83,10 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
             getNearbyCharged();
         }else if(id == R.id.set_fench){
             setFench();
-        }else if(id == R.id.un_bind){
-            unBind();
         }else if(id == R.id.back){
             finish();
+        }else if(id == R.id.acount_and_safe){
+            startActivity(AccountAndSafeActivity.class,false);
         }
     }
 
@@ -129,7 +137,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
      * 附近门店
      */
     public void getNearbyShop() {
-        showPickerView(FROM_SHOP);
+        showPickerView(FROM_SHOP,ranges,"范围");
     }
 
 
@@ -137,39 +145,38 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     /**
      * 弹出选择器
      */
-    private void showPickerView(int from) {
-        ranges.add(new RangeWrapper("500米内",500));
-        ranges.add(new RangeWrapper("1000米内",1000));
-        ranges.add(new RangeWrapper("2000米内",2000));
+    private void showPickerView(int from, List<? extends IPickerViewData> list , String title) {
         OptionsPickerView pvOptions = new OptionsPickerBuilder(SettingActivity.this, new OnOptionsSelectListener() {
             @Override
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
                 //返回的分别是三个级别的选中位置
-                if(ranges != null && !ranges.isEmpty()){
+                if(list != null && !list.isEmpty()){
                     ILog.e(TAG,options1 + "---" + options2 + "---" + options3);
-                    RangeWrapper rangeWrapper = ranges.get(options1);
-                    int rangeMeter = rangeWrapper.rangeMeter;
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("range",rangeMeter);
-                    switch (from){
-                        case FROM_CHARGE:
-                            ChargeActivity.startAction(SettingActivity.this,bundle);
-                            break;
-                        case FROM_SHOP:
-                            NeiboorhoorActivity.startAction(SettingActivity.this,bundle);
-                            break;
+                    IPickerViewData iPickerViewData = list.get(options1);
+                    if(iPickerViewData instanceof  RangeWrapper){
+                        RangeWrapper rangeWrapper = (RangeWrapper) iPickerViewData;
+                        int rangeMeter = rangeWrapper.rangeMeter;
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("range",rangeMeter);
+                        switch (from){
+                            case FROM_CHARGE:
+                                ChargeActivity.startAction(SettingActivity.this,bundle);
+                                break;
+                            case FROM_SHOP:
+                                NeiboorhoorActivity.startAction(SettingActivity.this,bundle);
+                                break;
+                        }
                     }
-
                 }
             }
         })
-                .setTitleText("范围")
+                .setTitleText(title)
                 .setDividerColor(Color.BLACK)
                 .setTextColorCenter(Color.BLACK) //设置选中项文字颜色
                 .setContentTextSize(14)
                 .build();
 
-        pvOptions.setPicker(ranges);//一级选择器
+        pvOptions.setPicker(list);//一级选择器
         //pvOptions.setPicker(options1Items, options2Items);//二级选择器*/
         //pvOptions.setPicker(options1Items, options2Items, options3Items);//三级选择器
         pvOptions.show();
@@ -179,31 +186,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
      * 获取附近充电桩
      */
     public void getNearbyCharged() {
-        showPickerView(FROM_CHARGE);
-    }
-
-    /**
-     * 解除绑定
-     */
-    private void unBind() {
-        String token = UserManager.getToken();
-        if(TextUtils.isEmpty(token)){
-            return;
-        }
-        netServices.getViceCardAllByAccount(token)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new ResponseCallback<BaseEntery<BindModel>>() {
-                    @Override
-                    public void onSuccess(BaseEntery<BindModel> value) {
-                        //showPickerView();
-                    }
-
-                    @Override
-                    public void onFailture(String e) {
-
-                    }
-                });
+        showPickerView(FROM_CHARGE,ranges,"范围");
     }
 
 }

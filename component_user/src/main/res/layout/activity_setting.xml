@@ -127,23 +127,18 @@
 
 
         <TextView
-            android:id="@+id/un_bind"
+            android:id="@+id/acount_and_safe"
             android:layout_width="match_parent"
             android:layout_height="@dimen/component_user_dp_50"
-
             android:gravity="center_vertical"
             android:paddingBottom="@dimen/component_user_dp_10"
             android:paddingTop="@dimen/component_user_dp_10"
-            android:text="解除绑定(管理员权限)"/>
+            android:text="账户与安全"/>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/divide_line"/>
-
-
-
-
 
 
     </LinearLayout>
