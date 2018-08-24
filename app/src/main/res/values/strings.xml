@@ -19,8 +19,5 @@
     <string name="call_kotlin_component">kotlin</string>
 
 
-    <string name="sp1_text_sub">浏览所有电池产品相关信息和购买及分期政策</string>
-    <string name="sp2_text_sub">扫描选定电池并选择支付方式和付款并成为该电池的绑定用户</string>
-    <string name="sp3_text_sub">绑定主用户某块电池并成为主用户的副用户</string>
 
 </resources>

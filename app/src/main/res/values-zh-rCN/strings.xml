@@ -17,4 +17,9 @@
     <string name="life_cycle_relationship">(Activity/Fragment)生命周期关联，登录AOP</string>
     <string name="call_fragment_method">与跨组件的fragment对象通信</string>
     <string name="call_kotlin_component">调用kotlin组件</string>
+
+
+    <string name="sp1_text_sub">浏览所有电池产品相关信息和购买及分期政策</string>
+    <string name="sp2_text_sub">扫描选定电池并选择支付方式和付款并成为该电池的绑定用户</string>
+    <string name="sp3_text_sub">绑定主用户某块电池并成为主用户的副用户</string>
 </resources>
