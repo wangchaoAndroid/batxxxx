@@ -3,71 +3,83 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:background="#ddd"
+    android:background="#eee"
     android:layout_height="match_parent">
-
-
-    <ImageView
-        android:id="@+id/good_iv"
-        android:layout_width="120dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/basic_bg_circle_blue"
-        android:layout_marginTop="@dimen/basic_d20"
-        android:layout_height="120dp"/>
-
-    <TextView
-        android:id="@+id/doc_category"
-        android:layout_marginTop="@dimen/basic_d20"
-        app:layout_constraintTop_toBottomOf="@+id/good_iv"
+    <ScrollView
         android:layout_width="match_parent"
-        android:paddingLeft="@dimen/basic_d10"
-        android:paddingRight="@dimen/basic_d10"
-        android:paddingTop="@dimen/basic_d5"
-        android:paddingBottom="@dimen/basic_d5"
-        android:textColor="@color/basic_black1"
-        android:textSize="@dimen/basic_s16"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent">
 
-    <TextView
-        android:layout_marginTop="@dimen/basic_d20"
-        android:id="@+id/doc_buy_method"
-        android:textColor="@color/basic_black1"
-        android:layout_width="match_parent"
-        android:paddingLeft="@dimen/basic_d10"
-        android:paddingRight="@dimen/basic_d10"
-        android:paddingTop="@dimen/basic_d5"
-        app:layout_constraintTop_toBottomOf="@+id/doc_category"
-        android:paddingBottom="@dimen/basic_d5"
-        android:textSize="@dimen/basic_s16"
-        android:layout_height="wrap_content"/>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/doc_pay_one"
-        android:layout_marginTop="@dimen/basic_d20"
-        app:layout_constraintTop_toBottomOf="@+id/doc_buy_method"
-        android:textColor="@color/basic_black1"
-        android:layout_width="match_parent"
-        android:paddingLeft="@dimen/basic_d10"
-        android:paddingRight="@dimen/basic_d10"
-        android:paddingTop="@dimen/basic_d5"
-        android:paddingBottom="@dimen/basic_d5"
-        android:textSize="@dimen/basic_s16"
-        android:layout_height="wrap_content"/>
+            <ImageView
+                android:id="@+id/good_iv"
+                android:layout_width="100dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/basic_d20"
+                android:layout_height="100dp"/>
 
-    <TextView
-        android:id="@+id/doc_pay_two"
-        android:layout_marginTop="@dimen/basic_d20"
-        app:layout_constraintTop_toBottomOf="@+id/doc_pay_one"
-        android:textColor="@color/basic_black1"
-        android:layout_width="match_parent"
-        android:paddingLeft="@dimen/basic_d10"
-        android:paddingRight="@dimen/basic_d10"
-        android:paddingTop="@dimen/basic_d5"
-        android:paddingBottom="@dimen/basic_d5"
-        android:textSize="@dimen/basic_s16"
-        android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/doc_category"
+                android:layout_marginTop="@dimen/basic_d20"
+                app:layout_constraintTop_toBottomOf="@+id/good_iv"
+                android:layout_width="match_parent"
+                android:paddingLeft="@dimen/basic_d10"
+                android:paddingRight="@dimen/basic_d10"
+                android:paddingTop="@dimen/basic_d5"
+                android:paddingBottom="@dimen/basic_d5"
+                android:textColor="@color/basic_black2"
+                android:textSize="@dimen/basic_s16"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:layout_marginTop="@dimen/basic_d20"
+                android:id="@+id/doc_buy_method"
+                android:textColor="@color/basic_black2"
+                android:layout_width="match_parent"
+                android:paddingLeft="@dimen/basic_d10"
+                android:paddingRight="@dimen/basic_d10"
+                android:paddingTop="@dimen/basic_d5"
+                app:layout_constraintTop_toBottomOf="@+id/doc_category"
+                android:paddingBottom="@dimen/basic_d5"
+                android:textSize="@dimen/basic_s16"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/doc_pay_one"
+                android:layout_marginTop="@dimen/basic_d20"
+                app:layout_constraintTop_toBottomOf="@+id/doc_buy_method"
+                android:textColor="@color/basic_black2"
+                android:layout_width="match_parent"
+                android:paddingLeft="@dimen/basic_d10"
+                android:paddingRight="@dimen/basic_d10"
+                android:paddingTop="@dimen/basic_d5"
+                android:paddingBottom="@dimen/basic_d5"
+                android:textSize="@dimen/basic_s16"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/doc_pay_two"
+                android:layout_marginTop="@dimen/basic_d20"
+                app:layout_constraintTop_toBottomOf="@+id/doc_pay_one"
+                android:textColor="@color/basic_black2"
+                android:layout_width="match_parent"
+                android:paddingLeft="@dimen/basic_d10"
+                android:paddingRight="@dimen/basic_d10"
+                android:paddingTop="@dimen/basic_d5"
+                android:paddingBottom="@dimen/basic_d5"
+                android:textSize="@dimen/basic_s16"
+                android:layout_height="wrap_content"/>
+
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
 
 
 </android.support.constraint.ConstraintLayout>

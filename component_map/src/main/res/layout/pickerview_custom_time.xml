@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="#EEEEEE">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#aaa" />
+
+        <ImageView
+            android:id="@+id/iv_cancel"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="17dp"
+            android:padding="8dp"
+            android:src="@drawable/basic_ic_arrow_down_little" />
+
+
+        <RadioGroup
+            android:layout_centerHorizontal="true"
+            android:id="@+id/rg_time"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+            <RadioButton
+                android:button="@null"
+                android:gravity="center"
+                android:id="@+id/start_time"
+                android:hint="开始时间"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <!--<TextView-->
+                <!--android:layout_marginRight="@dimen/basic_d10"-->
+                <!--android:layout_marginLeft="@dimen/basic_d10"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:text="—"-->
+                <!--android:layout_height="wrap_content"/>-->
+
+            <View
+                android:layout_width=".5dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@color/basic_black1"
+                android:layout_height="0dp"/>
+
+            <RadioButton
+                android:id="@+id/end_time"
+                android:hint="结束时间"
+                android:gravity="center"
+                android:button="@null"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </RadioGroup>
+
+
+
+        <TextView
+            android:id="@+id/tv_finish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="17dp"
+            android:padding="8dp"
+            android:text="完成"
+            android:textColor="#24AD9D"
+            android:textSize="18sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#aaa" />
+    </RelativeLayout>
+
+
+    <!--此部分需要完整复制过去，删减或者更改ID会导致初始化找不到内容而报空-->
+    <LinearLayout
+        android:id="@+id/timepicker"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:orientation="horizontal">
+
+        <com.contrarywind.view.WheelView
+            android:id="@+id/year"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <com.contrarywind.view.WheelView
+
+            android:id="@+id/month"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.1" />
+
+        <com.contrarywind.view.WheelView
+            android:id="@+id/day"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.1" />
+
+        <com.contrarywind.view.WheelView
+            android:id="@+id/hour"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.1" />
+
+        <com.contrarywind.view.WheelView
+            android:id="@+id/min"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.1" />
+
+        <com.contrarywind.view.WheelView
+            android:id="@+id/second"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.1" />
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -39,7 +39,7 @@ import io.reactivex.schedulers.Schedulers;
 public class UserFragment extends LazyLoadFragment {
 
     private TextView tv_name,setting_tv;
-
+    NetServices mNetServices = RetrofitManager.getInstance().initRetrofit().create(NetServices.class);
     @Override
     protected void init(View view,Bundle savedInstanceState) {
 
@@ -55,11 +55,7 @@ public class UserFragment extends LazyLoadFragment {
 
     @Override
     protected void lazyLoad() {
-
-        LoginModel userInfo = UserManager.getUserInfo();
-        if(userInfo != null){
-            tv_name.setText(userInfo.nickName + "");
-        }
+        getNetUserInfo();
 
         addOnClickListeners(R.id.setting_tv,R.id.warn_info);
     }
@@ -76,6 +72,33 @@ public class UserFragment extends LazyLoadFragment {
                     .build()
                     .call();
         }
+    }
+
+
+    public void getNetUserInfo(){
+        String token = UserManager.getToken();
+        if(TextUtils.isEmpty(token)){
+            return;
+        }
+        mNetServices.getUserInfo(token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ResponseCallback<BaseEntery<LoginModel>>() {
+                    @Override
+                    public void onSuccess(BaseEntery<LoginModel> value) {
+                        LoginModel loginModel = value.obj;
+                        if(loginModel != null){
+                            tv_name.setText(loginModel.nickName + "");
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailture(String e) {
+
+                    }
+                });
+
     }
 
 

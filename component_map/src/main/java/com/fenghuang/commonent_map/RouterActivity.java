@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +30,8 @@ import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
 import com.amap.api.trace.LBSTraceClient;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
+import com.bigkoo.pickerview.listener.CustomListener;
+import com.bigkoo.pickerview.listener.OnTimeSelectChangeListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.fenghuang.commonent_map.bean.RouterModel;
@@ -39,6 +44,7 @@ import com.fenghuang.component_base.net.RetrofitManager;
 import com.fenghuang.component_base.tool.RxToast;
 import com.fenghuang.component_base.utils.DateTimeUtil;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -59,6 +65,9 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
     private boolean isOpen;
     public AMapLocationClient mLocationClient ;
     public AMapLocationClientOption mLocationOption;
+    private RadioButton mStart,mEnd;
+    private RadioGroup mRadioGroup;
+
     @Override
     protected void initView() {
         mMapView = (MapView)findViewById(R.id.router_map);
@@ -180,24 +189,101 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
         mMapView.onSaveInstanceState(outState);
     }
 
+    private TimePickerView pvTime;
+    public static final int START = 0X001;
+    public static final int END = 0X002;
+    private String startTime , endTime;
+    private int seleted;
     @Override
     public void onClick(View view) {
         int id = view.getId();
         if(id == R.id.start_router){
             if(!isOpen){
-                final TimePickerView pvTime = new TimePickerBuilder(RouterActivity.this, new OnTimeSelectListener() {
+                pvTime = new TimePickerBuilder(RouterActivity.this, new OnTimeSelectListener() {
                     @Override
                     public void onTimeSelect(Date date, View v) {
-                        ILog.e(TAG,"");
-                        long time = DateTimeUtil.getTime(date.toLocaleString());
-                        ILog.e(TAG,"time " + time);
-                        // Toast.makeText(RouterActivity.this, pvTime.getTime(date), Toast.LENGTH_SHORT).show();
-                        getRouter("2018-07-03 00:00:00","2018-08-12 23:00:00");
+                      // getRouter("2018-07-03 00:00:00","2018-08-12 23:00:00");
 
+                       getRouter(startTime,endTime);
                     }
                 })
+                        .setLayoutRes(R.layout.pickerview_custom_time, new CustomListener() {
+
+                            @Override
+                            public void customLayout(View v) {
+                                final TextView tvSubmit = (TextView) v.findViewById(R.id.tv_finish);
+                                ImageView ivCancel = (ImageView) v.findViewById(R.id.iv_cancel);
+                                mStart = v.findViewById(R.id.start_time);
+                                mEnd = v.findViewById(R.id.end_time);
+                                mRadioGroup = v.findViewById(R.id.rg_time);
+                                tvSubmit.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        if(TextUtils.isEmpty(startTime)){
+                                            RxToast.error("请选择开始时间");
+                                            return;
+                                        }
+                                        if(TextUtils.isEmpty(endTime)){
+                                            RxToast.error("请选择结束时间");
+                                            return;
+                                        }
+                                        pvTime.returnData();
+                                    }
+                                });
+                                ivCancel.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        pvTime.dismiss();
+                                    }
+                                });
+
+                                mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
+                                    @Override
+                                    public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                                        if(i == mStart.getId()){
+                                            seleted = START;
+                                            mStart.setHintTextColor(getResources().getColor(R.color.selectd));
+                                            mEnd.setHintTextColor(Color.GRAY);
+                                        }else {
+                                            seleted = END;
+                                            mEnd.setHintTextColor(getResources().getColor(R.color.selectd));
+                                            mStart.setHintTextColor(Color.GRAY);
+                                        }
+                                    }
+                                });
+                                mStart.setChecked(true);
+                                mStart.setHintTextColor(getResources().getColor(R.color.selectd));
+                                mEnd.setHintTextColor(Color.GRAY);
+                            }
+                        })
                         .setType(new boolean[]{true, true, true, true, true, true})
+//                        .setLabel("", "", "", "", "", "") //设置空字符串以隐藏单位提示   hide label
+                        .setDividerColor(Color.DKGRAY)
+                        .setContentTextSize(20)
+                        .setBackgroundId(0xFFFFFFFF)
+                        .setLineSpacingMultiplier(1.2f)
+                        .setContentTextSize(16)
+                        .setOutSideCancelable(false)
+                        .setTextXOffset(0, 0, 0, 40, 0, -40)
+                        .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
+                        .setDividerColor(0xFF24AD9D)
+                        .setTimeSelectChangeListener(new OnTimeSelectChangeListener() {
+                            @Override
+                            public void onTimeSelectChanged(Date date) {
+                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                String format = simpleDateFormat.format(date);
+                                if(seleted == START){
+                                    mStart.setText(format + "");
+                                    startTime = format;
+                                }else if(seleted == END){
+                                    mEnd.setText(format + "");
+                                    endTime = format;
+                                }
+                            }
+                        })
                         .build();
+
                 pvTime.show();
             }else {
                 startRouter(null);
@@ -251,6 +337,7 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
      * 获取轨迹
      */
     public void getRouter(String startTime ,String endTime) {
+
         String token = (String) SPDataSource.get(this,SPDataSource.USER_TOKEN,"");
         if(TextUtils.isEmpty(token)){
             return;
@@ -262,6 +349,9 @@ public class RouterActivity extends BaseActivity implements View.OnClickListener
                     @Override
                     public void onSuccess(BaseEntery<List<RouterModel>> value) {
                         ILog.e(TAG,value.toString());
+                        if(pvTime != null){
+                            pvTime.dismiss();
+                        }
                         List<RouterModel> routerModels = value.obj;
                         if(routerModels != null && !routerModels.isEmpty()){
                             startRouter(routerModels);

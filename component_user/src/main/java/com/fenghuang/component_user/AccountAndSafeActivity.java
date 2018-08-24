@@ -144,10 +144,14 @@ public class AccountAndSafeActivity extends BaseActivity implements View.OnClick
                     public void onSuccess(BaseEntery<List<BindModel>> value) {
                         if(value != null){
                             List<BindModel> bindModels = value.obj;
-
+                            if(bindModels != null &&  !bindModels.isEmpty()){
+                                List<RangeWrapper> ids = new ArrayList<>();
+                                showPickerView(ids,"选择编号");
+                            }else {
+                                RxToast.info("暂无数据");
+                            }
                         }
-                        List<RangeWrapper> ids = new ArrayList<>();
-                        showPickerView(ids,"选择编号");
+
                     }
 
                     @Override

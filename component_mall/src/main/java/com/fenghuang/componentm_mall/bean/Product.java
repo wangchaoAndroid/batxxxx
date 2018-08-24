@@ -8,37 +8,43 @@ import java.io.Serializable;
 public class Product implements Serializable {
     public int id;
 
-    public String batteryName;
+    public String img;
 
     public String batteryModel;
 
     public int isStages;
 
-    public String stagesNumber;
-
-    public String stagesMoney;
-
     public long createTime;
 
     public int status;
 
-    public int  shopId;
+    public String batteryName;
 
-    public String batterytdescribe;
+    public String describe1;
+
+    public String describe2;
+
+    public String describe3;
+
+    public String describe4;
+
+    public String shopName;
 
     @Override
     public String toString() {
-        return "GoodModel{" +
+        return "Product{" +
                 "id=" + id +
-                ", batteryName='" + batteryName + '\'' +
+                ", img='" + img + '\'' +
                 ", batteryModel='" + batteryModel + '\'' +
                 ", isStages=" + isStages +
-                ", stagesNumber='" + stagesNumber + '\'' +
-                ", stagesMoney='" + stagesMoney + '\'' +
                 ", createTime=" + createTime +
                 ", status=" + status +
-                ", shopId=" + shopId +
-                ", batterytdescribe='" + batterytdescribe + '\'' +
+                ", batteryName='" + batteryName + '\'' +
+                ", describe1='" + describe1 + '\'' +
+                ", describe2='" + describe2 + '\'' +
+                ", describe3='" + describe3 + '\'' +
+                ", describe4='" + describe4 + '\'' +
+                ", shopName='" + shopName + '\'' +
                 '}';
     }
 }

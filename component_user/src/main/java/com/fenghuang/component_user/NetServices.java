@@ -148,5 +148,5 @@ public interface NetServices {
      */
     @FormUrlEncoded
     @POST("getUserInfoInterface")
-    Observable<BaseEntery<List<BindModel>>> getUserInfo(@Field("token") String token);
+    Observable<BaseEntery<LoginModel>> getUserInfo(@Field("token") String token);
 }

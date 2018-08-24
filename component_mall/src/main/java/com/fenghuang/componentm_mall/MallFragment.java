@@ -42,6 +42,8 @@ public class MallFragment extends LazyLoadFragment implements BaseQuickAdapter.O
     List<String> categorys = new ArrayList<>();
     private MallAdapter mMallAdapter;
     MallNetServices mMallNetServices = RetrofitManager.getInstance().initRetrofit().create(MallNetServices.class);
+    private List<Product> mProducts;
+
     @Override
     protected void init(View view,Bundle savedInstanceState) {
         mRecyclerView = view.findViewById(R.id.recycler_view);
@@ -61,7 +63,7 @@ public class MallFragment extends LazyLoadFragment implements BaseQuickAdapter.O
         mMallAdapter.setOnItemClickListener(this);
         mMallAdapter.setChecked(0);
         getGoodsData();
-        FragmentUtils.replaceFragment(getChildFragmentManager(),R.id.container2,new ProductFragment(),false);
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -74,8 +76,16 @@ public class MallFragment extends LazyLoadFragment implements BaseQuickAdapter.O
 
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-        FragmentUtils.replaceFragment(getChildFragmentManager(),R.id.container2,new ProductFragment(),false);
-        mMallAdapter.setChecked(position);
+        if(mProducts != null && !mProducts.isEmpty()){
+            Product product = mProducts.get(position);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("product",product);
+            ProductFragment productFragment = new ProductFragment();
+            productFragment.setArguments(bundle);
+            FragmentUtils.replaceFragment(getChildFragmentManager(),R.id.container2,productFragment,false);
+            mMallAdapter.setChecked(position);
+        }
+
     }
 
     /**
@@ -139,12 +149,18 @@ public class MallFragment extends LazyLoadFragment implements BaseQuickAdapter.O
                 .subscribe(new ResponseCallback<BaseEntery<List<Product>>>() {
                     @Override
                     public void onSuccess(BaseEntery<List<Product>> value) {
-                        List<Product> products = value.obj;
-                        if(products != null && !products.isEmpty()){
-                            for(Product p : products){
+                        mProducts = value.obj;
+                        if(mProducts != null && !mProducts.isEmpty()){
+                            for(Product p : mProducts){
                                 categorys.add(p.batteryModel);
                             }
                             mMallAdapter.notifyDataSetChanged();
+                            Product product = mProducts.get(0);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("product",product);
+                            ProductFragment productFragment = new ProductFragment();
+                            productFragment.setArguments(bundle);
+                            FragmentUtils.replaceFragment(getChildFragmentManager(),R.id.container2,productFragment,false);
                         }
                     }
 
