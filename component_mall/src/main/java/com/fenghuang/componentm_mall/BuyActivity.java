@@ -74,7 +74,7 @@ public class BuyActivity extends BaseActivity implements View.OnClickListener {
 
     private void pay(final String productNumber) {
         final String token = (String) SPDataSource.get(this,SPDataSource.USER_TOKEN,"");
-        mMallNetServices.purchase(token,"10086",productNumber)
+        mMallNetServices.purchase(token,"1547774",productNumber)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new ResponseCallback<BaseEntery>() {
