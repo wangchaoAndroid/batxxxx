@@ -141,6 +141,7 @@ public class MallFragment extends LazyLoadFragment implements BaseQuickAdapter.O
     }
 
     public void getGoodsData() {
+        categorys.clear();
         String token = (String) SPDataSource.get(getActivity(),SPDataSource.USER_TOKEN,"");
         if(TextUtils.isEmpty(token))return;
         mMallNetServices.getBatteryGoods(token)

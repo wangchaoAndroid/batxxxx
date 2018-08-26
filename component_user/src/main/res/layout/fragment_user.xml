@@ -19,19 +19,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/component_user_dp_50"
-                android:drawableRight="@drawable/icon_user_1"
-                android:gravity="center_vertical"
-                android:paddingBottom="@dimen/component_user_dp_10"
-                android:paddingTop="@dimen/component_user_dp_10"
-                android:text="我的保险"/>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/divide_line"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -63,7 +51,20 @@
                 android:layout_height="1dp"
                 android:background="@color/divide_line"/>
 
+            <TextView
+                android:id="@+id/feed_back"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/component_user_dp_50"
+                android:drawableRight="@drawable/icon_user_1"
+                android:gravity="center_vertical"
+                android:paddingBottom="@dimen/component_user_dp_10"
+                android:paddingTop="@dimen/component_user_dp_10"
+                android:text="电池反馈"/>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/divide_line"/>
 
 
             <TextView

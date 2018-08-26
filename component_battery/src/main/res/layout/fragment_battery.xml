@@ -86,7 +86,7 @@
     <LinearLayout
         android:id="@+id/battery_tips"
         app:layout_constraintTop_toBottomOf="@+id/battery_icon"
-        app:layout_constraintBottom_toTopOf="@+id/app_banner"
+        app:layout_constraintBottom_toTopOf="@+id/app_banner_rl"
         android:orientation="vertical"
         android:layout_marginTop="@dimen/basic_d10"
         android:layout_width="match_parent"
@@ -107,20 +107,40 @@
             android:padding="@dimen/basic_d10"/>
     </LinearLayout>
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/app_banner"
-        app:layout_constraintTop_toBottomOf="@+id/battery_tips"
-        app:layout_constraintBottom_toTopOf="@+id/app_enter_map"
-        android:paddingRight="@dimen/basic_d10"
-        android:paddingLeft="@dimen/basic_d10"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/basic_d150"/>
+        <RelativeLayout
+            android:id="@+id/app_banner_rl"
+            app:layout_constraintTop_toBottomOf="@+id/battery_tips"
+            app:layout_constraintBottom_toTopOf="@+id/app_enter_map"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/basic_d150">
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/app_banner"
+                android:paddingRight="@dimen/basic_d10"
+                android:paddingLeft="@dimen/basic_d10"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <LinearLayout
+                android:layout_alignParentBottom="true"
+                android:id="@+id/point_view"
+                android:paddingLeft="@dimen/dp_10"
+                android:paddingRight="@dimen/dp_10"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="@dimen/basic_d30"
+                android:layout_height="wrap_content"/>
+
+
+        </RelativeLayout>
+
+
 
     <com.amap.api.maps.MapView
         android:id="@+id/app_enter_map"
         android:src="@drawable/default1"
         android:layout_margin="@dimen/basic_d10"
-        app:layout_constraintTop_toBottomOf="@+id/app_banner"
+        app:layout_constraintTop_toBottomOf="@+id/app_banner_rl"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_width="match_parent"
         android:layout_height="@dimen/basic_d150"/>

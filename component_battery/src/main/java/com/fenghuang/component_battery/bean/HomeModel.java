@@ -7,7 +7,7 @@ import java.util.List;
  * Create by wangchao on 2018/8/20 14:55
  */
 public class HomeModel {
-    public int temperature;
+    public String temperature;
     public int electricquantity;
     public double longitude;
     public double latitude;
@@ -17,6 +17,7 @@ public class HomeModel {
     public Alarmtab alarmtab;
     public int batteryStatus;
     public int alarmtabStatus;
+    public String defaultProductNumber;
     public String batteryModel;
     public List<ViceCard> viceCardList;
 
@@ -64,7 +65,7 @@ public class HomeModel {
     @Override
     public String toString() {
         return "HomeModel{" +
-                "temperature=" + temperature +
+                "temperature='" + temperature + '\'' +
                 ", electricquantity=" + electricquantity +
                 ", longitude=" + longitude +
                 ", latitude=" + latitude +
@@ -74,6 +75,7 @@ public class HomeModel {
                 ", alarmtab=" + alarmtab +
                 ", batteryStatus=" + batteryStatus +
                 ", alarmtabStatus=" + alarmtabStatus +
+                ", defaultProductNumber='" + defaultProductNumber + '\'' +
                 ", batteryModel='" + batteryModel + '\'' +
                 ", viceCardList=" + viceCardList +
                 '}';

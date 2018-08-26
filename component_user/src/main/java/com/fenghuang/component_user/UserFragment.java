@@ -57,7 +57,7 @@ public class UserFragment extends LazyLoadFragment {
     protected void lazyLoad() {
         getNetUserInfo();
 
-        addOnClickListeners(R.id.setting_tv,R.id.warn_info);
+        addOnClickListeners(R.id.setting_tv,R.id.warn_info,R.id.feed_back);
     }
 
     @Override
@@ -71,6 +71,8 @@ public class UserFragment extends LazyLoadFragment {
                     .setActionName("getWarnInfo")
                     .build()
                     .call();
+        }else if(id == R.id.feed_back){
+            startActivity(new Intent(getActivity(),FeedBackActivity.class));
         }
     }
 
