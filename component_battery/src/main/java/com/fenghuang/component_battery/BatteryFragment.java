@@ -499,10 +499,10 @@ public class BatteryFragment  extends LazyLoadFragment implements ViewPager.OnPa
     @Override
     public void onStart() {
         super.onStart();
-        if(isPausing){
-            startRool();
-            isPausing= false;
-        }
+//        if(isPausing){
+//            startRool();
+//            isPausing= false;
+//        }
     }
 
     @Override
