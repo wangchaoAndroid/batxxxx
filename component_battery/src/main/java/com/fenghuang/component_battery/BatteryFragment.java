@@ -316,6 +316,7 @@ public class BatteryFragment  extends LazyLoadFragment implements ViewPager.OnPa
                         ILog.e(TAG,value + "");
                         if(value != null){
                             items.clear();
+                            mBind_ids.clear();
                             homeModel = value.obj;
                             String defaultProductNumber = homeModel.defaultProductNumber;
                             List<HomeModel.ViceCard> viceCardList = homeModel.viceCardList;

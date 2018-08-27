@@ -22,10 +22,12 @@ import java.util.Date;
  */
 public class ILog {
 
+	public static boolean TO_MAIN = false;
+
     /**
      * DEBUG级别开关
      */
-	public static  boolean DEBUG = false;
+	public static  boolean DEBUG = true;
 
 	/**
 	 * 是否保存至SD卡

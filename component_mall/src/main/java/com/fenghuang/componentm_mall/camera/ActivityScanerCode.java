@@ -58,7 +58,7 @@ public class ActivityScanerCode extends LazyLoadFragment implements View.OnClick
     /**
      * 扫描结果监听
      */
-    private static OnRxScanerListener mScanerListener;
+    private  OnRxScanerListener mScanerListener;
 
     private InactivityTimer inactivityTimer;
 
@@ -121,7 +121,7 @@ public class ActivityScanerCode extends LazyLoadFragment implements View.OnClick
     /**
      * 设置扫描信息回调
      */
-    public static void setScanerListener(OnRxScanerListener scanerListener) {
+    public  void setScanerListener(OnRxScanerListener scanerListener) {
         mScanerListener = scanerListener;
     }
 
@@ -350,8 +350,9 @@ public class ActivityScanerCode extends LazyLoadFragment implements View.OnClick
         String result1 = result.getText();
         Log.v("二维码/条形码 扫描结果", result1);
         if (mScanerListener == null) {
-            RxToast.success(result1);
-            initDialogResult(result);
+            //RxToast.success(result1);
+            //initDialogResult(  );
+            mScanerListener.onSuccess("productNumber",result);
         } else {
             mScanerListener.onSuccess("From to Camera", result);
         }

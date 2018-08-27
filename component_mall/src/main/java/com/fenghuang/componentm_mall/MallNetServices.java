@@ -28,7 +28,7 @@ public interface MallNetServices  {
      */
     @FormUrlEncoded
     @POST("purchaseInterface")
-    Observable<BaseEntery> purchase(@Field("token")String token,@Field("batteryId") String batteryId
+    Observable<BaseEntery> purchase(@Field("token")String token
         ,@Field("productNumber") String productNumber);
 
 
