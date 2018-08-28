@@ -1,8 +1,12 @@
 package com.fenghuang.component_battery;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.view.ViewPager;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -11,6 +15,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -49,7 +54,7 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * Create by wangchao on 2018/7/18 10:26
  */
-public class BatteryFragment  extends LazyLoadFragment{
+public class BatteryFragment  extends LazyLoadFragment implements ViewPager.OnPageChangeListener {
     private static final String TAG = "BatteryFragment";
     private MapView mMapView;
     private ViewPager mBannerView;
@@ -63,6 +68,78 @@ public class BatteryFragment  extends LazyLoadFragment{
     private ImageView left1,left2,right1,right2,iv_battery;
     BatteryNetServices batteryNetServices = RetrofitManager.getInstance().initRetrofit().create(BatteryNetServices.class);
     HomeModel homeModel;
+    private  LinearLayout pointView;;
+
+    //定义Handler接收发送消息
+    private Handler handler = new Handler(Looper.getMainLooper()) {
+        public void handleMessage(android.os.Message msg) {
+            if (msg.what == 999) {
+                //获取viewPager当前的位置
+                int currentItem = mBannerView.getCurrentItem();
+                currentItem++;
+                //设置viewPager的位置
+                mBannerView.setCurrentItem(currentItem);
+                // 继续轮播
+                //Logger.i(TAG, "bobobo.....");//测试
+                //调用发送消息的方法
+                startRool();
+            }
+        };
+    };
+
+    private List<ImageView> dotsList = new ArrayList<>();
+    /**
+     * 初始化小点
+     */
+    private void initDots() {
+
+        //每次初始化之前清空集合
+        dotsList.clear();
+        // 每次初始化之前  移除  布局中的所
+        // 有小点
+        pointView.removeAllViews();
+        for (int i = 0; i < items.size(); i++) {
+            //创建小点点图片
+            ImageView imageView = new ImageView(getActivity());
+            Drawable drawable = null;
+            if (i == 0) {
+                // 亮色图片
+                drawable = getResources().getDrawable(R.drawable.main_point);
+
+            } else {
+                drawable = getResources().getDrawable(R.drawable.main_point66);
+            }
+            imageView.setImageDrawable(drawable);
+            // 考虑屏幕适配
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(dip2px(getActivity(), 5), dip2px(getActivity(), 5));
+            //设置小点点之间的间距
+            params.setMargins(dip2px(getActivity(), 5), 0, dip2px(getActivity(), 5), 0);
+            //将小点点添加大线性布局中
+            pointView.addView(imageView, params);
+            // 将小点的控件添加到集合中
+            dotsList.add(imageView);
+        }
+    }
+
+
+    /**
+     * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
+     */
+    public int dip2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
+    }
+
+
+
+    /**
+     * 每隔2秒发送一次消息
+     */
+    private void startRool() {
+        // 开始轮播
+        handler.sendEmptyMessageDelayed(999, 3000);
+    }
+
     @Override
     protected void init(View view,Bundle savedInstanceState) {
         mMapView = view.findViewById(R.id.app_enter_map);
@@ -76,6 +153,7 @@ public class BatteryFragment  extends LazyLoadFragment{
         right1 = view.findViewById(R.id.right1);
         right2 = view.findViewById(R.id.right2);
         spinner = (Spinner) findViewById(R.id.title_tv);
+        pointView = findViewById( R.id.point_view);
 
         mAMap = mMapView.getMap();
         mMapView.onCreate(savedInstanceState);// 此方法必须重写
@@ -90,16 +168,13 @@ public class BatteryFragment  extends LazyLoadFragment{
     @Override
     protected void lazyLoad() {
         initMap();
-        mBannerAdapter = new BannerAdapter(getActivity(),items);
-        mBannerView.setAdapter(mBannerAdapter);
-
         //适配器
         arr_adapter= new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, mBind_ids);
         //设置样式
         arr_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //加载适配器
         spinner.setAdapter(arr_adapter);
-        spinner.setSelection(0);
+//        spinner.setSelection(0);
 
         getHomeInfo();
 
@@ -241,11 +316,17 @@ public class BatteryFragment  extends LazyLoadFragment{
                         ILog.e(TAG,value + "");
                         if(value != null){
                             items.clear();
+                            mBind_ids.clear();
                             homeModel = value.obj;
+                            String defaultProductNumber = homeModel.defaultProductNumber;
                             List<HomeModel.ViceCard> viceCardList = homeModel.viceCardList;
                             if(viceCardList != null && !viceCardList.isEmpty()){
                                 for(HomeModel.ViceCard viceCard : viceCardList){
-                                    mBind_ids.add(viceCard.productNumber);
+                                    String number  =  viceCard.productNumber;
+                                    mBind_ids.add(number);
+                                    if(defaultProductNumber.equals(number)){
+                                        spinner.setSelection(mBind_ids.indexOf(number));
+                                    }
                                 }
                                 arr_adapter.notifyDataSetChanged();
                             }
@@ -304,7 +385,13 @@ public class BatteryFragment  extends LazyLoadFragment{
                             List<Ad> advertisingtabList = homeModel.advertisingtabList;
                             items.clear();
                             items.addAll(advertisingtabList);
+                            mBannerAdapter = new BannerAdapter(getActivity(),items);
+                            mBannerView.setAdapter(mBannerAdapter);
+                            mBannerView.setOnPageChangeListener(BatteryFragment.this);
                             mBannerAdapter.notifyDataSetChanged();
+                            mBannerView.setCurrentItem(items.size() * 10000);
+                            initDots();
+                            startRool();
                             LatLng latLng = new LatLng(homeModel.latitude,homeModel.longitude);
                             MarkerOptions markerOption = new MarkerOptions();
                             markerOption.position(latLng);
@@ -398,4 +485,50 @@ public class BatteryFragment  extends LazyLoadFragment{
         mAMap.setMyLocationEnabled(false);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
     }
 
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    private boolean isPausing;
+    @Override
+    public void onStop() {
+        super.onStop();
+        isPausing = true;
+        handler.removeCallbacksAndMessages(null);
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+//        if(isPausing){
+//            startRool();
+//            isPausing= false;
+//        }
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+//遍历存放图片的数组
+        if(items.isEmpty() || dotsList.isEmpty()){
+            return;
+        }
+        for (int i = 0; i < items.size(); i++) {
+            ImageView iv = (ImageView) dotsList.get(i);
+            Drawable drawable = null;
+            //判断小点点与当前的图片是否对应，对应设置为亮色 ，否则设置为暗色
+            if (i == position % items.size()) {
+                drawable = getResources().getDrawable(R.drawable.main_point);
+                iv.setImageDrawable(drawable);
+            } else {
+                drawable = getResources().getDrawable(R.drawable.main_point66);
+                iv.setImageDrawable(drawable);
+
+            }
+        }
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
 }

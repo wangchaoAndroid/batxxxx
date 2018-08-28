@@ -22,6 +22,8 @@ import java.util.Date;
  */
 public class ILog {
 
+	public static boolean TO_MAIN = false;
+
     /**
      * DEBUG级别开关
      */

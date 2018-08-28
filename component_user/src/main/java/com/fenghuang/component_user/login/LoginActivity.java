@@ -109,7 +109,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                         SPDataSource.put(LoginActivity.this,SPDataSource.USER_TOKEN,loginModel.token);
                         //根据电池集合判读是否需要购买
                         ArrayList<String> viceCardListNumber = loginModel.viceCardListNumber;
-                        if(ILog.DEBUG){
+                        if(ILog.TO_MAIN){
                             call = CC.obtainBuilder("component_app")
                                     .setContext(LoginActivity.this)
                                     .setActionName("enterMain")

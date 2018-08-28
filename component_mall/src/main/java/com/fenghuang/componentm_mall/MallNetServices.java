@@ -22,4 +22,21 @@ public interface MallNetServices  {
     @FormUrlEncoded
     @POST("getBatteryAllInterface")
     Observable<BaseEntery<List<Product>>> getBatteryGoods(@Field("token")String token);
+
+    /**
+     * 支付
+     */
+    @FormUrlEncoded
+    @POST("purchaseInterface")
+    Observable<BaseEntery> purchase(@Field("token")String token
+        ,@Field("productNumber") String productNumber);
+
+
+    /**
+     * 绑定电池
+     */
+    @FormUrlEncoded
+    @POST("batteryBindingInterface")
+    Observable<BaseEntery> bindBattery(@Field("token")String token
+            ,@Field("productNumber") String productNumber);
 }

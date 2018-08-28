@@ -149,4 +149,13 @@ public interface NetServices {
     @FormUrlEncoded
     @POST("getUserInfoInterface")
     Observable<BaseEntery<LoginModel>> getUserInfo(@Field("token") String token);
+
+    /**
+     * 提交反馈
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("setMaintaintabInfoInterface")
+    Observable<BaseEntery> commitDescribe(@Field("token") String token,@Field("maintainContent")String maintainContent);
+
 }

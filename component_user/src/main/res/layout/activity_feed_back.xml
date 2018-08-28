@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/basic_white1"
+    android:orientation="vertical"
+    tools:context="com.fenghuang.component_user.SettingActivity">
+    <RelativeLayout
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:paddingLeft="@dimen/basic_d10"
+        android:paddingRight="@dimen/basic_d10"
+        android:layout_height="?android:attr/actionBarSize">
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="18dp"
+            android:src="@drawable/back"
+            android:layout_centerVertical="true"
+            android:layout_height="18dp"/>
+
+        <TextView
+            android:text="问题描述"
+            android:textSize="@dimen/basic_s16"
+            android:textColor="@color/basic_black3"
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:paddingLeft="@dimen/basic_d10"
+        android:paddingRight="@dimen/basic_d10"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="0dp">
+
+        <TextView
+            android:id="@+id/un_bind"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/component_user_dp_40"
+            android:gravity="center_vertical"
+            android:paddingBottom="@dimen/component_user_dp_10"
+            android:paddingTop="@dimen/component_user_dp_10"
+            android:textSize="@dimen/basic_s14"
+            android:text="问题描述"/>
+
+
+
+
+
+        <EditText
+            android:id="@+id/qaq_describe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:paddingBottom="@dimen/component_user_dp_10"
+            android:paddingTop="@dimen/component_user_dp_10"
+            android:minHeight="@dimen/basic_d160"
+            android:background="@color/basic_black2"
+            android:textSize="@dimen/basic_s14"
+            android:hint="请输入问题描述"/>
+
+
+        <TextView
+            android:id="@+id/btn_commit"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/component_user_dp_20"
+            android:layout_width="match_parent"
+            android:background="@android:color/background_dark"
+            android:textColor="@android:color/white"
+            android:layout_height="@dimen/basic_d40"
+            android:text="提交"
+            android:textSize="@dimen/basic_s18" />
+
+
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
+

@@ -22,6 +22,7 @@ import com.fenghuang.component_base.data.SPDataSource;
 import com.fenghuang.component_base.net.ILog;
 import com.fenghuang.component_base.utils.ContextManager;
 import com.fenghuang.component_base.utils.ViewFinder;
+import com.fenghuang.component_base.view.ViewPagerStop;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ import java.util.List;
 public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
     private static final String TAG = "MainActivity";
     private BottomNavigationView mBottomNavigationView;
-    private ViewPager mViewPager;
+    private ViewPagerStop mViewPager;
 
     @Override
     protected void setEvent() {

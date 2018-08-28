@@ -28,7 +28,7 @@ public class BannerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return ads.size();
+        return Integer.MAX_VALUE;
     }
 
     @Override
@@ -43,7 +43,7 @@ public class BannerAdapter extends PagerAdapter {
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         view.setLayoutParams(layoutParams);
 
-        ImageLoader.load(ads.get(position).advertisingjpg,view);
+        ImageLoader.load(ads.get(position % ads.size() ).advertisingjpg,view);
         container.addView(view);
         return view;
     }

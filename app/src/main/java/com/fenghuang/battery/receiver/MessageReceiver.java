@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.fenghuang.component_base.tool.RxToast;
 import com.tencent.android.tpush.XGPushBaseReceiver;
 import com.tencent.android.tpush.XGPushClickedResult;
 import com.tencent.android.tpush.XGPushManager;
@@ -19,7 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class MessageReceiver extends XGPushBaseReceiver {
-	private Intent intent = new Intent("com.jpp.mall.activity.UPDATE_LISTVIEW");
+	private Intent intent = new Intent("com.fenghuang.battery.activity.UPDATE_LISTVIEW");
 	public static final String LogTag = "TPushReceiver";
 
 	private void show(Context context, String text) {
@@ -40,7 +41,7 @@ public class MessageReceiver extends XGPushBaseReceiver {
 		// notificationActionType==1为Activity，2为url，3为intent
 		notific.setNotificationActionType(1);
 		// Activity,url,intent都可以通过getActivity()获得
-		notific.setActivity("com.jpp.mall.acitivity.NotifyCenterActivity");
+		notific.setActivity("com.fenghuang.component_battery.WarnActivity");
 		notific.setUpdate_time(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 				.format(Calendar.getInstance().getTime()));
 		NotificationService.getInstance(context).save(notific);
@@ -162,13 +163,14 @@ public class MessageReceiver extends XGPushBaseReceiver {
 	@Override
 	public void onTextMessage(Context context, XGPushTextMessage message) {
 		// TODO Auto-generated method stub
-		String text = "收到消息:" + message.toString();
+		String text = ":" + message.toString();
 		// 获取自定义key-value
-		String customContent = message.getCustomContent();
 
-		if (customContent != null && customContent.length() != 0) {
+		String content = message.getContent();
+		RxToast.warning("收到消息" + content  + "");
+		if (content != null && content.length() != 0) {
 			try {
-				JSONObject obj = new JSONObject(customContent);
+				JSONObject obj = new JSONObject(content);
 				// key1为前台配置的key
 				if (!obj.isNull("key")) {
 					String value = obj.getString("key");
@@ -180,11 +182,11 @@ public class MessageReceiver extends XGPushBaseReceiver {
 			}
 		}
 		// APP自主处理消息的过程...
-		if(TextUtils.isEmpty(customContent)){
+		if(TextUtils.isEmpty(content)){
 			return;
 		}
 		try {
-			JSONObject jsonObject = new JSONObject(customContent);
+			JSONObject jsonObject = new JSONObject(content);
 			String ext = jsonObject.optString("ext");
 			if(!TextUtils.isEmpty(ext)){
 				JSONObject jsonObject1 = new JSONObject(ext);
