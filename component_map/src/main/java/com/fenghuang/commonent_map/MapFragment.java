@@ -4,11 +4,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -26,13 +29,16 @@ import com.amap.api.maps.CameraUpdate;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
+import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.CameraPosition;
 import com.amap.api.maps.model.Circle;
 import com.amap.api.maps.model.CircleOptions;
 import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
+import com.fenghuang.commonent_map.bean.PositionModel;
 import com.fenghuang.component_base.base.LazyLoadFragment;
 import com.fenghuang.component_base.data.SPDataSource;
 import com.fenghuang.component_base.net.BaseEntery;
@@ -86,6 +92,16 @@ public class MapFragment extends LazyLoadFragment{
             }
         }
     };
+    private Handler mHandler = new Handler();
+
+    Runnable mRunnable = new Runnable() {
+        @Override
+        public void run() {
+            getPosition();
+            mHandler.postDelayed(this, 1000 * 60);
+        }
+    };
+
     private Circle mCircle;
     //绘制面
     public void circle(double v1, double v2,int radius) {
@@ -115,19 +131,19 @@ public class MapFragment extends LazyLoadFragment{
             }
         });
         mAMap.moveCamera(CameraUpdateFactory.zoomTo(15));
-        myLocationStyle = new MyLocationStyle();//初始化定位蓝点样式类myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);//连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
-        myLocationStyle.strokeColor(android.R.color.transparent);
-        //自定义精度范围的圆形边框宽度
-        myLocationStyle.strokeWidth(0);
-        // 设置圆形的填充颜色
-        myLocationStyle.radiusFillColor(android.R.color.transparent);
-        myLocationStyle.showMyLocation(true);
-        myLocationStyle.interval(2000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
-        mAMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
-        mUiSettings = mAMap.getUiSettings();//实例化UiSettings类对象
-        mUiSettings.setMyLocationButtonEnabled(true);
+//        myLocationStyle = new MyLocationStyle();//初始化定位蓝点样式类myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);//连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
+//        myLocationStyle.strokeColor(android.R.color.transparent);
+//        //自定义精度范围的圆形边框宽度
+//        myLocationStyle.strokeWidth(0);
+//        // 设置圆形的填充颜色
+//        myLocationStyle.radiusFillColor(android.R.color.transparent);
+//        myLocationStyle.showMyLocation(false);
+//        myLocationStyle.interval(2000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
+//        mAMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
+//        mUiSettings = mAMap.getUiSettings();//实例化UiSettings类对象
+//        mUiSettings.setMyLocationButtonEnabled(false);
 
-        mAMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
+        mAMap.setMyLocationEnabled(false);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
     }
 
     /**
@@ -250,6 +266,7 @@ public class MapFragment extends LazyLoadFragment{
     public void onDestroyView() {
         super.onDestroyView();
         //clearFence();
+        mHandler.removeCallbacks(mRunnable);
         unRegeist();
     }
 
@@ -262,10 +279,12 @@ public class MapFragment extends LazyLoadFragment{
     protected void lazyLoad() {
         initMap();
         initLocation(getActivity());
-        setAMapLocationListener();
-        startLocation();
+//        setAMapLocationListener();
+//        startLocation();
+        mHandler.post(mRunnable);
+        getFenchStatus();
         addOnClickListeners(R.id.start_fench);
-        start_fench.setText("开启围栏");
+
     }
 
 
@@ -289,6 +308,7 @@ public class MapFragment extends LazyLoadFragment{
             if(mCircle != null){
                 mCircle.remove();
             }
+            mHandler.removeCallbacks(mRunnable);
             clearFence();
         }else {
             start_fench.setText("关闭围栏");
@@ -326,9 +346,8 @@ public class MapFragment extends LazyLoadFragment{
     public void onDestroy() {
         super.onDestroy();
         mMapView.onDestroy();
-        mLocationClient.stopLocation();
-        mLocationClient.onDestroy();
     }
+
 
     /**
      * 方法必须重写
@@ -356,12 +375,68 @@ public class MapFragment extends LazyLoadFragment{
         super.onSaveInstanceState(outState);
         mMapView.onSaveInstanceState(outState);
     }
+    /**
+     * 获取围栏状态
+     */
+    public void getFenchStatus(){
+        String token = (String) SPDataSource.get(getActivity(),SPDataSource.USER_TOKEN,"");
+        mMapNetServices.getStatus(token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ResponseCallback<BaseEntery<PositionModel>>() {
+                    @Override
+                    public void onSuccess(BaseEntery<PositionModel> value) {
+                        PositionModel positionModel = value.obj;
+                        if(positionModel != null){
+                            isOpen = positionModel.railstatus == 1;
+                            if(isOpen){
+                                start_fench.setText("关闭围栏");
+                            }else {
+                                start_fench.setText("开启围栏");
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailture(String e) {
+
+                    }
+                });
+    }
 
     /**
-     * 获取围栏信息
+     * 获取当前位置
      */
-    public void getFenchInfo(){
+    public void getPosition(){
+        String token = (String) SPDataSource.get(getActivity(),SPDataSource.USER_TOKEN,"");
+        mMapNetServices.getLocation(token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ResponseCallback<BaseEntery<FenchModel>>() {
+                    @Override
+                    public void onSuccess(BaseEntery<FenchModel> value) {
+                        FenchModel fenchModel = value.obj;
+                        if(fenchModel != null){
+                            ILog.e(TAG,fenchModel.latitude   +  "----"  + fenchModel.longitude);
+                            LatLng latLng = new LatLng(fenchModel.latitude,fenchModel.longitude);
+                            MarkerOptions markerOption = new MarkerOptions();
+                            markerOption.position(latLng);
+//                            markerOption.snippet("上次电池终端定位点");
+                            markerOption.draggable(false);//设置Marker可拖动
+                            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                                    .decodeResource(getResources(),R.drawable.circle_blue)));
+                            // 将Marker设置为贴地显示，可以双指下拉地图查看效果
+                            markerOption.setFlat(true);//设置marker平贴地图效果
+                            mAMap.moveCamera(CameraUpdateFactory.changeLatLng(latLng));
+                            mAMap.addMarker(markerOption);
+                        }
+                    }
 
+                    @Override
+                    public void onFailture(String e) {
+
+                    }
+                });
     }
 
 }

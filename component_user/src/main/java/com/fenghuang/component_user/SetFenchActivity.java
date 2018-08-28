@@ -1,6 +1,7 @@
 package com.fenghuang.component_user;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -21,7 +22,9 @@ import com.amap.api.maps.CameraUpdate;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
+import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.geocoder.GeocodeResult;
@@ -36,11 +39,13 @@ import com.fenghuang.component_base.net.ILog;
 import com.fenghuang.component_base.net.ResponseCallback;
 import com.fenghuang.component_base.net.RetrofitManager;
 import com.fenghuang.component_base.tool.RxToast;
+import com.fenghuang.component_user.bean.FenchModel;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class SetFenchActivity extends BaseActivity implements View.OnClickListener {
+    private static final String TAG = "SetFenchActivity";
     private AMap mAMap;
     private MapView mMapView;
     public MyLocationStyle myLocationStyle;
@@ -75,8 +80,8 @@ public class SetFenchActivity extends BaseActivity implements View.OnClickListen
     protected void setEvent() {
         initMap();
         initLocation(this);
-        setAMapLocationListener();
-        startLocation();
+//        setAMapLocationListener();
+        //startLocation();
         addOnClickListeners(R.id.set_fench,R.id.back);
     }
 
@@ -161,21 +166,21 @@ public class SetFenchActivity extends BaseActivity implements View.OnClickListen
         geocoderSearch = new GeocodeSearch(this);
 
         mAMap.moveCamera(CameraUpdateFactory.zoomTo(15));
-        myLocationStyle = new MyLocationStyle();//初始化定位蓝点样式类myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);//连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
-        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE_NO_CENTER);
-        myLocationStyle.strokeColor(android.R.color.transparent);
-        //自定义精度范围的圆形边框宽度
-        myLocationStyle.strokeWidth(0);
-        // 设置圆形的填充颜色
-        myLocationStyle.radiusFillColor(android.R.color.transparent);
-        myLocationStyle.showMyLocation(true);
-        myLocationStyle.interval(2000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
-        mAMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
-        mUiSettings = mAMap.getUiSettings();//实例化UiSettings类对象
-        mUiSettings.setMyLocationButtonEnabled(true);
+//        myLocationStyle = new MyLocationStyle();//初始化定位蓝点样式类myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);//连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
+//        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE_NO_CENTER);
+//        myLocationStyle.strokeColor(android.R.color.transparent);
+//        //自定义精度范围的圆形边框宽度
+//        myLocationStyle.strokeWidth(0);
+//        // 设置圆形的填充颜色
+//        myLocationStyle.radiusFillColor(android.R.color.transparent);
+//        myLocationStyle.showMyLocation(true);
+//        myLocationStyle.interval(2000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
+//        mAMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
+//        mUiSettings = mAMap.getUiSettings();//实例化UiSettings类对象
+//        mUiSettings.setMyLocationButtonEnabled(false);
 
-        mAMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
-
+        mAMap.setMyLocationEnabled(false);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
+        getPosition();
     }
 
     @Override
@@ -252,4 +257,41 @@ public class SetFenchActivity extends BaseActivity implements View.OnClickListen
                     }
                 });
     }
+
+
+    /**
+     * 获取当前位置
+     */
+    public void getPosition(){
+        String token = (String) SPDataSource.get(this,SPDataSource.USER_TOKEN,"");
+        netServices.getLocation(token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ResponseCallback<BaseEntery<FenchModel>>() {
+                    @Override
+                    public void onSuccess(BaseEntery<FenchModel> value) {
+                        FenchModel fenchModel = value.obj;
+                        if(fenchModel != null){
+                            ILog.e(TAG,fenchModel.latitude   +  "----"  + fenchModel.longitude);
+                            LatLng latLng = new LatLng(fenchModel.latitude,fenchModel.longitude);
+                            MarkerOptions markerOption = new MarkerOptions();
+                            markerOption.position(latLng);
+//                            markerOption.snippet("上次电池终端定位点");
+                            markerOption.draggable(false);//设置Marker可拖动
+                            markerOption.icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory
+                                    .decodeResource(getResources(),R.drawable.circle_blue)));
+                            // 将Marker设置为贴地显示，可以双指下拉地图查看效果
+                            markerOption.setFlat(true);//设置marker平贴地图效果
+                            mAMap.moveCamera(CameraUpdateFactory.changeLatLng(latLng));
+                            mAMap.addMarker(markerOption);
+                        }
+                    }
+
+                    @Override
+                    public void onFailture(String e) {
+
+                    }
+                });
+    }
+
 }

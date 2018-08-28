@@ -84,5 +84,30 @@ public class ActivityStackManager {
         }
         return false;
     }
+
+    private Activity currentActivity(){
+        Activity activity=mActivityStack.lastElement();
+        return activity;
+    }
+
+    public void popActivity(Activity activity){
+        if(activity!=null){
+            activity.finish();
+            mActivityStack.remove(activity);
+            activity=null;
+        }
+    }
+
+
+    public void popAllActivity(){
+
+        while(true){
+            if(mActivityStack.empty()){
+                break;
+            }
+            Activity activity=currentActivity();
+            popActivity(activity);
+        }
+    }
 }
 

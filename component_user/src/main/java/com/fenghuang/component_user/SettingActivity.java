@@ -112,8 +112,9 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                         //注销信鸽
                         XGPushManager.unregisterPush(SettingActivity.this);
                         //退到登录界面
+                        ActivityStackManager.getInstance().popAllActivity();
                         startActivity(new Intent(SettingActivity.this,LoginActivity.class));
-                        ActivityStackManager.getInstance().finishAllActivity();
+
                     }
 
                     @Override

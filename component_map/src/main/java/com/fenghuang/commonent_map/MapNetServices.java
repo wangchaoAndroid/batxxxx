@@ -1,5 +1,6 @@
 package com.fenghuang.commonent_map;
 
+import com.fenghuang.commonent_map.bean.PositionModel;
 import com.fenghuang.commonent_map.bean.RouterModel;
 import com.fenghuang.component_base.net.BaseEntery;
 
@@ -32,4 +33,18 @@ public interface MapNetServices {
     Observable<BaseEntery<List<RouterModel>>> getNavigation(@Field("token")String token,
                                                             @Field("startTime")String startTime,
                                                             @Field("endTime")String endTime);
+
+    /**
+     *获取围栏状态
+     */
+    @FormUrlEncoded
+    @POST("getStatusInterface")
+    Observable<BaseEntery<PositionModel>> getStatus(@Field("token")String token);
+
+    /**
+     *获取当前位置
+     */
+    @FormUrlEncoded
+    @POST("getLocationInterface")
+    Observable<BaseEntery<FenchModel>> getLocation(@Field("token")String token);
 }

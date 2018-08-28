@@ -2,6 +2,7 @@ package com.fenghuang.component_user;
 
 import com.fenghuang.component_base.net.BaseEntery;
 import com.fenghuang.component_user.bean.BindModel;
+import com.fenghuang.component_user.bean.FenchModel;
 import com.fenghuang.component_user.bean.Neiboor;
 
 import java.util.List;
@@ -158,4 +159,11 @@ public interface NetServices {
     @POST("setMaintaintabInfoInterface")
     Observable<BaseEntery> commitDescribe(@Field("token") String token,@Field("maintainContent")String maintainContent);
 
+
+    /**
+     *获取当前位置
+     */
+    @FormUrlEncoded
+    @POST("getLocationInterface")
+    Observable<BaseEntery<FenchModel>> getLocation(@Field("token")String token);
 }

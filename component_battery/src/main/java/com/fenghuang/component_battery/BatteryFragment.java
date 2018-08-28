@@ -242,6 +242,7 @@ public class BatteryFragment  extends LazyLoadFragment implements ViewPager.OnPa
             }else {
                 switchBattery(0);
             }
+            getHomeInfo();
 
         }
     }
@@ -291,6 +292,7 @@ public class BatteryFragment  extends LazyLoadFragment implements ViewPager.OnPa
                         int code =  Integer.valueOf((String) value.obj);
                         if(code == 5){
                             RxToast.info(value.msg);
+                            right2.setImageResource(R.mipmap.un_open);
                         }else {
                             RxToast.error(value.msg);
                         }
@@ -358,6 +360,7 @@ public class BatteryFragment  extends LazyLoadFragment implements ViewPager.OnPa
                             //开关  0关 1开 2充电中 3欠费关机
                             if(homeModel.batteryStatus  == 0){
                                 right2.setImageResource(R.mipmap.un_open);
+                                iv_battery.setImageResource(R.drawable.ba_cloose);
                             }else if(homeModel.batteryStatus ==1){
                                 right2.setImageResource(R.mipmap.open);
                                 int electricquantity = homeModel.electricquantity;
@@ -380,6 +383,7 @@ public class BatteryFragment  extends LazyLoadFragment implements ViewPager.OnPa
                                 iv_battery.setImageResource(R.mipmap.charging);
                             }else if(homeModel.batteryStatus ==3){
                                 right2.setImageResource(R.mipmap.lock);
+                                iv_battery.setImageResource(R.drawable.ba_cloose);
                             }
 
                             List<Ad> advertisingtabList = homeModel.advertisingtabList;
