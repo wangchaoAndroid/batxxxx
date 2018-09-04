@@ -2,6 +2,7 @@ package com.fenghuang.component_base.net;
 
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
@@ -35,6 +36,7 @@ public abstract class ResponseCallback<T extends BaseEntery> implements Observer
     @Override
     public void onError(Throwable e) {
         String message = e.getMessage();
+        Log.e("1111",e +"");
         if(message == null){
             message = "";
         }

@@ -17,10 +17,11 @@
         android:layout_height="?android:attr/actionBarSize">
         <ImageView
             android:id="@+id/back"
-            android:layout_width="18dp"
+            android:layout_width="24dp"
+            android:padding="@dimen/basic_d5"
             android:src="@drawable/back"
             android:layout_centerVertical="true"
-            android:layout_height="18dp"/>
+            android:layout_height="24dp"/>
 
         <TextView
             android:text="设置"

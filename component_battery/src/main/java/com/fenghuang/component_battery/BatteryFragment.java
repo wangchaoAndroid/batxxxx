@@ -32,6 +32,7 @@ import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.animation.Animation;
 import com.amap.api.maps.model.animation.RotateAnimation;
 import com.billy.cc.core.component.CC;
+import com.billy.cc.core.component.CCResult;
 import com.fenghuang.component_base.base.LazyLoadFragment;
 import com.fenghuang.component_base.data.SPDataSource;
 import com.fenghuang.component_base.net.BaseEntery;
@@ -73,7 +74,7 @@ public class BatteryFragment  extends LazyLoadFragment implements ViewPager.OnPa
     //定义Handler接收发送消息
     private Handler handler = new Handler(Looper.getMainLooper()) {
         public void handleMessage(android.os.Message msg) {
-            if (msg.what == 999) {
+                if (msg.what == 999) {
                 //获取viewPager当前的位置
                 int currentItem = mBannerView.getCurrentItem();
                 currentItem++;
@@ -183,10 +184,13 @@ public class BatteryFragment  extends LazyLoadFragment implements ViewPager.OnPa
                                        int position, long id) {
                 // TODO Auto-generated method stub
                 // 将所选mySpinner 的值带入myTextView 中
-              String productNumber = parent.getItemAtPosition(position).toString();
-              //切换终端
-                ILog.e(TAG,productNumber + "");
-              changeDevice(productNumber);
+                if(mBind_ids != null && !mBind_ids.isEmpty()){
+                    String productNumber = parent.getItemAtPosition(position).toString();
+                    //切换终端
+                    ILog.e(TAG,productNumber + "");
+                    changeDevice(productNumber);
+                }
+
             }
 
             public void onNothingSelected(AdapterView<?> arg0) {
@@ -194,6 +198,25 @@ public class BatteryFragment  extends LazyLoadFragment implements ViewPager.OnPa
 
             }
         });
+    }
+
+    public boolean toLoginForToken(){
+        String token = (String) SPDataSource.get(getActivity(),SPDataSource.USER_TOKEN,"");
+        if(TextUtils.isEmpty(token)){
+            CCResult ccResult = CC.obtainBuilder("component_user")
+                    .setContext(getActivity())
+                    .setActionName("toLoginActivityForToken")
+                    .build()
+                    .call();
+            String data = ccResult.getDataItem(SPDataSource.USER_TOKEN);
+            if(!TextUtils.isEmpty(data)){
+                getHomeInfo();
+                return true;
+            }
+            return false;
+
+        }
+        return true;
     }
 
     /**
@@ -224,6 +247,9 @@ public class BatteryFragment  extends LazyLoadFragment implements ViewPager.OnPa
     public void onClick(View view) {
         super.onClick(view);
         int  viewId = view.getId();
+        if(!toLoginForToken()){
+           return;
+        }
         if(viewId == R.id.right1){
             if(homeModel != null){
                 int lockstatus = homeModel.lockstatus;
@@ -307,9 +333,6 @@ public class BatteryFragment  extends LazyLoadFragment implements ViewPager.OnPa
 
     public void getHomeInfo(){
         String token = (String) SPDataSource.get(getActivity(),SPDataSource.USER_TOKEN,"");
-        if(TextUtils.isEmpty(token)){
-            return;
-        }
         batteryNetServices.getHome(token).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new ResponseCallback<BaseEntery<HomeModel>>() {
@@ -387,15 +410,18 @@ public class BatteryFragment  extends LazyLoadFragment implements ViewPager.OnPa
                             }
 
                             List<Ad> advertisingtabList = homeModel.advertisingtabList;
-                            items.clear();
-                            items.addAll(advertisingtabList);
-                            mBannerAdapter = new BannerAdapter(getActivity(),items);
-                            mBannerView.setAdapter(mBannerAdapter);
-                            mBannerView.setOnPageChangeListener(BatteryFragment.this);
-                            mBannerAdapter.notifyDataSetChanged();
-                            mBannerView.setCurrentItem(items.size() * 10000);
-                            initDots();
-                            startRool();
+                            if(advertisingtabList != null && !advertisingtabList.isEmpty()){
+                                items.clear();
+                                items.addAll(advertisingtabList);
+                                mBannerAdapter = new BannerAdapter(getActivity(),items);
+                                mBannerView.setAdapter(mBannerAdapter);
+                                mBannerView.setOnPageChangeListener(BatteryFragment.this);
+                                mBannerAdapter.notifyDataSetChanged();
+                                mBannerView.setCurrentItem(items.size() * 10000);
+                                initDots();
+                                startRool();
+                            }
+
                             LatLng latLng = new LatLng(homeModel.latitude,homeModel.longitude);
                             MarkerOptions markerOption = new MarkerOptions();
                             markerOption.position(latLng);
@@ -463,10 +489,12 @@ public class BatteryFragment  extends LazyLoadFragment implements ViewPager.OnPa
         mAMap.setOnMapClickListener(new AMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                CC.obtainBuilder("component_map")
-                        .setActionName("enter_router_map")
-                        .build()
-                        .call();
+                if(toLoginForToken()){
+                    CC.obtainBuilder("component_map")
+                            .setActionName("enter_router_map")
+                            .build()
+                            .call();
+                }
             }
         });
         mAMap.moveCamera(CameraUpdateFactory.zoomTo(15));

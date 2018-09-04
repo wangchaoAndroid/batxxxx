@@ -12,6 +12,7 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -38,6 +39,8 @@ import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
+import com.billy.cc.core.component.CC;
+import com.billy.cc.core.component.CCResult;
 import com.fenghuang.commonent_map.bean.PositionModel;
 import com.fenghuang.component_base.base.LazyLoadFragment;
 import com.fenghuang.component_base.data.SPDataSource;
@@ -287,10 +290,32 @@ public class MapFragment extends LazyLoadFragment{
 
     }
 
+    public boolean toLoginForToken(){
+        String token = (String) SPDataSource.get(getActivity(),SPDataSource.USER_TOKEN,"");
+        if(TextUtils.isEmpty(token)){
+            CCResult ccResult = CC.obtainBuilder("component_user")
+                    .setContext(getActivity())
+                    .setActionName("toLoginActivityForToken")
+                    .build()
+                    .call();
+            String data = ccResult.getDataItem(SPDataSource.USER_TOKEN);
+            if(!TextUtils.isEmpty(data)){
+                getFenchStatus();
+                return true;
+            }
+            return false;
+
+        }
+        return true;
+    }
+
 
     @Override
     public void onClick(View view) {
         super.onClick(view);
+        if(!toLoginForToken()){
+            return;
+        }
         int id = view.getId();
         if(id == R.id.start_fench){
             if(isOpen){

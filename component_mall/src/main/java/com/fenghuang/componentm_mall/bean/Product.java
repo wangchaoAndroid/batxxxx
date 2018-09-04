@@ -14,7 +14,7 @@ public class Product implements Serializable {
 
     public int isStages;
 
-    public long createTime;
+    public String createTime;
 
     public int status;
 

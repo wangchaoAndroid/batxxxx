@@ -14,6 +14,7 @@ import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.billy.cc.core.component.CC;
+import com.billy.cc.core.component.CCResult;
 import com.contrarywind.interfaces.IPickerViewData;
 import com.fenghuang.component_base.base.BaseActivity;
 import com.fenghuang.component_base.data.SPDataSource;
@@ -82,13 +83,18 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         }else if(id == R.id.tv_charge){
             getNearbyCharged();
         }else if(id == R.id.set_fench){
-            setFench();
+            if(toLoginForToken()){
+                setFench();
+            }
         }else if(id == R.id.back){
             finish();
         }else if(id == R.id.acount_and_safe){
-            startActivity(AccountAndSafeActivity.class,false);
+            if(toLoginForToken()){
+                startActivity(AccountAndSafeActivity.class,false);
+            }
         }
     }
+
 
     /**
      * 退出登录
@@ -96,6 +102,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     public void logout(){
         String token = UserManager.getToken();
         if(TextUtils.isEmpty(token)){
+            RxToast.error("您还未登录");
             return;
         }
         netServices.logout(token)
@@ -123,6 +130,24 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                         RxToast.error(e + "");
                     }
                 });
+    }
+
+    public boolean toLoginForToken(){
+        String token = (String) SPDataSource.get(this,SPDataSource.USER_TOKEN,"");
+        if(TextUtils.isEmpty(token)){
+            CCResult ccResult = CC.obtainBuilder("component_user")
+                    .setContext(this)
+                    .setActionName("toLoginActivityForToken")
+                    .build()
+                    .call();
+            String data = ccResult.getDataItem(SPDataSource.USER_TOKEN);
+            if(!TextUtils.isEmpty(data)){
+                return true;
+            }
+            return false;
+
+        }
+        return true;
     }
 
 

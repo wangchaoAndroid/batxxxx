@@ -3,11 +3,15 @@ package com.fenghuang.componentm_mall;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.billy.cc.core.component.CC;
+import com.billy.cc.core.component.CCResult;
 import com.fenghuang.component_base.base.LazyLoadFragment;
+import com.fenghuang.component_base.data.SPDataSource;
 import com.fenghuang.component_base.tool.ImageLoader;
 import com.fenghuang.component_base.utils.FragmentUtils;
 import com.fenghuang.componentm_mall.bean.Product;
@@ -42,6 +46,19 @@ public class ProductFragment extends LazyLoadFragment implements View.OnClickLis
     @Override
     public void onClick(View view) {
         super.onClick(view);
+        String token = (String) SPDataSource.get(getActivity(),SPDataSource.USER_TOKEN,"");
+        if(TextUtils.isEmpty(token)){
+            CCResult ccResult = CC.obtainBuilder("component_user")
+                    .setContext(getActivity())
+                    .setActionName("toLoginActivityForToken")
+                    .build()
+                    .call();
+            String data = ccResult.getDataItem(SPDataSource.USER_TOKEN);
+            if(!TextUtils.isEmpty(data)){
+//                getHomeInfo();
+            }
+            return;
+        }
         int id = view.getId();
         if(id == R.id.btn_buy){
             startActivity(new Intent(getActivity(),BuyActivity.class));

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -64,12 +65,12 @@ public class MallFragment extends LazyLoadFragment implements BaseQuickAdapter.O
         mMallAdapter.setChecked(0);
         getGoodsData();
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                getPayData();
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                getPayData();
+//            }
+//        }).start();
 
     }
 
@@ -143,7 +144,6 @@ public class MallFragment extends LazyLoadFragment implements BaseQuickAdapter.O
     public void getGoodsData() {
         categorys.clear();
         String token = (String) SPDataSource.get(getActivity(),SPDataSource.USER_TOKEN,"");
-        if(TextUtils.isEmpty(token))return;
         mMallNetServices.getBatteryGoods(token)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -167,7 +167,7 @@ public class MallFragment extends LazyLoadFragment implements BaseQuickAdapter.O
 
                     @Override
                     public void onFailture(String e) {
-
+                        RxToast.error(e + "");
                     }
                 });
     }

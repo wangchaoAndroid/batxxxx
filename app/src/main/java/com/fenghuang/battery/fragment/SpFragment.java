@@ -84,7 +84,8 @@ public class SpFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         int id = view.getId();
         if(id == R.id.skip_buy){
-            boolean hasComponentUser = CC.hasComponent("component_user");
+//            boolean hasComponentUser = CC.hasComponent("component_user");
+            boolean hasComponentUser = false;
             if (hasComponentUser) {
                 CCResult ccResult = CC.obtainBuilder("component_user")
                         .setContext(getActivity())

@@ -61,7 +61,7 @@ public class ComponentUser implements IComponent {
 
         switch (actionName) {
             case "toLoginActivity":
-                login(cc);
+                login(cc,true);
                 break;
             case "toLoginActivityClearTask":
                 loginClearTask(cc);
@@ -77,6 +77,9 @@ public class ComponentUser implements IComponent {
                 break;
             case "getInfo":
                 getInfo(cc);
+                break;
+            case "toLoginActivityForToken":
+                login(cc,false);
                 break;
             default:
                 //这个逻辑分支上没有调用CC.sendCCResult(...),是一种错误的示例
@@ -103,7 +106,7 @@ public class ComponentUser implements IComponent {
         );
     }
 
-    public void login(CC cc){
+    public void login(CC cc,boolean exit){
         Context context = cc.getContext();
         Intent intent = new Intent(context, LoginActivity.class);
         intent.putExtra("callId", cc.getCallId());
@@ -112,7 +115,7 @@ public class ComponentUser implements IComponent {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
         context.startActivity(intent);
-        if (context instanceof Activity) {
+        if (context instanceof Activity && exit) {
             ((Activity) context).finish();
         }
         CC.sendCCResult(cc.getCallId(), CCResult.success());

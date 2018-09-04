@@ -2,10 +2,12 @@ package com.fenghuang.component_user;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Range;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
@@ -39,12 +41,14 @@ import io.reactivex.schedulers.Schedulers;
 public class UserFragment extends LazyLoadFragment {
 
     private TextView tv_name,setting_tv;
+    private ImageView avatar;
     NetServices mNetServices = RetrofitManager.getInstance().initRetrofit().create(NetServices.class);
     @Override
     protected void init(View view,Bundle savedInstanceState) {
 
         tv_name = view.findViewById(R.id.tv_name);
         setting_tv = view.findViewById(R.id.setting_tv);
+        avatar = view.findViewById(R.id.avatar);
 
     }
 
@@ -57,23 +61,54 @@ public class UserFragment extends LazyLoadFragment {
     protected void lazyLoad() {
         getNetUserInfo();
 
-        addOnClickListeners(R.id.setting_tv,R.id.warn_info,R.id.feed_back);
+        addOnClickListeners(R.id.setting_tv,R.id.warn_info,R.id.feed_back,R.id.avatar);
     }
 
     @Override
     public void onClick(View view) {
         super.onClick(view);
+
         int id = view.getId();
         if(id == R.id.setting_tv){
             startActivity(new Intent(getActivity(),SettingActivity.class));
         }else if(id == R.id.warn_info){
-            CC.obtainBuilder("component_battery")
-                    .setActionName("getWarnInfo")
+            if(toLoginForToken()){
+                CC.obtainBuilder("component_battery")
+                        .setActionName("getWarnInfo")
+                        .build()
+                        .call();
+            }
+
+        }else if(id == R.id.feed_back){
+            if(toLoginForToken()){
+                startActivity(new Intent(getActivity(),FeedBackActivity.class));
+            }
+        }else if(id == R.id.avatar){
+            String token1 = (String) SPDataSource.get(getActivity(),SPDataSource.USER_TOKEN,"");
+            if(TextUtils.isEmpty(token1)){
+                startActivity(new Intent(getActivity(),LoginActivity.class));
+            }
+
+        }
+    }
+
+    public boolean toLoginForToken(){
+        String token = (String) SPDataSource.get(getActivity(),SPDataSource.USER_TOKEN,"");
+        if(TextUtils.isEmpty(token)){
+            CCResult ccResult = CC.obtainBuilder("component_user")
+                    .setContext(getActivity())
+                    .setActionName("toLoginActivityForToken")
                     .build()
                     .call();
-        }else if(id == R.id.feed_back){
-            startActivity(new Intent(getActivity(),FeedBackActivity.class));
+            String data = ccResult.getDataItem(SPDataSource.USER_TOKEN);
+            if(!TextUtils.isEmpty(data)){
+                getNetUserInfo();
+                return true;
+            }
+            return false;
+
         }
+        return true;
     }
 
 
