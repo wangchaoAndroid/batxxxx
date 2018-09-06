@@ -14,6 +14,8 @@ public class LoginModel extends BaseEntery  {
     public String nickName;
     public String sex;
     public String token;
+    public String headPortrait;
+
 
     @Override
     public String toString() {
@@ -22,6 +24,7 @@ public class LoginModel extends BaseEntery  {
                 ", nickName='" + nickName + '\'' +
                 ", sex='" + sex + '\'' +
                 ", token='" + token + '\'' +
+                ", headPortrait='" + headPortrait + '\'' +
                 '}';
     }
 }

@@ -1,11 +1,4 @@
 <resources>
     <string name="demo_a_life_cycle_fragment_notice">test fragment lifecycle\n callId=%s\n slow process cc (3s) invoked\nClick button to destroy current fragment and replace a new one.</string>
-    <string name="user_name_password">请输入手机号</string>
-    <string name="user_hint_input_password">请输入密码</string>
-    <string name="user_hint_input_password_again">请再次输入密码</string>
-    <string name="user_hint_auth_code">请输入验证码</string>
-    <string name="user_hint_nick">请输入昵称</string>
-    <string name="title_btn_login">确定</string>
-    <string name="title_btn_login_config">暂无账号，去注册</string>
-    <string name="title_activity_set_fench">SetFenchActivity</string>
+
 </resources>

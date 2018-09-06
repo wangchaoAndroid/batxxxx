@@ -521,7 +521,10 @@ public class ActivityScanerCode extends LazyLoadFragment implements View.OnClick
         } else {
             if(!getActivity().isFinishing()){
                 Message message = Message.obtain(handler, R.id.decode_failed);
-                message.sendToTarget();
+                if(message != null){
+                    message.sendToTarget();
+                }
+
             }
         }
     }

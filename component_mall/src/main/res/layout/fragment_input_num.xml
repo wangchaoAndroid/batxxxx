@@ -46,7 +46,18 @@
     </android.support.design.widget.TextInputLayout>
 
 
-
+    <TextView
+        android:id="@+id/btn_login"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/basic_d20"
+        android:layout_marginLeft="@dimen/basic_d10"
+        android:layout_marginRight="@dimen/basic_d10"
+        android:layout_width="match_parent"
+        android:background="@android:color/background_dark"
+        android:textColor="@android:color/white"
+        android:layout_height="@dimen/basic_d40"
+        android:text="@string/title_btn_login"
+        android:textSize="@dimen/basic_s18" />
 
 
 </LinearLayout>
