@@ -31,7 +31,7 @@ public class ComponentMall implements IComponent {
         String actionName = cc.getActionName();
         switch (actionName) {
             case "showActivityA":
-                openActivity(cc,CameraActivity.class);
+                openActivity(cc,BuyActivity.class);
                 break;
             case "getLifecycleFragment":
                 //demo for provide fragment object to other component

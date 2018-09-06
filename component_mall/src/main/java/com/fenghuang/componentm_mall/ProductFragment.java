@@ -10,9 +10,10 @@ import android.widget.TextView;
 
 import com.billy.cc.core.component.CC;
 import com.billy.cc.core.component.CCResult;
+import com.bumptech.glide.Glide;
 import com.fenghuang.component_base.base.LazyLoadFragment;
 import com.fenghuang.component_base.data.SPDataSource;
-import com.fenghuang.component_base.tool.ImageLoader;
+import com.fenghuang.component_base.helper.GlideRoundTransform;
 import com.fenghuang.component_base.utils.FragmentUtils;
 import com.fenghuang.componentm_mall.bean.Product;
 
@@ -74,7 +75,9 @@ public class ProductFragment extends LazyLoadFragment implements View.OnClickLis
             doc_buy_method.setText(mProduct.describe2 + "");
             doc_pay_one.setText(mProduct.describe3 + "");
             doc_pay_two.setText(mProduct.describe4 + "");
-            ImageLoader.load(mProduct.img,good_iv);
+            Glide.with(getActivity())
+                    .load(mProduct.img)
+                    .transform(new GlideRoundTransform(getActivity())).into(good_iv);
         }
     }
 }
