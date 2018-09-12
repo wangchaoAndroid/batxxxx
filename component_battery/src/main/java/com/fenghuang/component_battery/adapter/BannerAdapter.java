@@ -1,14 +1,19 @@
 package com.fenghuang.component_battery.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.fenghuang.component_base.base.BaseApp;
-import com.fenghuang.component_base.tool.ImageLoader;
+import com.fenghuang.component_base.helper.GlideCircleTransform;
+import com.fenghuang.component_base.helper.GlideRoundTransform;
 import com.fenghuang.component_battery.R;
 import com.fenghuang.component_battery.bean.Ad;
 
@@ -40,10 +45,14 @@ public class BannerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         ImageView view = new ImageView(mContext);
-        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        view.setScaleType(ImageView.ScaleType.FIT_XY);
+        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         view.setLayoutParams(layoutParams);
-
-        ImageLoader.load(ads.get(position % ads.size() ).advertisingjpg,view);
+        Ad ad = ads.get(position % ads.size());
+        Glide.with(mContext)
+                .load(ad.advertisingjpg)
+                .transform(new GlideRoundTransform(mContext))
+                .into(view);
         container.addView(view);
         return view;
     }

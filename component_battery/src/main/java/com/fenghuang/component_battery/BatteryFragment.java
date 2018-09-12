@@ -39,7 +39,6 @@ import com.fenghuang.component_base.net.BaseEntery;
 import com.fenghuang.component_base.net.ILog;
 import com.fenghuang.component_base.net.ResponseCallback;
 import com.fenghuang.component_base.net.RetrofitManager;
-import com.fenghuang.component_base.tool.ImageLoader;
 import com.fenghuang.component_base.tool.RxToast;
 import com.fenghuang.component_battery.adapter.BannerAdapter;
 import com.fenghuang.component_battery.bean.Ad;
@@ -262,13 +261,17 @@ public class BatteryFragment  extends LazyLoadFragment implements ViewPager.OnPa
 
         }else if(viewId == R.id.right2){
             //开关  0关 1开 2充电中 3欠费关机
-            int batteryStatus = homeModel.batteryStatus;
-            if(batteryStatus == 0){
-                switchBattery(1);
-            }else {
-                switchBattery(0);
+            if(homeModel != null){
+                int batteryStatus = homeModel.batteryStatus;
+                if(batteryStatus == 0){
+                    switchBattery(1);
+                }else {
+                    switchBattery(0);
+                }
+
             }
             getHomeInfo();
+
 
         }
     }
@@ -332,6 +335,7 @@ public class BatteryFragment  extends LazyLoadFragment implements ViewPager.OnPa
     }
 
     public void getHomeInfo(){
+        ILog.e(TAG,"1111111111111");
         String token = (String) SPDataSource.get(getActivity(),SPDataSource.USER_TOKEN,"");
         batteryNetServices.getHome(token).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -442,6 +446,7 @@ public class BatteryFragment  extends LazyLoadFragment implements ViewPager.OnPa
                     @Override
                     public void onFailture(String e) {
                         RxToast.error(e);
+                        ILog.e(TAG,"1111111111111" +e);
                     }
                 });
     }

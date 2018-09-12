@@ -20,6 +20,7 @@ public abstract class ResponseCallback<T extends BaseEntery> implements Observer
 
     @Override
     public void onNext(T value) {
+        Log.e("1111",value + "");
         if(value == null) return;
         if(value.code == 1){
             onSuccess(value);

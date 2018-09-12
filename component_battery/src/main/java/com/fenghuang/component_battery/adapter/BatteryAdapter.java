@@ -4,7 +4,6 @@ import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.fenghuang.component_battery.R;
@@ -23,12 +22,12 @@ public class BatteryAdapter extends BaseQuickAdapter<Integer,BaseViewHolder> {
     @Override
     protected void convert(BaseViewHolder helper, Integer item) {
         helper.setImageResource(R.id.image,item);
-        RequestOptions myOptions = new RequestOptions()
-                .transform(new GlideRoundTransform(mContext,20));
-
-        Glide.with(mContext)
-                .load(item)
-                .apply(myOptions)
-                .into((ImageView) helper.getView(R.id.image));
+//        RequestOptions myOptions = new RequestOptions()
+//                .transform(new GlideRoundTransform(mContext,20));
+//
+//        Glide.with(mContext)
+//                .load(item)
+//                .apply(myOptions)
+//                .into((ImageView) helper.getView(R.id.image));
     }
 }

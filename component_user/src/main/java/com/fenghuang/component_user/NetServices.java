@@ -1,6 +1,7 @@
 package com.fenghuang.component_user;
 
 import com.fenghuang.component_base.net.BaseEntery;
+import com.fenghuang.component_user.bean.AvatarModel;
 import com.fenghuang.component_user.bean.BindModel;
 import com.fenghuang.component_user.bean.FenchModel;
 import com.fenghuang.component_user.bean.Neiboor;
@@ -57,14 +58,12 @@ public interface NetServices {
 
     /**
      * 上传缩略图
-     * @param params
      * @param parts
      * @return
      */
     @Multipart
-    @POST("lyuploadImg")
-    Observable<ResponseBody> uploadImg(@PartMap Map<String, RequestBody> params,
-                                       @Part List<MultipartBody.Part> parts);
+    @POST("headPortraitInterface")
+    Observable<BaseEntery<AvatarModel>> uploadImg(@Part MultipartBody.Part parts, @Part MultipartBody.Part no);
 
 
     /**

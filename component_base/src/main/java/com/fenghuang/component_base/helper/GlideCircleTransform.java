@@ -53,9 +53,6 @@ public class GlideCircleTransform extends BitmapTransformation {
         return getClass().getName();
     }
 
-    @Override
-    public void updateDiskCacheKey(MessageDigest messageDigest) {
 
-    }
 }
 

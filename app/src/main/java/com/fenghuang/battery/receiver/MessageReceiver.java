@@ -2,10 +2,16 @@ package com.fenghuang.battery.receiver;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.UserManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.billy.cc.core.component.CC;
+import com.billy.cc.core.component.CCResult;
+import com.fenghuang.component_base.data.SPDataSource;
+import com.fenghuang.component_base.net.ILog;
 import com.fenghuang.component_base.tool.RxToast;
+import com.fenghuang.component_base.utils.ActivityStackManager;
 import com.tencent.android.tpush.XGPushBaseReceiver;
 import com.tencent.android.tpush.XGPushClickedResult;
 import com.tencent.android.tpush.XGPushManager;
@@ -167,7 +173,8 @@ public class MessageReceiver extends XGPushBaseReceiver {
 		// 获取自定义key-value
 
 		String content = message.getContent();
-		RxToast.warning("收到消息" + content  + "");
+		ILog.e("1111",content + "");
+//		RxToast.warning("收到消息" + content  + "");
 		if (content != null && content.length() != 0) {
 			try {
 				JSONObject obj = new JSONObject(content);
@@ -187,18 +194,29 @@ public class MessageReceiver extends XGPushBaseReceiver {
 		}
 		try {
 			JSONObject jsonObject = new JSONObject(content);
-			String ext = jsonObject.optString("ext");
-			if(!TextUtils.isEmpty(ext)){
-				JSONObject jsonObject1 = new JSONObject(ext);
-				String msgCode = jsonObject1.optString("msgCode");
-				if("9000".equals(msgCode)){
-//					RxToast.warning(context,"您的账号已在别处登录");
-//					XGPushManager.unregisterPush(context);
-//					SpUtils.put(context,"token","");
-//					StackManager.getInstance().popAllActivity();
-//					Intent intent = new Intent(context, LoginActivity.class);
-//					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//					context.startActivity(intent);
+			String cmd = jsonObject.optString("cmd");
+			String title = jsonObject.optString("title");
+			if(!TextUtils.isEmpty(cmd)){
+				if("railsPosition".equals(cmd)){ //超过围栏
+					RxToast.warning(title + "");
+				}else if("lockPosition".equals(cmd)){
+					RxToast.warning(title + "");
+				}else if("remoteLogin".equals(cmd)){
+					RxToast.warning(title + "");
+					//清除内存保存用户数据
+					//清除sp token
+					SPDataSource.put(context,SPDataSource.USER_TOKEN,"");
+					//注销信鸽
+					XGPushManager.unregisterPush(context);
+					//退到登录界面
+					ActivityStackManager.getInstance().popAllActivity();
+					CCResult ccResult = CC.obtainBuilder("component_user")
+							.setContext(context)
+							.setActionName("toLoginActivity")
+							.build()
+							.call();
+//					startActivity(new Intent(SettingActivity.this,LoginActivity.class));
+
 				}
 			}
 

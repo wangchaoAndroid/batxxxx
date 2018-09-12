@@ -2,8 +2,9 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:state_checked="false"
-        android:drawable="@mipmap/icon_checked" />
+        android:drawable="@android:drawable/radiobutton_off_background"
+        />
     <item
         android:state_checked="true"
-        android:drawable="@mipmap/icon_checked" />
+        android:drawable="@mipmap/icon_checked"  />
 </selector>

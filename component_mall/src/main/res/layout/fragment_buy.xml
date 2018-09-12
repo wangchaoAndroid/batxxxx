@@ -86,86 +86,91 @@
             android:layout_width="match_parent"
             android:background="@color/basic_gray0"
             android:layout_height="@dimen/basic_d20"/>
-        <RelativeLayout
-            android:paddingLeft="@dimen/basic_d10"
-            android:paddingRight="@dimen/basic_d10"
-            android:background="@color/basic_white1"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/basic_d50">
-            <TextView
-                android:layout_width="wrap_content"
-                android:text="全部付清"
-                android:layout_centerVertical="true"
-                android:layout_height="wrap_content"/>
 
-            <RadioButton
-                android:layout_width="@dimen/basic_d18"
-                android:button="@null"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:background="@drawable/radio"
-                android:layout_height="@dimen/basic_d18"/>
-        </RelativeLayout>
-
-        <View
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/payTypeRv"
             android:layout_width="match_parent"
-            android:background="@color/basic_gray0"
-            android:layout_marginRight="@dimen/basic_d10"
-            android:layout_marginLeft="@dimen/basic_d10"
-            android:layout_height=".5dp"/>
-        <RelativeLayout
-            android:paddingLeft="@dimen/basic_d10"
-            android:paddingRight="@dimen/basic_d10"
-            android:background="@color/basic_white1"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/basic_d50">
-            <TextView
-                android:layout_width="wrap_content"
-                android:text="分期付款 (两年)"
-                android:layout_centerVertical="true"
-                android:layout_height="wrap_content"/>
-
-            <RadioButton
-                android:layout_width="@dimen/basic_d18"
-                android:button="@null"
-                android:visibility="gone"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:background="@drawable/radio"
-                android:layout_height="@dimen/basic_d18"/>
-        </RelativeLayout>
-
-        <View
-            android:layout_marginRight="@dimen/basic_d10"
-            android:layout_marginLeft="@dimen/basic_d10"
-            android:layout_width="match_parent"
-            android:background="@color/basic_gray0"
-            android:layout_height=".5dp"/>
-        <RelativeLayout
-            android:paddingLeft="@dimen/basic_d10"
-            android:paddingRight="@dimen/basic_d10"
-            android:background="@color/basic_white1"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/basic_d50">
-            <TextView
-                android:layout_width="wrap_content"
-                android:text="分期付款 (月租)"
-                android:layout_centerVertical="true"
-                android:layout_height="wrap_content"/>
-            <RadioButton
-                android:visibility="gone"
-                android:layout_width="@dimen/basic_d18"
-                android:button="@null"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:background="@drawable/radio"
-                android:layout_height="@dimen/basic_d18"/>
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:background="@color/basic_gray0"
             android:layout_height="match_parent"/>
+        <!--<RelativeLayout-->
+            <!--android:paddingLeft="@dimen/basic_d10"-->
+            <!--android:paddingRight="@dimen/basic_d10"-->
+            <!--android:background="@color/basic_white1"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="@dimen/basic_d50">-->
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:text="全部付清"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:layout_height="wrap_content"/>-->
+
+            <!--<RadioButton-->
+                <!--android:layout_width="@dimen/basic_d18"-->
+                <!--android:button="@null"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:background="@drawable/radio"-->
+                <!--android:layout_height="@dimen/basic_d18"/>-->
+        <!--</RelativeLayout>-->
+
+        <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:background="@color/basic_gray0"-->
+            <!--android:layout_marginRight="@dimen/basic_d10"-->
+            <!--android:layout_marginLeft="@dimen/basic_d10"-->
+            <!--android:layout_height=".5dp"/>-->
+        <!--<RelativeLayout-->
+            <!--android:paddingLeft="@dimen/basic_d10"-->
+            <!--android:paddingRight="@dimen/basic_d10"-->
+            <!--android:background="@color/basic_white1"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="@dimen/basic_d50">-->
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:text="分期付款 (两年)"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:layout_height="wrap_content"/>-->
+
+            <!--<RadioButton-->
+                <!--android:layout_width="@dimen/basic_d18"-->
+                <!--android:button="@null"-->
+                <!--android:visibility="gone"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:background="@drawable/radio"-->
+                <!--android:layout_height="@dimen/basic_d18"/>-->
+        <!--</RelativeLayout>-->
+
+        <!--<View-->
+            <!--android:layout_marginRight="@dimen/basic_d10"-->
+            <!--android:layout_marginLeft="@dimen/basic_d10"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:background="@color/basic_gray0"-->
+            <!--android:layout_height=".5dp"/>-->
+        <!--<RelativeLayout-->
+            <!--android:paddingLeft="@dimen/basic_d10"-->
+            <!--android:paddingRight="@dimen/basic_d10"-->
+            <!--android:background="@color/basic_white1"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="@dimen/basic_d50">-->
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:text="分期付款 (月租)"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:layout_height="wrap_content"/>-->
+            <!--<RadioButton-->
+                <!--android:visibility="gone"-->
+                <!--android:layout_width="@dimen/basic_d18"-->
+                <!--android:button="@null"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:background="@drawable/radio"-->
+                <!--android:layout_height="@dimen/basic_d18"/>-->
+        <!--</RelativeLayout>-->
+
+        <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:background="@color/basic_gray0"-->
+            <!--android:layout_height="match_parent"/>-->
     </LinearLayout>
 
     <LinearLayout

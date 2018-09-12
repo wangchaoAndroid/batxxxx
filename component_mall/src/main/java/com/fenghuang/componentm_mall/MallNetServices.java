@@ -1,6 +1,7 @@
 package com.fenghuang.componentm_mall;
 
 import com.fenghuang.component_base.net.BaseEntery;
+import com.fenghuang.componentm_mall.bean.PayType;
 import com.fenghuang.componentm_mall.bean.Product;
 
 import java.util.List;
@@ -27,9 +28,14 @@ public interface MallNetServices  {
      * 支付
      */
     @FormUrlEncoded
-    @POST("purchaseInterface")
-    Observable<BaseEntery> purchase(@Field("token")String token
-        ,@Field("productNumber") String productNumber);
+    @POST("payInterface")
+    Observable<BaseEntery<String>> purchase(
+            @Field("payType")int payType,
+            @Field("token")String token,
+            @Field("productNumber")String productNumber,
+            @Field("isStages")int isStages,
+            @Field("arlarmruleId")int arlarmruleId,
+            @Field("paymentType")int paymentType);
 
 
     /**
@@ -39,4 +45,13 @@ public interface MallNetServices  {
     @POST("batteryBindingInterface")
     Observable<BaseEntery> bindBattery(@Field("token")String token
             ,@Field("productNumber") String productNumber);
+
+
+    /**
+     * 获取分期方式
+     */
+    @FormUrlEncoded
+    @POST("getStageTypeInterface")
+    Observable<BaseEntery<List<PayType>>> getStageType(@Field("productNumber") String productNumber);
+
 }
