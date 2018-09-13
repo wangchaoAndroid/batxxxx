@@ -17,6 +17,7 @@ import com.billy.cc.core.component.CC;
 import com.billy.cc.core.component.CCResult;
 import com.contrarywind.interfaces.IPickerViewData;
 import com.fenghuang.component_base.base.BaseActivity;
+import com.fenghuang.component_base.base.LazyLoadFragment;
 import com.fenghuang.component_base.data.SPDataSource;
 import com.fenghuang.component_base.net.BaseEntery;
 import com.fenghuang.component_base.net.ILog;
@@ -155,9 +156,18 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
      * 设置围栏信息
      */
     private void setFench() {
-        startActivity(new Intent(SettingActivity.this,SetFenchActivity.class));
+        startActivityForResult(new Intent(SettingActivity.this,SetFenchActivity.class),10);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 10  &&  resultCode == RESULT_OK){
+            setResult(RESULT_OK);
+            finish();
+        }
+
+    }
 
     /**
      * 附近门店

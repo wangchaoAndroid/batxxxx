@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -39,7 +40,7 @@ public class BuyActivity extends BaseActivity implements View.OnClickListener {
     private ImageView mImageView;
     MallNetServices mMallNetServices = RetrofitManager.getInstance().initRetrofit().create(MallNetServices.class);
     private String productNumber;
-    private TextView numberTv;
+    private TextView numberTv,buy;
     private RecyclerView payTypeRv;
     private int request = 2;
     private List<PayType> types = new ArrayList<>();
@@ -61,6 +62,7 @@ public class BuyActivity extends BaseActivity implements View.OnClickListener {
     protected void initView() {
         mImageView = findViewById(R.id.mall_enter_camera_iv);
         numberTv = findViewById(R.id.num_tv);
+        buy = findViewById(R.id.buy);
         payTypeRv = findViewById(R.id.payTypeRv);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         payTypeRv.setLayoutManager(linearLayoutManager);
@@ -79,6 +81,7 @@ public class BuyActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void onCbClick( PayType item) {
                 checkedItem = item;
+                buy.setText("¥ " + item.downpayment );
             }
         });
     }
@@ -138,6 +141,14 @@ public class BuyActivity extends BaseActivity implements View.OnClickListener {
         if(alertDialog != null && alertDialog.isShowing()){
             return;
         }
+        if(TextUtils.isEmpty(productNumber)){
+            RxToast.error("请扫码输入电池编号");
+            return;
+        }
+        if(checkedItem == null) {
+            RxToast.error("请选择分期方式");
+            return;
+        }
         showLoadingDialog();
         final String token = (String) SPDataSource.get(this,SPDataSource.USER_TOKEN,"");
         int id = checkedItem.id;
@@ -147,7 +158,7 @@ public class BuyActivity extends BaseActivity implements View.OnClickListener {
         }else {
             isStage = 1;
         }
-        mMallNetServices.purchase(200,token,productNumber,isStage,checkedItem.alarmnum,1)
+        mMallNetServices.purchase(200,token,productNumber,isStage,checkedItem.id,1)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new ResponseCallback<BaseEntery<String>>() {

@@ -13,6 +13,7 @@ public class PayType implements Serializable {
     public double downpayment;
     public String batteryName;
     public String staging;
+    public boolean checked;
 
     @Override
     public String toString() {

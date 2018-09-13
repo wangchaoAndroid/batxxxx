@@ -155,6 +155,10 @@ public class MapFragment extends LazyLoadFragment{
     public void init( FenchModel fenchModel){
         //围栏初始化
         //注册监听事件
+        if(mCircle != null){
+            clearFence();
+            mCircle.remove();
+        }
         mGeoFenceClient = new GeoFenceClient(getActivity());
         mGeoFenceClient.setActivateAction(GeoFenceClient.GEOFENCE_IN| GeoFenceClient.GEOFENCE_OUT| GeoFenceClient.GEOFENCE_STAYED);
         //设置回调监听
@@ -242,11 +246,16 @@ public class MapFragment extends LazyLoadFragment{
 
     //清除所有围栏
     public void clearFence(){
-        mGeoFenceClient.removeGeoFence();
+        if(mGeoFenceClient != null){
+            mGeoFenceClient.removeGeoFence();
+        }
+
     }
 
     public void destoryClient(){
-        mLocationClient.onDestroy();//销毁定位客户端，同时销毁本地定位服务。
+        if(mLocationClient != null){
+            mLocationClient.onDestroy();//销毁定位客户端，同时销毁本地定位服务。
+        }
     }
 
     //创建回调监听
@@ -268,7 +277,7 @@ public class MapFragment extends LazyLoadFragment{
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        //clearFence();
+//        clearFence();
         mHandler.removeCallbacks(mRunnable);
         unRegeist();
     }
@@ -327,40 +336,42 @@ public class MapFragment extends LazyLoadFragment{
     }
 
     private void swtichFench(int status,int type) {
-        isOpen = !isOpen;
-        if(status == 0){
-            start_fench.setText("开启围栏");
-            if(mCircle != null){
-                mCircle.remove();
-            }
-            mHandler.removeCallbacks(mRunnable);
-            clearFence();
-        }else {
-            start_fench.setText("关闭围栏");
-            String token = (String) SPDataSource.get(getActivity(),SPDataSource.USER_TOKEN,"");
-            ILog.e(TAG,token);
-            mMapNetServices.switchEnclosure(token,status,type)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new ResponseCallback<BaseEntery<FenchModel>>() {
-                        @Override
-                        public void onSuccess(BaseEntery<FenchModel> value) {
-                            //后台返回围栏信息
+        String token = (String) SPDataSource.get(getActivity(),SPDataSource.USER_TOKEN,"");
+        mMapNetServices.switchEnclosure(token,status,type)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ResponseCallback<BaseEntery<FenchModel>>() {
+                    @Override
+                    public void onSuccess(BaseEntery<FenchModel> value) {
+                        //后台返回围栏信息
+                        isOpen = !isOpen;
+                        ILog.e(TAG,"isOpen" + isOpen);
+                        if(value != null){
+                            FenchModel fenchModel = value.obj;
+                            ILog.e(TAG,"" + fenchModel.toString());
 
-                            if(value != null){
-                                FenchModel fenchModel = value.obj;
-                                ILog.e(TAG,"" + fenchModel.toString());
+                            if(isOpen){
                                 init(fenchModel);
+                                start_fench.setText("关闭围栏");
+                            }else {
+                                if(mCircle != null){
+                                    mCircle.remove();
+                                }
+                                clearFence();
+                                mHandler.removeCallbacks(mRunnable);
+                                start_fench.setText("开启围栏");
                             }
-
                         }
 
-                        @Override
-                        public void onFailture(String e) {
-                            RxToast.error(e + "");
-                        }
-                    });
-        }
+
+
+                    }
+
+                    @Override
+                    public void onFailture(String e) {
+                        RxToast.error(e + "");
+                    }
+                });
 
     }
 
@@ -372,6 +383,8 @@ public class MapFragment extends LazyLoadFragment{
         super.onDestroy();
         mMapView.onDestroy();
     }
+
+
 
 
     /**
@@ -401,7 +414,7 @@ public class MapFragment extends LazyLoadFragment{
         mMapView.onSaveInstanceState(outState);
     }
     /**
-     * 获取围栏状态
+     * 获取围栏状态,如果开启应该返回围栏信息
      */
     public void getFenchStatus(){
         String token = (String) SPDataSource.get(getActivity(),SPDataSource.USER_TOKEN,"");
@@ -412,9 +425,16 @@ public class MapFragment extends LazyLoadFragment{
                     @Override
                     public void onSuccess(BaseEntery<PositionModel> value) {
                         PositionModel positionModel = value.obj;
+                        ILog.e(TAG,"positionModel" + positionModel.toString());
                         if(positionModel != null){
                             isOpen = positionModel.railstatus == 1;
                             if(isOpen){
+                                //此处应该设置围栏
+                                FenchModel fenchModel = new FenchModel();
+                                fenchModel.longitude = positionModel.longitude;
+                                fenchModel.latitude = positionModel.latitude;
+                                fenchModel.meter = positionModel.meter;
+                                init(fenchModel);
                                 start_fench.setText("关闭围栏");
                             }else {
                                 start_fench.setText("开启围栏");
@@ -442,6 +462,7 @@ public class MapFragment extends LazyLoadFragment{
                     public void onSuccess(BaseEntery<FenchModel> value) {
                         FenchModel fenchModel = value.obj;
                         if(fenchModel != null){
+                            mAMap.removecache();
                             ILog.e(TAG,fenchModel.latitude   +  "----"  + fenchModel.longitude);
                             LatLng latLng = new LatLng(fenchModel.latitude,fenchModel.longitude);
                             MarkerOptions markerOption = new MarkerOptions();

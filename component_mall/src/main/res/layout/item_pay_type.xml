@@ -13,12 +13,11 @@
     android:layout_centerVertical="true"
     android:layout_height="wrap_content"/>
 
-    <RadioButton
+    <ImageView
         android:id="@+id/rbcheck"
     android:layout_width="@dimen/basic_d18"
-    android:button="@null"
     android:layout_alignParentRight="true"
     android:layout_centerVertical="true"
-    android:background="@drawable/radio"
+    android:src="@drawable/radio"
     android:layout_height="@dimen/basic_d18"/>
 </RelativeLayout>

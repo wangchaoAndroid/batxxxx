@@ -10,6 +10,7 @@ public class FenchModel implements Serializable{
     public double latitude;
     public double longitude;
 
+
     @Override
     public String toString() {
         return "FenchModel{" +

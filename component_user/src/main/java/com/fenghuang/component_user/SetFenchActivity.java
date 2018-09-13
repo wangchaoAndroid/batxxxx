@@ -20,6 +20,7 @@ import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdate;
 import com.amap.api.maps.CameraUpdateFactory;
+import com.amap.api.maps.MapFragment;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
@@ -32,7 +33,10 @@ import com.amap.api.services.geocoder.GeocodeSearch;
 import com.amap.api.services.geocoder.RegeocodeAddress;
 import com.amap.api.services.geocoder.RegeocodeQuery;
 import com.amap.api.services.geocoder.RegeocodeResult;
+import com.billy.cc.core.component.CC;
+import com.billy.cc.core.component.CCResult;
 import com.fenghuang.component_base.base.BaseActivity;
+import com.fenghuang.component_base.base.LazyLoadFragment;
 import com.fenghuang.component_base.data.SPDataSource;
 import com.fenghuang.component_base.net.BaseEntery;
 import com.fenghuang.component_base.net.ILog;
@@ -249,6 +253,7 @@ public class SetFenchActivity extends BaseActivity implements View.OnClickListen
                     public void onSuccess(BaseEntery value) {
                         RxToast.info("设置成功");
                         finish();
+
                     }
 
                     @Override
@@ -258,6 +263,12 @@ public class SetFenchActivity extends BaseActivity implements View.OnClickListen
                 });
     }
 
+    @Override
+    public void finish() {
+        setResult(RESULT_OK);
+
+        super.finish();
+    }
 
     /**
      * 获取当前位置

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:state_checked="false"
+        android:state_selected="false"
         android:drawable="@android:drawable/radiobutton_off_background"
         />
     <item
-        android:state_checked="true"
+        android:state_selected="true"
         android:drawable="@mipmap/icon_checked"  />
 </selector>

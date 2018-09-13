@@ -184,7 +184,6 @@
             android:id="@+id/buy"
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:text="总额: ¥120"
             android:textColor="@color/basic_black8"
             android:gravity="center"
             android:textSize="@dimen/basic_s14"

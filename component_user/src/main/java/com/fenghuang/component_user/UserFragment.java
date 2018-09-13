@@ -121,7 +121,7 @@ public class UserFragment extends LazyLoadFragment {
 
         int id = view.getId();
         if(id == R.id.setting_tv){
-            startActivity(new Intent(getActivity(),SettingActivity.class));
+            getActivity().startActivityForResult(new Intent(getActivity(),SettingActivity.class),11);
         }else if(id == R.id.warn_info){
             if(toLoginForToken()){
                 CC.obtainBuilder("component_battery")
@@ -152,6 +152,8 @@ public class UserFragment extends LazyLoadFragment {
 
         }
     }
+
+
 
 
     public boolean toLoginForToken(){
@@ -340,7 +342,7 @@ public class UserFragment extends LazyLoadFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // 用户没有进行有效的设置操作，返回
         if (resultCode == RESULT_CANCELED) {
-            Toast.makeText(getActivity(), "取消", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getActivity(), "取消", Toast.LENGTH_LONG).show();
             return;
         }
         switch (requestCode) {

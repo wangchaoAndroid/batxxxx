@@ -9,4 +9,15 @@ public class PositionModel implements Serializable {
     public int railstatus; //是否开启围栏
     public int lockstatus; //是否死锁
     public int status; //开关状态
+    public int meter;
+    public double latitude;
+    public double longitude;
+    @Override
+    public String toString() {
+        return "PositionModel{" +
+                "railstatus=" + railstatus +
+                ", lockstatus=" + lockstatus +
+                ", status=" + status +
+                '}';
+    }
 }

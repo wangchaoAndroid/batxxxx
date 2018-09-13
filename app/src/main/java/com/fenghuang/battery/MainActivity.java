@@ -100,4 +100,13 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     public void onPageScrollStateChanged(int state) {
 
     }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 11 && resultCode == RESULT_OK){
+            mViewPager.setCurrentItem(1);
+        }
+    }
 }

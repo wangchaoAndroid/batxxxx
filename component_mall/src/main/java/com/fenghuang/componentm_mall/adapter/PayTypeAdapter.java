@@ -2,6 +2,7 @@ package com.fenghuang.componentm_mall.adapter;
 
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -22,15 +23,25 @@ public class PayTypeAdapter extends BaseQuickAdapter<PayType,BaseViewHolder> {
         super(layoutResId, data);
     }
 
+    public void switchChecked(){
+        for(PayType payType : mData){
+            payType.checked = false;
+        }
+    }
+
     @Override
     protected void convert(final BaseViewHolder helper, final  PayType item) {
         helper.setText(R.id.des_pay,item.staging + "");
-        final RadioButton radioButton = helper.getView(R.id.rbcheck);
+        final ImageView radioButton = helper.getView(R.id.rbcheck);
+        radioButton.setSelected(item.checked);
         radioButton.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(listener != null){
                     listener.onCbClick(item);
+                    switchChecked();
+                    item.checked = true;
+                    notifyDataSetChanged();
                 }
             }
         });
