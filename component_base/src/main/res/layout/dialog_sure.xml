@@ -26,8 +26,8 @@
             android:layout_marginRight="30dp"
             android:paddingLeft="3dp"
             android:paddingRight="3dp"
-            android:text="Android的起源"
-            android:textColor="#00f"
+            android:text="警告"
+            android:textColor="#f00"
             android:textSize="18dp"
             android:textStyle="bold"/>
 

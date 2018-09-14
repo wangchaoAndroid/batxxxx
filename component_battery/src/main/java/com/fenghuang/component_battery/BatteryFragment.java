@@ -40,10 +40,14 @@ import com.fenghuang.component_base.net.ILog;
 import com.fenghuang.component_base.net.ResponseCallback;
 import com.fenghuang.component_base.net.RetrofitManager;
 import com.fenghuang.component_base.tool.RxToast;
+import com.fenghuang.component_base.view.RxDialog;
+import com.fenghuang.component_base.view.RxDialogSure;
 import com.fenghuang.component_battery.adapter.BannerAdapter;
 import com.fenghuang.component_battery.bean.Ad;
 import com.fenghuang.component_battery.bean.FenchModel;
 import com.fenghuang.component_battery.bean.HomeModel;
+import com.pingplusplus.ui.PaymentHandler;
+import com.pingplusplus.ui.PingppUI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,7 +91,11 @@ public class BatteryFragment  extends LazyLoadFragment implements ViewPager.OnPa
         };
     };
 
+
+
     private List<ImageView> dotsList = new ArrayList<>();
+    private RxDialogSure mDialogSure;
+
     /**
      * 初始化小点
      */
@@ -167,6 +175,7 @@ public class BatteryFragment  extends LazyLoadFragment implements ViewPager.OnPa
 
     @Override
     protected void lazyLoad() {
+        ILog.e(TAG,"lazyLoad");
         initMap();
         //适配器
         arr_adapter= new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, mBind_ids);
@@ -272,7 +281,11 @@ public class BatteryFragment  extends LazyLoadFragment implements ViewPager.OnPa
             }
             getHomeInfo();
 
-
+        }else if(viewId == R.id.tv_sure){
+            if(mDialogSure != null && mDialogSure.isShowing()){
+                mDialogSure.dismiss();
+            }
+            pay();
         }
     }
     //调用位置死锁
@@ -409,8 +422,16 @@ public class BatteryFragment  extends LazyLoadFragment implements ViewPager.OnPa
                                 right2.setImageResource(R.mipmap.open);
                                 iv_battery.setImageResource(R.mipmap.charging);
                             }else if(homeModel.batteryStatus ==3){
-                                right2.setImageResource(R.mipmap.lock);
+                                right2.setImageResource(R.mipmap.un_open);
+                                right1.setImageResource(R.mipmap.un_lock);
                                 iv_battery.setImageResource(R.drawable.ba_cloose);
+                                mDialogSure = new RxDialogSure(getActivity());
+                                mDialogSure.setCancelable(false);
+                                mDialogSure.setContent("您的电池属于分期付款类型，本期欠费未缴清，是否立即缴费（注：欠费无法正常使用）.");
+                                mDialogSure.setTitle("警告");
+                                mDialogSure.setSure("确认缴费");
+                                mDialogSure.show();
+                                mDialogSure.setSureListener(BatteryFragment.this);
                             }
 
                             List<Ad> advertisingtabList = homeModel.advertisingtabList;
@@ -467,6 +488,10 @@ public class BatteryFragment  extends LazyLoadFragment implements ViewPager.OnPa
     @Override
     public void onResume() {
         super.onResume();
+        ILog.e(TAG,"isLoad" + isLoad);
+        if(!isLoad){
+            getHomeInfo();
+        }
         mMapView.onResume();
     }
 
@@ -532,6 +557,7 @@ public class BatteryFragment  extends LazyLoadFragment implements ViewPager.OnPa
     public void onStop() {
         super.onStop();
         isPausing = true;
+        isLoad = false;
         handler.removeCallbacksAndMessages(null);
     }
     @Override
@@ -567,5 +593,50 @@ public class BatteryFragment  extends LazyLoadFragment implements ViewPager.OnPa
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    /**
+     * 缴费
+     */
+    public void pay(){
+        final String token = (String) SPDataSource.get(getActivity(),SPDataSource.USER_TOKEN,"");
+        String productNumber =  spinner.getSelectedItem().toString().trim();
+        ILog.e(TAG,productNumber + "");
+        if(TextUtils.isEmpty(productNumber)){
+            RxToast.error("编号不存在");
+            return;
+        }
+        showLoadingDialog();
+        batteryNetServices.purchase(200,token,productNumber,0,0,2)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ResponseCallback<BaseEntery<String>>() {
+                    @Override
+                    public void onSuccess(BaseEntery<String> value) {
+                        dimissLoadingDialog();
+                        PingppUI.createPay(getActivity(), value.obj, new PaymentHandler() {
+                            @Override public void handlePaymentResult(Intent data) {
+                                int code = data.getExtras().getInt("code");
+                                String result = data.getExtras().getString("result");
+                                ILog.e(TAG, "handlePaymentResult: "+ code + "---" + result );
+                                if(code == 1){ //成功
+                                    RxToast.showToast("缴费成功");
+                                   // getHomeInfo();
+
+                                }else {
+                                    RxToast.error(""+ result);
+                                }
+                            }
+                        });
+                        //bindBattery(token,productNumber);
+
+                    }
+
+                    @Override
+                    public void onFailture(String e) {
+                        RxToast.error(e + "");
+                        dimissLoadingDialog();
+                    }
+                });
     }
 }

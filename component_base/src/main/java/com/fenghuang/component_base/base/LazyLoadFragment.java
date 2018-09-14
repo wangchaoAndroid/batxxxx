@@ -11,6 +11,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.fenghuang.component_base.R;
+import com.fenghuang.component_base.net.ILog;
+import com.fenghuang.component_base.view.ProgressAlertDialog;
+
+import java.util.logging.Logger;
 
 import javax.annotation.Nullable;
 
@@ -31,7 +35,6 @@ public abstract class LazyLoadFragment extends Fragment implements View.OnClickL
     protected final String TAG = "LazyLoadFragment";
     public View rootView;
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -39,6 +42,7 @@ public abstract class LazyLoadFragment extends Fragment implements View.OnClickL
         isInit = true;
         /**初始化的时候去加载数据**/
         init(rootView,savedInstanceState);
+        ILog.e(TAG,"onCreateView");
         isCanLoadData();
         return rootView;
     }
@@ -49,6 +53,7 @@ public abstract class LazyLoadFragment extends Fragment implements View.OnClickL
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
+        ILog.e(TAG,"setUserVisibleHint");
         isCanLoadData();
     }
 
@@ -61,6 +66,9 @@ public abstract class LazyLoadFragment extends Fragment implements View.OnClickL
     }
 
 
+
+
+
     /**
      * 是否可以加载数据
      * 可以加载数据的条件：
@@ -68,14 +76,17 @@ public abstract class LazyLoadFragment extends Fragment implements View.OnClickL
      * 2.视图对用户可见
      */
     private void isCanLoadData() {
+        ILog.e(TAG,"isCanLoadData" + isInit);
         if (!isInit) {
             return;
         }
 
         if (getUserVisibleHint()) {
+            ILog.e(TAG,"getUserVisibleHint" + true);
             lazyLoad();
             isLoad = true;
         } else {
+            ILog.e(TAG,"getUserVisibleHint" + false);
             if (isLoad) {
                 stopLoad();
             }
@@ -139,9 +150,25 @@ public abstract class LazyLoadFragment extends Fragment implements View.OnClickL
     protected void stopLoad() {
     }
 
+
+
+
     @Override
     public void onClick(View view) {
 
+    }
+    public  ProgressAlertDialog alertDialog;
+    public void showLoadingDialog() {
+        if(alertDialog == null){
+            alertDialog = new ProgressAlertDialog(getActivity());
+        }
+        alertDialog.show();
+    }
+
+    public void dimissLoadingDialog(){
+        if(alertDialog != null && alertDialog.isShowing()){
+            alertDialog.dismiss();
+        }
     }
 }
 

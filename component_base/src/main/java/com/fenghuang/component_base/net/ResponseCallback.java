@@ -28,7 +28,7 @@ public abstract class ResponseCallback<T extends BaseEntery> implements Observer
 
     @Override
     public void onNext(T value) {
-        Log.e("1111",value + "");
+        ILog.e("ResponseCallback",value + "");
         if(value == null) return;
         if(value.code == 1){
             onSuccess(value);
@@ -57,7 +57,7 @@ public abstract class ResponseCallback<T extends BaseEntery> implements Observer
     @Override
     public void onError(Throwable e) {
         String message = e.getMessage();
-        Log.e("1111",e +"");
+        ILog.e("ResponseCallback",e +"");
         if(message == null){
             message = "";
         }

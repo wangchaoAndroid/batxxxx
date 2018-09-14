@@ -224,7 +224,7 @@ public class MapFragment extends LazyLoadFragment{
                 String fenceId = bundle.getString(GeoFence.BUNDLE_KEY_FENCEID);
                 //获取当前有触发的围栏对象：
                 GeoFence fence = bundle.getParcelable(GeoFence.BUNDLE_KEY_FENCE);
-                RxToast.warning(customId +"");
+//                RxToast.warning(customId +"");
             }
         }
     };

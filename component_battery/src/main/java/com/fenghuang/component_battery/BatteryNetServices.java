@@ -68,4 +68,19 @@ public  interface BatteryNetServices {
     @FormUrlEncoded
     @POST("bindingDefaultInterface")
     Observable<BaseEntery> bindingDefault(@Field("token")String token,@Field("productNumber")String productNumber);
+
+
+
+    /**
+     * 支付
+     */
+    @FormUrlEncoded
+    @POST("payInterface")
+    Observable<BaseEntery<String>> purchase(
+            @Field("payType")int payType,
+            @Field("token")String token,
+            @Field("productNumber")String productNumber,
+            @Field("isStages")int isStages,
+            @Field("arlarmruleId")int arlarmruleId,
+            @Field("paymentType")int paymentType);
 }
