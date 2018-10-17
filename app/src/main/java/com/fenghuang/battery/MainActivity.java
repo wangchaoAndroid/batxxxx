@@ -19,6 +19,7 @@ import com.fenghuang.component_base.adapter.CommonFragmentAdapter;
 import com.fenghuang.component_base.base.BaseActivity;
 import com.fenghuang.component_base.base.LazyLoadFragment;
 import com.fenghuang.component_base.data.SPDataSource;
+import com.fenghuang.component_base.download.DownloadManager;
 import com.fenghuang.component_base.net.ILog;
 import com.fenghuang.component_base.utils.ContextManager;
 import com.fenghuang.component_base.utils.ViewFinder;
@@ -82,7 +83,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         fragments.add(FragmentFactory.createFragment(2,null));
         fragments.add(FragmentFactory.createFragment(3,null));
         mViewPager.setAdapter(new CommonFragmentAdapter(getSupportFragmentManager(),fragments));
-
+        DownloadManager.getInstance().upgrade(this, true);
     }
 
 

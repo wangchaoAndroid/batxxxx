@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:padding="10dp"
+                android:background="@drawable/bg_white_round"
+                android:layout_height="@dimen/basic_d160">
+
+    <ImageView
+        android:id="@+id/cancle_txt"
+        android:layout_width="@dimen/basic_d20"
+        android:padding="@dimen/basic_d3"
+        android:src="@drawable/main_history_search_delete_icon"
+        android:layout_height="@dimen/basic_d20"/>
+
+    <TextView
+        android:id="@+id/tip_txt"
+        android:layout_width="wrap_content"
+        android:text="@string/upgrade_tip"
+        android:layout_centerHorizontal="true"
+        android:textSize="@dimen/basic_s18"
+        android:padding="5dp"
+        android:textColor="@color/basic_black1"
+        android:layout_marginTop="@dimen/basic_d10"
+        android:layout_marginBottom="@dimen/basic_d5"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/version_name"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textSize="16dp"
+        android:padding="5dp"
+        android:textColor="@color/basic_black8"
+        android:layout_below="@+id/tip_txt"
+        android:layout_marginBottom="20dp"
+        android:layout_height="wrap_content"/>
+
+    <ProgressBar
+        android:id="@+id/psb"
+        style="@style/mProgress_horizontal"
+        android:max="100"
+        android:progressDrawable="@drawable/progressbar_red_bg_corner"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/version_name"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/basic_d40"
+        android:layout_marginRight="@dimen/basic_d40"
+        android:layout_height="5dp"/>
+
+
+
+    <TextView
+        android:id="@+id/sure_txt"
+        android:paddingRight="@dimen/basic_d10"
+        android:paddingLeft="@dimen/basic_d10"
+        android:paddingTop="@dimen/basic_d5"
+        android:paddingBottom="@dimen/basic_d5"
+        android:layout_below="@+id/version_name"
+        android:layout_width="wrap_content"
+        android:textSize="14dp"
+        android:background="@drawable/bg_blue_corner"
+        android:text="立即更新"
+        android:textColor="@color/basic_white1"
+        android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content"/>
+
+</RelativeLayout>

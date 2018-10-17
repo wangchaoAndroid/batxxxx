@@ -8,10 +8,11 @@
 
     <ImageView
         android:id="@+id/back"
+        android:layout_width="24dp"
+        android:padding="@dimen/basic_d5"
         android:src="@drawable/back"
         android:layout_centerVertical="true"
-        android:layout_width="@dimen/basic_d30"
-        android:layout_height="@dimen/basic_d30" />
+        android:layout_height="24dp"/>
 
     <TextView
         android:id="@+id/title"

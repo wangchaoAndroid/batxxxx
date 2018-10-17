@@ -35,6 +35,7 @@ import com.billy.cc.core.component.CC;
 import com.billy.cc.core.component.CCResult;
 import com.fenghuang.component_base.base.LazyLoadFragment;
 import com.fenghuang.component_base.data.SPDataSource;
+import com.fenghuang.component_base.download.DownloadManager;
 import com.fenghuang.component_base.net.BaseEntery;
 import com.fenghuang.component_base.net.ILog;
 import com.fenghuang.component_base.net.ResponseCallback;
@@ -206,6 +207,7 @@ public class BatteryFragment  extends LazyLoadFragment implements ViewPager.OnPa
 
             }
         });
+
     }
 
     public boolean toLoginForToken(){

@@ -23,7 +23,7 @@ public class MyApp extends BaseApp {
         CC.enableVerboseLog(true);
         CC.enableDebug(true);
         CC.init(this);
-        CC.enableRemoteCC(true);
+        CC.enableRemoteCC(false);
         RxTool.init(this);
         ContextManager.init(this);
         MultiDex.install(this);

@@ -44,11 +44,13 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     public static final int FROM_UNBIND = 0x02;
     private TextView scan_tv;
     private TextView logoutTv;
+    private TextView about_us;
     NetServices netServices = RetrofitManager.getInstance().initRetrofit().create(NetServices.class);
     @Override
     protected void initView() {
         scan_tv = (TextView) findViewById(R.id.scan_tv);
         logoutTv = findViewById(R.id.btn_logout);
+        about_us = findViewById(R.id.about_us);
     }
 
     @Override
@@ -60,7 +62,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     protected void setEvent() {
-        addOnClickListeners(R.id.scan_tv,R.id.btn_logout,R.id.tv_nearbyShop,R.id.tv_charge,R.id.set_fench,R.id.back,R.id.acount_and_safe);
+        addOnClickListeners(R.id.scan_tv,R.id.btn_logout,R.id.tv_nearbyShop,R.id.tv_charge,R.id.set_fench,R.id.back,R.id.acount_and_safe,R.id.about_us);
     }
 
     @Override
@@ -93,6 +95,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
             if(toLoginForToken()){
                 startActivity(AccountAndSafeActivity.class,false);
             }
+        }else if(id == R.id.about_us){
+            AboutActivity.startActivity(this);
         }
     }
 

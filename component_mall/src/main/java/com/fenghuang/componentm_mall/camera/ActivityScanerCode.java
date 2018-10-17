@@ -269,7 +269,6 @@ public class ActivityScanerCode extends LazyLoadFragment implements View.OnClick
         if (mFlashing) {
             mFlashing = false;
             // 开闪光灯
-            Log.e("11111","222222222222222");
             CameraManager.get().openLight();
         } else {
             mFlashing = true;

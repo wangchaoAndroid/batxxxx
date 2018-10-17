@@ -11,7 +11,7 @@
     <color name="basic_white7">#C6C7CA</color>
     <color name="basic_white8">#CCCCCC</color>
 
-
+    <color name="basic_main">#ff8f44</color>
 
     <!-- 灰色 -->
     <color name="basic_gray0">#dddddd</color>
@@ -57,5 +57,6 @@
     <color name="basic_green1">#2B4B35</color>
     <color name="basic_green2">#2AC246</color>
     <color name="basic_green3">#009688</color>
-
+    <color name="color_ffa569">#ffa569</color>
+    <color name="color_ed833c">#ed833c</color>
 </resources>
