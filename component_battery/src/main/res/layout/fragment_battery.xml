@@ -18,12 +18,14 @@
 
         <ImageView
             android:id="@+id/left1"
+            android:src="@drawable/left1"
             android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <ImageView
             android:id="@+id/left2"
+            android:src="@drawable/left2"
             android:layout_marginLeft="@dimen/basic_d10"
             android:layout_toRightOf="@+id/left1"
             android:layout_centerVertical="true"

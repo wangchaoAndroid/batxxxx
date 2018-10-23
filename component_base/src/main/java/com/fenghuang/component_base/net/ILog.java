@@ -27,7 +27,7 @@ public class ILog {
     /**
      * DEBUG级别开关
      */
-	public static  boolean DEBUG = false;
+	public static  boolean DEBUG = true;
 
 	/**
 	 * 是否保存至SD卡

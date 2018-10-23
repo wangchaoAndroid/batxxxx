@@ -60,12 +60,14 @@ dependencies {
     api 'com.contrarywind:Android-PickerView:4.1.4'
 
     //3D地图so及jar
-    api 'com.amap.api:3dmap:latest.integration'
-    //定位功能
-    api 'com.amap.api:location:latest.integration'
-    //搜索功能
-    api 'com.amap.api:search:latest.integration'
-
+//    api 'com.amap.api:3dmap:latest.integration'
+//    //定位功能
+//    api 'com.amap.api:location:latest.integration'
+//    //搜索功能
+//    api 'com.amap.api:search:latest.integration'
+    api 'com.amap.api:3dmap:6.4.0'
+    api 'com.amap.api:location:3.3.0'
+    api 'com.amap.api:search:5.0.0'
 
     //ping++ 支付
     api 'com.pingxx:pingpp-core:2.1.17' // (Ping++ 标准版 SDK) 必须添加
