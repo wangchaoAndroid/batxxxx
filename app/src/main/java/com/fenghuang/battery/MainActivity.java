@@ -109,5 +109,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         if(requestCode == 11 && resultCode == RESULT_OK){
             mViewPager.setCurrentItem(1);
         }
+        ILog.e("1111111",requestCode + "-----------");
     }
 }

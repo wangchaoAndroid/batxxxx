@@ -341,6 +341,11 @@ public class UserFragment extends LazyLoadFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // 用户没有进行有效的设置操作，返回
+        super.onActivityResult(requestCode, resultCode, data);
+        ILog.e("nnnnnnnnnnnn",requestCode + "-----------" + resultCode);
+        if(requestCode == 9){
+            getNetUserInfo();
+        }
         if (resultCode == RESULT_CANCELED) {
             //Toast.makeText(getActivity(), "取消", Toast.LENGTH_LONG).show();
             return;
@@ -362,7 +367,7 @@ public class UserFragment extends LazyLoadFragment {
                 }
                 break;
         }
-        super.onActivityResult(requestCode, resultCode, data);
+
     }
 
 

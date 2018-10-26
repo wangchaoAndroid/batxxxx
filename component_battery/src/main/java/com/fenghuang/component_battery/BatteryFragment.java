@@ -244,6 +244,7 @@ public class BatteryFragment  extends LazyLoadFragment implements ViewPager.OnPa
                     @Override
                     public void onSuccess(BaseEntery value) {
 //                        RxToast.info("切换成功");
+                        getHomeInfo();
                     }
 
                     @Override
@@ -399,6 +400,12 @@ public class BatteryFragment  extends LazyLoadFragment implements ViewPager.OnPa
                             }else {
                                 right1.setImageResource(R.mipmap.un_lock);
                             }
+
+                            //充电中
+                            if(homeModel.isCharge == 1){
+                                right2.setImageResource(R.mipmap.un_open);
+                                iv_battery.setImageResource(R.mipmap.charging);
+                            }
                             //开关  0关 1开 2充电中 3欠费关机
                             if(homeModel.batteryStatus  == 0){
                                 right2.setImageResource(R.mipmap.un_open);
@@ -421,8 +428,7 @@ public class BatteryFragment  extends LazyLoadFragment implements ViewPager.OnPa
                                     iv_battery.setImageResource(R.mipmap.p_100);
                                 }
                             }else if(homeModel.batteryStatus ==2){
-                                right2.setImageResource(R.mipmap.open);
-                                iv_battery.setImageResource(R.mipmap.charging);
+                                //修改后这里不在是充电中
                             }else if(homeModel.batteryStatus ==3){
                                 right2.setImageResource(R.mipmap.un_open);
                                 right1.setImageResource(R.mipmap.un_lock);

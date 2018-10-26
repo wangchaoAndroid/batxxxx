@@ -16,6 +16,7 @@ public class HomeModel {
     public int lockstatus;
     public Alarmtab alarmtab;
     public int batteryStatus;
+    public int isCharge;
     public int alarmtabStatus;
     public String defaultProductNumber;
     public String batteryModel;
@@ -74,6 +75,7 @@ public class HomeModel {
                 ", lockstatus=" + lockstatus +
                 ", alarmtab=" + alarmtab +
                 ", batteryStatus=" + batteryStatus +
+                ", isCharge=" + isCharge +
                 ", alarmtabStatus=" + alarmtabStatus +
                 ", defaultProductNumber='" + defaultProductNumber + '\'' +
                 ", batteryModel='" + batteryModel + '\'' +

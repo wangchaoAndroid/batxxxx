@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion rootProject.minVersion // support v7 minSdkVersion is 9
         targetSdkVersion rootProject.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
     }
 
 //    resourcePrefix "component_user_"

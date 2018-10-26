@@ -128,6 +128,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                         .build()
                                         .call();
                                 if(call.isSuccess()){
+                                    setResult(RESULT_OK);
                                     finish();
                                 }
                             }else {
