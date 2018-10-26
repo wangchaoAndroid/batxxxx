@@ -283,6 +283,12 @@ public class MapFragment extends LazyLoadFragment{
     }
 
     @Override
+    protected void stopLoad() {
+        super.stopLoad();
+        mHandler.removeCallbacks(mRunnable);
+    }
+
+    @Override
     protected int setContentView() {
         return R.layout.fragment_map;
     }

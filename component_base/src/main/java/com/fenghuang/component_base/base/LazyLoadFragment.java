@@ -13,10 +13,9 @@ import android.widget.Toast;
 import com.fenghuang.component_base.R;
 import com.fenghuang.component_base.net.ILog;
 import com.fenghuang.component_base.view.ProgressAlertDialog;
+import com.trello.rxlifecycle2.components.support.RxFragment;
 
 import java.util.logging.Logger;
-
-import javax.annotation.Nullable;
 
 /**
  * Fragment预加载问题的解决方案：
@@ -26,7 +25,7 @@ import javax.annotation.Nullable;
  * blog ：http://blog.csdn.net/linglongxin24/article/details/53205878
  */
 
-public abstract class LazyLoadFragment extends Fragment implements View.OnClickListener {
+public abstract class LazyLoadFragment extends RxFragment implements View.OnClickListener {
     /**
      * 视图是否已经初初始化
      */
@@ -35,9 +34,8 @@ public abstract class LazyLoadFragment extends Fragment implements View.OnClickL
     protected final String TAG = "LazyLoadFragment";
     public View rootView;
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,  ViewGroup container,  Bundle savedInstanceState) {
         rootView = inflater.inflate(setContentView(), container, false);
         isInit = true;
         /**初始化的时候去加载数据**/
@@ -83,8 +81,11 @@ public abstract class LazyLoadFragment extends Fragment implements View.OnClickL
 
         if (getUserVisibleHint()) {
             ILog.e(TAG,"getUserVisibleHint" + true);
-            lazyLoad();
-            isLoad = true;
+            if(!getActivity().isFinishing()){
+                lazyLoad();
+                isLoad = true;
+            }
+
         } else {
             ILog.e(TAG,"getUserVisibleHint" + false);
             if (isLoad) {
@@ -159,10 +160,22 @@ public abstract class LazyLoadFragment extends Fragment implements View.OnClickL
     }
     public  ProgressAlertDialog alertDialog;
     public void showLoadingDialog() {
-        if(alertDialog == null){
-            alertDialog = new ProgressAlertDialog(getActivity());
+
+        if(getActivity() != null && !getActivity().isFinishing()){
+            if(alertDialog == null){
+                alertDialog = new ProgressAlertDialog(getActivity());
+            }
+            try {
+                alertDialog.show();
+            }catch (Exception e){
+
+            }
+
+        }else {
+            alertDialog = null;
         }
-        alertDialog.show();
+
+
     }
 
     public void dimissLoadingDialog(){

@@ -58,6 +58,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 
             }
         });
+
     }
 
     @Override

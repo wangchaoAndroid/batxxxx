@@ -171,4 +171,10 @@ public class MallFragment extends LazyLoadFragment implements BaseQuickAdapter.O
                     }
                 });
     }
+
+    @Override
+    protected void stopLoad() {
+        super.stopLoad();
+        mProducts = null;
+    }
 }

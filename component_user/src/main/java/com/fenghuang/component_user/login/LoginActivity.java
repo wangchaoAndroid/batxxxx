@@ -94,13 +94,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     public void login(String phone ,String pwd,String xgToken){
         //测试账号，登录
+        showLoadingDialog();
         NetServices netServices = RetrofitManager.getInstance().initRetrofit().create(NetServices.class);
         netServices.login(phone,pwd,xgToken)
+                .compose(bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new ResponseCallback<BaseEntery<LoginModel>>() {
                     @Override
                     public void onSuccess(BaseEntery<LoginModel> value) {
+                        dimissLoadingDialog();
                         ILog.e( "login" ,value + "");
                         LoginModel loginModel = value.obj;
                         //内存保存用户数据
@@ -148,6 +151,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     @Override
                     public void onFailture(String e) {
                         ILog.e( "login" ,e + "");
+                        dimissLoadingDialog();
                         RxToast.error(e);
                     }
                 });

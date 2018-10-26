@@ -10,6 +10,7 @@ import android.os.Looper;
 import android.support.v4.view.ViewPager;
 import android.text.SpannableString;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
@@ -352,12 +353,15 @@ public class BatteryFragment  extends LazyLoadFragment implements ViewPager.OnPa
 
     public void getHomeInfo(){
         ILog.e(TAG,"1111111111111");
+        showLoadingDialog();
         String token = (String) SPDataSource.get(getActivity(),SPDataSource.USER_TOKEN,"");
         batteryNetServices.getHome(token).subscribeOn(Schedulers.io())
+                .compose(this.<BaseEntery<HomeModel>>bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new ResponseCallback<BaseEntery<HomeModel>>() {
                     @Override
                     public void onSuccess(BaseEntery<HomeModel> value) {
+                        dimissLoadingDialog();
                         ILog.e(TAG,value + "");
                         if(value != null){
                             items.clear();
@@ -403,30 +407,41 @@ public class BatteryFragment  extends LazyLoadFragment implements ViewPager.OnPa
 
                             //充电中
                             if(homeModel.isCharge == 1){
-                                right2.setImageResource(R.mipmap.un_open);
+//                                right2.setImageResource(R.mipmap.un_open);
                                 iv_battery.setImageResource(R.mipmap.charging);
                             }
                             //开关  0关 1开 2充电中 3欠费关机
                             if(homeModel.batteryStatus  == 0){
                                 right2.setImageResource(R.mipmap.un_open);
-                                iv_battery.setImageResource(R.drawable.ba_cloose);
+                                if(homeModel.isCharge != 1){
+                                    iv_battery.setImageResource(R.drawable.ba_cloose);
+//                                    int electricquantity = homeModel.electricquantity;
+//                                    lastPrecent.setText(electricquantity + "%");
+                                    lastPrecent.setVisibility(View.GONE);
+                                }
+
                             }else if(homeModel.batteryStatus ==1){
                                 right2.setImageResource(R.mipmap.open);
-                                int electricquantity = homeModel.electricquantity;
-                                lastPrecent.setText(electricquantity + "%");
-                                if(electricquantity <= 10){
-                                    iv_battery.setImageResource(R.mipmap.p_10);
-                                }else if(electricquantity <= 25){
-                                    iv_battery.setImageResource(R.mipmap.p_25);
-                                }else if(electricquantity <= 45){
-                                    iv_battery.setImageResource(R.mipmap.p_45);
-                                }else if(electricquantity <= 60){
-                                    iv_battery.setImageResource(R.mipmap.p_60);
-                                }else if(electricquantity < 100){
-                                    iv_battery.setImageResource(R.mipmap.p_80);
-                                }else {
-                                    iv_battery.setImageResource(R.mipmap.p_100);
+
+                                if(homeModel.isCharge != 1){
+                                    lastPrecent.setVisibility(View.VISIBLE);
+                                    int electricquantity = homeModel.electricquantity;
+                                    lastPrecent.setText(electricquantity + "%");
+                                    if(electricquantity <= 10){
+                                        iv_battery.setImageResource(R.mipmap.p_10);
+                                    }else if(electricquantity <= 25){
+                                        iv_battery.setImageResource(R.mipmap.p_25);
+                                    }else if(electricquantity <= 45){
+                                        iv_battery.setImageResource(R.mipmap.p_45);
+                                    }else if(electricquantity <= 60){
+                                        iv_battery.setImageResource(R.mipmap.p_60);
+                                    }else if(electricquantity < 100){
+                                        iv_battery.setImageResource(R.mipmap.p_80);
+                                    }else {
+                                        iv_battery.setImageResource(R.mipmap.p_100);
+                                    }
                                 }
+
                             }else if(homeModel.batteryStatus ==2){
                                 //修改后这里不在是充电中
                             }else if(homeModel.batteryStatus ==3){
@@ -446,13 +461,17 @@ public class BatteryFragment  extends LazyLoadFragment implements ViewPager.OnPa
                             if(advertisingtabList != null && !advertisingtabList.isEmpty()){
                                 items.clear();
                                 items.addAll(advertisingtabList);
-                                mBannerAdapter = new BannerAdapter(getActivity(),items);
-                                mBannerView.setAdapter(mBannerAdapter);
-                                mBannerView.setOnPageChangeListener(BatteryFragment.this);
-                                mBannerAdapter.notifyDataSetChanged();
-                                mBannerView.setCurrentItem(items.size() * 10000);
-                                initDots();
-                                startRool();
+                                Log.e("1111","mBannerAdapter" +mBannerAdapter);
+                                if(mBannerAdapter == null){
+                                    mBannerAdapter = new BannerAdapter(getActivity(),items);
+                                    mBannerView.setAdapter(mBannerAdapter);
+                                    mBannerView.setOnPageChangeListener(BatteryFragment.this);
+                                    mBannerAdapter.notifyDataSetChanged();
+                                    mBannerView.setCurrentItem(items.size() * 10000);
+                                    initDots();
+                                    startRool();
+                                }
+
                             }
 
                             LatLng latLng = new LatLng(homeModel.latitude,homeModel.longitude);
@@ -474,6 +493,7 @@ public class BatteryFragment  extends LazyLoadFragment implements ViewPager.OnPa
 
                     @Override
                     public void onFailture(String e) {
+                        dimissLoadingDialog();
                         RxToast.error(e);
                         ILog.e(TAG,"1111111111111" +e);
                     }
@@ -487,7 +507,30 @@ public class BatteryFragment  extends LazyLoadFragment implements ViewPager.OnPa
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mMapView.onDestroy();
+        Log.e("11111","onDestroy");
+        mBannerAdapter = null;
+        if(handler != null){
+            handler.removeCallbacksAndMessages(null);
+        }
+        homeModel = null;
+        if(mMapView != null){
+            mMapView.onDestroy();
+        }
+
+    }
+
+    @Override
+    protected void stopLoad() {
+        Log.e("1111","stopLoad");
+        super.stopLoad();
+        mBannerAdapter = null;
+        if(handler != null){
+            handler.removeCallbacksAndMessages(null);
+        }
+        homeModel = null;
+        if(mMapView != null){
+            mMapView.onDestroy();
+        }
     }
 
     /**

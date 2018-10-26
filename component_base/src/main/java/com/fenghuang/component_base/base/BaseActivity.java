@@ -22,16 +22,16 @@ import com.fenghuang.component_base.utils.ActivityStackManager;
 import com.fenghuang.component_base.utils.HandlerUtils;
 import com.fenghuang.component_base.utils.StatusBarUtil;
 import com.fenghuang.component_base.view.ProgressAlertDialog;
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import java.util.ArrayList;
 
-import javax.annotation.Nullable;
 
 
 /**
  * Create by wangchao on 2018/7/18 10:20
  */
-public abstract class  BaseActivity extends AppCompatActivity implements HandlerUtils.OnReceiveMessageListener {
+public abstract class  BaseActivity extends RxAppCompatActivity implements HandlerUtils.OnReceiveMessageListener {
     private static final String TAG = "BaseActivity";
 
     public Handler mHandler;
@@ -61,7 +61,7 @@ public abstract class  BaseActivity extends AppCompatActivity implements Handler
     private LazyLoadFragment fragment;// current fragment.
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(getSupportActionBar() != null){
             getSupportActionBar().hide();
@@ -225,7 +225,9 @@ public abstract class  BaseActivity extends AppCompatActivity implements Handler
         if(alertDialog == null){
             alertDialog = new ProgressAlertDialog(this);
         }
-        alertDialog.show();
+        if(!isFinishing()){
+            alertDialog.show();
+        }
     }
 
     public void dimissLoadingDialog(){
